@@ -155,6 +155,7 @@ Print '***Inicio de creacion de tablas***'
 		nro_dni int NOT NULL,
 		cuil nvarchar(15) NULL,
 		fecha_nacimiento datetime NULL,
+		fecha_creacion datetime NULL,
 		mail nvarchar(255) NOT NULL,
 		telefono nvarchar(15) NULL,
 		direccion_calle nvarchar(255) NULL,
