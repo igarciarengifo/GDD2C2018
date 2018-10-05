@@ -150,7 +150,7 @@ Print '***Inicio de creacion de tablas***'
 		[esta_habilitado] bit NOT NULL DEFAULT('True'),
 		puntos int NOT NULL DEFAULT('0'),
 		nombre nvarchar(255) NOT NULL,
-		apeliido nvarchar(255) NOT NULL,
+		apellido nvarchar(255) NOT NULL,
 		tipo_dni nvarchar(20) NOT NULL DEFAULT('DNI'),
 		nro_dni int NOT NULL,
 		cuil nvarchar(15) NULL,
