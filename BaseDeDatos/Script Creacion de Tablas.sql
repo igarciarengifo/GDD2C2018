@@ -152,7 +152,7 @@ Print '***Inicio de creacion de tablas***'
 		nombre nvarchar(255) NOT NULL,
 		apellido nvarchar(255) NOT NULL,
 		tipo_documento nvarchar(20) NOT NULL DEFAULT('DNI'),
-		nro_dni int NOT NULL,
+		nro_documento int NOT NULL,
 		cuil nvarchar(15) NULL,
 		fecha_nacimiento datetime NULL,
 		fecha_creacion datetime NULL,
