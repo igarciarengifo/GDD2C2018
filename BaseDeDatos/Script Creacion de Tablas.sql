@@ -6,6 +6,51 @@ BEGIN
     EXEC ('CREATE SCHEMA [LOOPP]')
 END
 
+/*BORRADO DE ENTIDADES*/
+
+	IF OBJECT_ID('LOOPP.Localidades_Vendidas') IS NOT NULL
+		DROP TABLE [LOOPP].[Localidades_Vendidas];
+	IF OBJECT_ID('LOOPP.Compras') IS NOT NULL
+		DROP TABLE [LOOPP].[Compras];
+	IF OBJECT_ID('LOOPP.Tarjetas_Asociadas') IS NOT NULL
+		DROP TABLE [LOOPP].[Tarjetas_Asociadas];
+	IF OBJECT_ID('LOOPP.Clientes') IS NOT NULL
+		DROP TABLE [LOOPP].[Clientes];
+	IF OBJECT_ID('LOOPP.Item_Factura') IS NOT NULL
+		DROP TABLE [LOOPP].[Item_Factura];
+	IF OBJECT_ID('LOOPP.Facturas') IS NOT NULL
+		DROP TABLE [LOOPP].[Facturas];
+	IF OBJECT_ID('LOOPP.Empresas') IS NOT NULL
+		DROP TABLE [LOOPP].[Empresas];
+	IF OBJECT_ID('LOOPP.Ubicac_X_Espectaculo') IS NOT NULL
+		DROP TABLE [LOOPP].[Ubicac_X_Espectaculo];
+	IF OBJECT_ID('LOOPP.Espectaculos') IS NOT NULL
+		DROP TABLE [LOOPP].[Espectaculos];
+	IF OBJECT_ID('LOOPP.Rol_X_Usuario') IS NOT NULL
+		DROP TABLE [LOOPP].[Rol_X_Usuario];
+	IF OBJECT_ID('LOOPP.Rubros') IS NOT NULL
+		DROP TABLE [LOOPP].[Rubros];
+	IF OBJECT_ID('LOOPP.Grados_Publicacion') IS NOT NULL
+		DROP TABLE [LOOPP].[Grados_Publicacion];
+	IF OBJECT_ID('LOOPP.Estados_Publicacion') IS NOT NULL
+		DROP TABLE [LOOPP].[Estados_Publicacion];
+	IF OBJECT_ID('LOOPP.Usuario_X_Rol') IS NOT NULL
+		DROP TABLE [LOOPP].[Usuario_X_Rol];
+	IF OBJECT_ID('LOOPP.Func_X_Rol') IS NOT NULL
+		DROP TABLE [LOOPP].[Func_X_Rol];
+	IF OBJECT_ID('LOOPP.Funcionalidades') IS NOT NULL
+		DROP TABLE [LOOPP].[Funcionalidades];
+	IF OBJECT_ID('LOOPP.Usuarios') IS NOT NULL
+		DROP TABLE [LOOPP].[Usuarios];
+	IF OBJECT_ID('LOOPP.Roles') IS NOT NULL
+		DROP TABLE [LOOPP].[Roles];
+	IF OBJECT_ID('LOOPP.Formas_Pago') IS NOT NULL
+		DROP TABLE [LOOPP].[Formas_Pago];
+	IF OBJECT_ID('LOOPP.Ubicaciones') IS NOT NULL
+		DROP TABLE [LOOPP].[Ubicaciones];
+	IF OBJECT_ID('LOOPP.Tipo_Ubicacion') IS NOT NULL
+		DROP TABLE [LOOPP].[Tipo_Ubicacion];
+
 /*##########################################################################################################*/
 /*										CREACION DE TABLAS													*/
 /*##########################################################################################################*/
@@ -39,8 +84,8 @@ Print '***Inicio de creacion de tablas***'
 		[id_usuario] [int] IDENTITY(1,1) NOT NULL,
 		[username] [varchar](255) NOT NULL,
 		[password] [varchar](255) NOT NULL,
-		[loginFallidos] int NULL,
-		[estaHabilitado] bit NOT NULL DEFAULT('True'),
+		[loginFallidos] int NOT NULL DEFAULT (0),
+		[estado] [varchar](50) NOT NULL DEFAULT('Primer Login'),
 		primary key ([id_usuario])
 	);
 
@@ -77,14 +122,14 @@ Print '***Inicio de creacion de tablas***'
 	/*-7- Tabla Estados de Publicacion*/
 	CREATE TABLE LOOPP.Estados_Publicacion(
 		id_estado_publicacion int identity(1,1) NOT NULL,
-		descripcion nvarchar(20) NOT NULL,
+		descripcion nvarchar(255) NOT NULL,
 		primary key ([id_estado_publicacion])
 	);
 
 	/*-8- Tabla Grados de Publicacion*/
 	CREATE TABLE LOOPP.Grados_Publicacion(
 		id_grado_publicacion int identity(1,1) NOT NULL,
-		prioridad nvarchar(20) NOT NULL,
+		prioridad tinyint NOT NULL,
 		comision numeric(10,2) NOT NULL,
 		descripcion nvarchar(20) NOT NULL,
 		primary key ([id_grado_publicacion])
@@ -118,7 +163,7 @@ Print '***Inicio de creacion de tablas***'
 
 	/*-11- Tabla Tipo de Ubicacion*/
 	CREATE TABLE LOOPP.Tipo_Ubicacion(
-		id_tipo_ubicacion int identity(1,1) NOT NULL,
+		id_tipo_ubicacion int  NOT NULL,
 		descripcion nvarchar(20) NOT NULL,
 		porcentual numeric(10,2) NOT null,
 		primary key ([id_tipo_ubicacion])
@@ -147,12 +192,12 @@ Print '***Inicio de creacion de tablas***'
 	/*-14- Tabla Clientes*/
 	CREATE TABLE LOOPP.Clientes(
 		id_cliente int identity(1,1) NOT NULL,
-		[esta_habilitado] bit NOT NULL DEFAULT('True'),
+		estado varchar(50) NOT NULL DEFAULT('Habilitado'),
 		puntos int NOT NULL DEFAULT('0'),
 		nombre nvarchar(255) NOT NULL,
-		apeliido nvarchar(255) NOT NULL,
-		tipo_dni nvarchar(20) NOT NULL DEFAULT('DNI'),
-		nro_dni int NOT NULL,
+		apellido nvarchar(255) NOT NULL,
+		tipo_documento nvarchar(20) NOT NULL DEFAULT('DNI'),
+		nro_documento numeric(18,0) NOT NULL,
 		cuil nvarchar(15) NULL,
 		fecha_nacimiento datetime NULL,
 		fecha_creacion datetime NULL,

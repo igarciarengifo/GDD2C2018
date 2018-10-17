@@ -47,9 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entidades\Cliente.cs" />
+    <Compile Include="Entidades\DatosSesion.cs" />
     <Compile Include="Entidades\Empresa.cs" />
+    <Compile Include="Entidades\Encriptacion.cs" />
     <Compile Include="Entidades\Funcionalidad.cs" />
     <Compile Include="Entidades\Rol.cs" />
+    <Compile Include="Entidades\Usuario.cs" />
     <Compile Include="Formularios\AbmCliente\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,8 +137,16 @@
     <Compile Include="Formularios\Login\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Login\SeleccionRolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Login\SeleccionRolForm.Designer.cs">
+      <DependentUpon>SeleccionRolForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Managers\Funcionalidad_Manager.cs" />
     <Compile Include="Managers\Login_Manager.cs" />
     <Compile Include="Managers\Rol_Manager.cs" />
+    <Compile Include="Managers\Usuario_Manager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Formularios\RegistroUsuario\Form1.cs">
@@ -146,6 +157,9 @@
     </Compile>
     <EmbeddedResource Include="Formularios\Login\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Login\SeleccionRolForm.resx">
+      <DependentUpon>SeleccionRolForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

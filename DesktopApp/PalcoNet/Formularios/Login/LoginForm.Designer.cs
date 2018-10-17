@@ -30,12 +30,12 @@
         {
             this.iniciarBtn = new System.Windows.Forms.Button();
             this.salirBtn = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.userBox = new System.Windows.Forms.TextBox();
             this.passBox = new System.Windows.Forms.TextBox();
-            this.iniciosComboBox = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.linkRegistro = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // iniciarBtn
@@ -58,19 +58,10 @@
             this.salirBtn.UseVisualStyleBackColor = true;
             this.salirBtn.Click += new System.EventHandler(this.salirBtn_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(48, 44);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Iniciar como:";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(48, 80);
+            this.label2.Location = new System.Drawing.Point(45, 41);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 3;
@@ -79,7 +70,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(48, 122);
+            this.label3.Location = new System.Drawing.Point(45, 83);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(61, 13);
             this.label3.TabIndex = 4;
@@ -87,37 +78,49 @@
             // 
             // userBox
             // 
-            this.userBox.Location = new System.Drawing.Point(121, 80);
+            this.userBox.Location = new System.Drawing.Point(118, 41);
             this.userBox.Name = "userBox";
             this.userBox.Size = new System.Drawing.Size(176, 20);
             this.userBox.TabIndex = 5;
             // 
             // passBox
             // 
-            this.passBox.Location = new System.Drawing.Point(121, 122);
+            this.passBox.Location = new System.Drawing.Point(118, 83);
             this.passBox.Name = "passBox";
             this.passBox.Size = new System.Drawing.Size(176, 20);
             this.passBox.TabIndex = 6;
             // 
-            // iniciosComboBox
+            // label1
             // 
-            this.iniciosComboBox.FormattingEnabled = true;
-            this.iniciosComboBox.Location = new System.Drawing.Point(121, 44);
-            this.iniciosComboBox.Name = "iniciosComboBox";
-            this.iniciosComboBox.Size = new System.Drawing.Size(176, 21);
-            this.iniciosComboBox.TabIndex = 7;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(112, 146);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(116, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Si es tu primer ingreso, ";
+            // 
+            // linkRegistro
+            // 
+            this.linkRegistro.AutoSize = true;
+            this.linkRegistro.Location = new System.Drawing.Point(228, 146);
+            this.linkRegistro.Name = "linkRegistro";
+            this.linkRegistro.Size = new System.Drawing.Size(75, 13);
+            this.linkRegistro.TabIndex = 8;
+            this.linkRegistro.TabStop = true;
+            this.linkRegistro.Text = "registrate aquí";
+            this.linkRegistro.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkRegistro_LinkClicked);
             // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(350, 243);
-            this.Controls.Add(this.iniciosComboBox);
+            this.Controls.Add(this.linkRegistro);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.passBox);
             this.Controls.Add(this.userBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.salirBtn);
             this.Controls.Add(this.iniciarBtn);
             this.Name = "LoginForm";
@@ -132,11 +135,11 @@
 
         private System.Windows.Forms.Button iniciarBtn;
         private System.Windows.Forms.Button salirBtn;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox userBox;
         private System.Windows.Forms.TextBox passBox;
-        private System.Windows.Forms.ComboBox iniciosComboBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel linkRegistro;
     }
 }
