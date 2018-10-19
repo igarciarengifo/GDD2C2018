@@ -48,6 +48,7 @@ namespace PalcoNet.Managers
 
         public static int ejecutarNonQuery(string stringComando, SQLArgumentosManager argManager)
         {
+            int filasAfectadas;
             SqlCommand spCommand = new SqlCommand(stringComando, connection);
             spCommand.CommandType = CommandType.StoredProcedure;
             connection.Open();
@@ -64,13 +65,43 @@ namespace PalcoNet.Managers
                     }
                 }
 
-                int filasAfectadas = spCommand.ExecuteNonQuery();
+                filasAfectadas = spCommand.ExecuteNonQuery();
             }
             finally
             {
                 connection.Close();
             }
             return filasAfectadas;
+        }
+
+
+
+        public static T ejecutarEscalarQuery<T>(string stringComando, SQLArgumentosManager argManager)
+        {
+            SqlCommand spCommand = new SqlCommand(stringComando, connection);
+            spCommand.CommandType = CommandType.StoredProcedure;
+            connection.Open();
+            object result;
+            try
+            {
+                if (argManager != null)
+                {
+
+                    spCommand.Parameters.Clear();
+                    /*Itero sobre el Dictionary para agregar los parametros*/
+                    foreach (KeyValuePair<string, object> entry in argManager.parametros)
+                    {
+                        spCommand.Parameters.Add(new SqlParameter(entry.Key, entry.Value));
+                    }
+                }
+
+                result = spCommand.ExecuteScalar();
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return  (T)Convert.ChangeType(result, typeof(T));
         }
     }
 }

@@ -47,6 +47,7 @@
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consultarGradosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelEmpresas = new System.Windows.Forms.Panel();
+            this.factComBtn = new System.Windows.Forms.Button();
             this.rendConsBtn = new System.Windows.Forms.Button();
             this.newPubBtn = new System.Windows.Forms.Button();
             this.puntosBtn = new System.Windows.Forms.Button();
@@ -59,7 +60,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.factComBtn = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panelEmpresas.SuspendLayout();
@@ -210,6 +210,16 @@
             this.panelEmpresas.Size = new System.Drawing.Size(662, 113);
             this.panelEmpresas.TabIndex = 0;
             // 
+            // factComBtn
+            // 
+            this.factComBtn.Location = new System.Drawing.Point(491, 0);
+            this.factComBtn.Margin = new System.Windows.Forms.Padding(3, 3, 50, 3);
+            this.factComBtn.Name = "factComBtn";
+            this.factComBtn.Size = new System.Drawing.Size(121, 51);
+            this.factComBtn.TabIndex = 3;
+            this.factComBtn.Text = "Facturar comisión";
+            this.factComBtn.UseVisualStyleBackColor = true;
+            // 
             // rendConsBtn
             // 
             this.rendConsBtn.Location = new System.Drawing.Point(356, -3);
@@ -314,16 +324,6 @@
             this.label1.Size = new System.Drawing.Size(643, 47);
             this.label1.TabIndex = 0;
             this.label1.Text = "Bienvenido al sistema Palco Net";
-            // 
-            // factComBtn
-            // 
-            this.factComBtn.Location = new System.Drawing.Point(491, 0);
-            this.factComBtn.Margin = new System.Windows.Forms.Padding(3, 3, 50, 3);
-            this.factComBtn.Name = "factComBtn";
-            this.factComBtn.Size = new System.Drawing.Size(121, 51);
-            this.factComBtn.TabIndex = 3;
-            this.factComBtn.Text = "Facturar comisión";
-            this.factComBtn.UseVisualStyleBackColor = true;
             // 
             // MenuPrincipalForm
             // 

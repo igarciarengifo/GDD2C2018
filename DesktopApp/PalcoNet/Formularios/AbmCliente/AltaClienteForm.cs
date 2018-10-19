@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PalcoNet.Entidades;
+using PalcoNet.Managers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,7 +14,9 @@ namespace PalcoNet.Formularios.AbmCliente
 {
     public partial class AltaClienteForm : Form
     {
-        string user, pass;
+        string user, pass, resultado;
+        Cliente_Manager clienteMng = new Cliente_Manager();
+
 
         public AltaClienteForm(string username, string passw)
         {
@@ -21,14 +25,71 @@ namespace PalcoNet.Formularios.AbmCliente
             pass = passw;
         }
 
-        internal string getResultado()
+        public string getResultado()
         {
-            throw new NotImplementedException();
+            return resultado;
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void newClienteBtn_Click(object sender, EventArgs e)
         {
+            try {
+                this.verificarCamposObligatorios();
+                Cliente nuevaPersona = new Cliente();
+                nuevaPersona.nombre = nameBox.Text;
+                nuevaPersona.apellido = lastNameBox.Text;
+                nuevaPersona.tipo_documento = (string)comboTipo.SelectedValue;
+                nuevaPersona.nro_documento = Convert.ToInt32(documentoBox.Text);
+                nuevaPersona.cuil = cuilBox.Text;
+                nuevaPersona.fecha_nacimiento = fechaNacBox.Value;
+                nuevaPersona.mail = mailBox.Text;
+                nuevaPersona.telefono = telBox.Text;
+                nuevaPersona.direccion_calle = direccionBox.Text;
+                nuevaPersona.direccion_nro = nroBox.Text;
+                nuevaPersona.direccion_piso = pisoBox.Text;
+                nuevaPersona.direccion_depto = deptoBox.Text;
+                nuevaPersona.codigo_postal = codPostalBox.Text;
+                
+                resultado = clienteMng.altaClienteYUsuario(user, pass, nuevaPersona);
+                MessageBox.Show(resultado);
+            }
+            catch (Exception exc) {
+                MessageBox.Show(exc.Message);
+            }
+            
+        }
 
+        private void verificarCamposObligatorios()
+        {
+            if ((String.IsNullOrEmpty(nroBox.Text)) || (String.IsNullOrEmpty(comboTipo.SelectedText)) || (String.IsNullOrEmpty(cuilBox.Text)) || String.IsNullOrEmpty(mailBox.Text) || String.IsNullOrEmpty(nameBox.Text) || String.IsNullOrEmpty(lastNameBox.Text))
+            {
+                throw new ArgumentException("Debe completar los datos de usuario y contraseña");
+            }
+            this.validarFormatoCUIL();
+
+        }
+
+        private void validarFormatoCUIL()
+        {
+            if (! cuilBox.Text.Contains("-")) {
+                throw new Exception("Formato incorrecto. El formato correcto es ##-########-##");
+            }
+
+            string[] substrings  = cuilBox.Text.Split('-');
+
+            //Si tiene tres partes separadas por  - y todas son numeros
+            if (!(substrings.Length.Equals(3) && substrings.All(substring => substring.All(character => Char.IsDigit(character))))){
+                throw new Exception("Formato incorrecto. El formato correcto es ##-########-##");
+            }
+            
+            if (!(substrings.ElementAt(0).Length.Equals(2) && substrings.ElementAt(1).Length.Equals(8) && substrings.ElementAt(2).Length.Equals(2))){
+                throw new Exception("Formato incorrecto. El formato correcto es ##-########-##");            
+            } 
+        }
+
+        private void exitBtn_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
+            this.Close();
         }
     }
 }
