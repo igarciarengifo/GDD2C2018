@@ -14,14 +14,8 @@ namespace PalcoNet.Managers
     {
         public List<Rol> getAllRoles()
         {
-            SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.AppSettings["ConnectionString"].ToString());
-            SqlCommand spCommand = new SqlCommand("LOOPP.SP_GetAllRoles", sqlConnection);
-            spCommand.CommandType = CommandType.StoredProcedure;
-            sqlConnection.Open();
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetAllRoles");
             var lista_Roles = new List<Rol>();
-            DataTable resultTable = new DataTable();
-            resultTable.Load(spCommand.ExecuteReader());
-
             if (resultTable != null && resultTable.Rows != null)
             {
                 foreach (DataRow row in resultTable.Rows)
@@ -46,14 +40,8 @@ namespace PalcoNet.Managers
 
         public List<Rol> getAllRolesHabilitados()
         {
-            SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.AppSettings["ConnectionString"].ToString());
-            SqlCommand spCommand = new SqlCommand("LOOPP.SP_GetAllRolesHab", sqlConnection);
-            spCommand.CommandType = CommandType.StoredProcedure;
-            sqlConnection.Open();
+            DataTable resultTable =  SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetAllRolesHab");
             var lista_Roles = new List<Rol>();
-            DataTable resultTable = new DataTable();
-            resultTable.Load(spCommand.ExecuteReader());
-
             if (resultTable != null && resultTable.Rows != null)
             {
                 foreach (DataRow row in resultTable.Rows)
@@ -64,6 +52,25 @@ namespace PalcoNet.Managers
             }
 
             return lista_Roles;
+        }
+
+        public List<Rol> getRolesConIDUsuario(int id_usuario)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetRolesIDUser",
+                                        SQLArgumentosManager.nuevoParametro("@id_user", id_usuario));
+
+            List<Rol> rolesEncontrados = new List<Rol>();
+
+            if (resultTable != null && resultTable.Rows != null)
+            {
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Rol rolEncontrado = this.BuildRol(row);
+                    rolesEncontrados.Add(rolEncontrado);
+                }
+            }
+           
+            return rolesEncontrados;
         }
     }
 }

@@ -32,6 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -101,12 +103,6 @@
     <Compile Include="Formularios\EditarPublicacion\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Formularios\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Formularios\GenerarPublicacion\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,6 +139,12 @@
     <Compile Include="Formularios\Login\SeleccionRolForm.Designer.cs">
       <DependentUpon>SeleccionRolForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\MenuPrincipalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\MenuPrincipalForm.Designer.cs">
+      <DependentUpon>MenuPrincipalForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Managers\Funcionalidad_Manager.cs" />
     <Compile Include="Managers\Login_Manager.cs" />
     <Compile Include="Managers\Rol_Manager.cs" />
@@ -160,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Login\SeleccionRolForm.resx">
       <DependentUpon>SeleccionRolForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\MenuPrincipalForm.resx">
+      <DependentUpon>MenuPrincipalForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

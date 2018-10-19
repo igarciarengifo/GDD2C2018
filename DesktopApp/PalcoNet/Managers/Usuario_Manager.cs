@@ -13,20 +13,14 @@ namespace PalcoNet.Managers
     public class Usuario_Manager
     {
         public Usuario getUsuario(String usuario) {
-            SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["ConnectionString"].ToString());
-            SqlCommand spCommand = new SqlCommand("CUATROGDD2018.SP_GetUsuario", connection);
-            spCommand.CommandType = CommandType.StoredProcedure;
-            connection.Open();
-            spCommand.Parameters.Clear();
-            //agrego parametros al SP_GetUsuario
-            spCommand.Parameters.Add(new SqlParameter("@username", usuario));
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetUsuario",
+                                        SQLArgumentosManager.nuevoParametro("@username", usuario));
 
             List<Usuario> usuariosEncontrados = new List<Usuario>();
-            DataTable usuariosTable = new DataTable();
-            usuariosTable.Load(spCommand.ExecuteReader());
-            if (usuariosTable != null && usuariosTable.Rows != null)
+
+            if (resultTable != null && resultTable.Rows != null)
             {
-                foreach (DataRow row in usuariosTable.Rows)
+                foreach (DataRow row in resultTable.Rows)
                 {
                     Usuario personaEncontrado = this.BuildUsuario(row);
                     usuariosEncontrados.Add(personaEncontrado);
@@ -37,22 +31,32 @@ namespace PalcoNet.Managers
             }
 
             return usuariosEncontrados.ElementAt(0);
-
         }
 
         private Usuario BuildUsuario(DataRow row)
         {
-            throw new NotImplementedException();
+            Usuario nuevoUsuario = new Usuario();
+            nuevoUsuario.id_usuario = Convert.ToInt32(row["id_usuario"]);
+            nuevoUsuario.username = Convert.ToString(row["username"]);
+            nuevoUsuario.password = Convert.ToString(row["password"]);
+            nuevoUsuario.esta_habilitado = Convert.ToBoolean(row["esta_habilitado"]);
+            return nuevoUsuario;
         }
 
-        internal void reiniciarIntentos(int p)
+        public int reiniciarIntentos(int id_user)
         {
-            throw new NotImplementedException();
+            /*las NO Query retorna cantidad de filas afectadas*/
+            return (SQLManager.ejecutarNonQuery("LOOPP.SP_ReiniciarIntentosLogin",
+                                        SQLArgumentosManager.nuevoParametro("@id_user", id_user)));
+            
         }
 
-        internal void agregarIntentoFallido(int p)
+        public int agregarIntentoFallido(int id_user)
         {
-            throw new NotImplementedException();
+            /*las NO Query retorna cantidad de filas afectadas*/
+            return (SQLManager.ejecutarNonQuery("LOOPP.SP_NuevoIntentoFallido",
+                                        SQLArgumentosManager.nuevoParametro("@id_user", id_user)));
         }
+
     }
 }

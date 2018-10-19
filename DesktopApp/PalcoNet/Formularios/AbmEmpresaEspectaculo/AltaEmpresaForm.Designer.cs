@@ -1,6 +1,6 @@
-﻿namespace PalcoNet.Abm_Cliente
+﻿namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
 {
-    partial class Form1
+    partial class AltaEmpresaForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.Text = "AltaEmpresaForm";
         }
 
         #endregion

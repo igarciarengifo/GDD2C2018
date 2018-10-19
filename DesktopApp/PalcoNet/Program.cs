@@ -1,4 +1,4 @@
-﻿using PalcoNet.Login;
+﻿using PalcoNet.Formularios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace PalcoNet
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginForm());
+            Application.Run(new MenuPrincipalForm());
         }
     }
 }

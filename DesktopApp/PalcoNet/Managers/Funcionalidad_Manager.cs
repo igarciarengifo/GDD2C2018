@@ -14,14 +14,9 @@ namespace PalcoNet.Managers
     {
         public List<Funcionalidad> funcionalidadesXRol(int id_rol)
         {
-            SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.AppSettings["ConnectionString"].ToString());
-            SqlCommand spCommand = new SqlCommand("LOOPP.SP_Funcionalidad_X_Rol", sqlConnection);
-            spCommand.CommandType = CommandType.StoredProcedure;
-            sqlConnection.Open();
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_Funcionalidad_X_Rol", 
+                                        SQLArgumentosManager.nuevoParametro("@id_rol", id_rol));
             var lista_funcionalidades = new List<Funcionalidad>();
-            DataTable resultTable = new DataTable();
-            resultTable.Load(spCommand.ExecuteReader());
-
             if (resultTable != null && resultTable.Rows != null)
             {
                 foreach (DataRow row in resultTable.Rows)

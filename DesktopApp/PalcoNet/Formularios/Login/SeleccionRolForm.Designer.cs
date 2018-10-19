@@ -68,6 +68,7 @@
             this.acceptButton.TabIndex = 3;
             this.acceptButton.Text = "Aceptar";
             this.acceptButton.UseVisualStyleBackColor = true;
+            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
             // 
             // exitBtn
             // 
@@ -77,6 +78,7 @@
             this.exitBtn.TabIndex = 4;
             this.exitBtn.Text = "Salir";
             this.exitBtn.UseVisualStyleBackColor = true;
+            this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
             // 
             // SeleccionRolForm
             // 

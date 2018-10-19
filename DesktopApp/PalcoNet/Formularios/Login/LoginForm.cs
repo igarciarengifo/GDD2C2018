@@ -1,4 +1,6 @@
 ﻿using PalcoNet.Entidades;
+using PalcoNet.Formularios.ABMUsuario;
+using PalcoNet.Formularios.Login;
 using PalcoNet.Managers;
 using System;
 using System.Collections.Generic;
@@ -17,15 +19,17 @@ namespace PalcoNet.Login
     {
         public string connectionString;
         int id_usuario, id_rol_seleccionado;
-        string password, usuario;
+        string password, usuario, username;
         private List<Funcionalidad> funcionalidades;
+        List<Rol> rolesDeUsuario = new List<Rol>();
         Funcionalidad_Manager funcMng = new Funcionalidad_Manager();
+        Usuario_Manager usuMng = new Usuario_Manager();
+        Rol_Manager rolMng = new Rol_Manager();
 
         public LoginForm()
         {
             InitializeComponent();
-            this.connectionString = ConfigurationManager.AppSettings["ConnectionString"].ToString();
-
+   
         }
 
         private void completarDiferentesTipos()
@@ -44,33 +48,34 @@ namespace PalcoNet.Login
                 this.verificarCamposObligatorios();
                 Login_Manager loginMng = new Login_Manager();
                 password = Encriptacion.getHashSha256(passBox.Text);
-                id_usuario = loginMng.iniciarLogin(userBox.Text, password); 
-                username = userLoginBox.Text;
-                //Abro ventana para seleccionar hotel y rol
-                SelHotelRolLoginForm seleccionForm = new SelHotelRolLoginForm(id_usuario);
-                if (seleccionForm.ShowDialog(this) == DialogResult.OK)
-                {
-                    id_rol = seleccionForm.id_RolSeleccionado;
-                    id_hotel = seleccionForm.id_hotelSeleccionado;
-                    panelSession.Enabled = false;
-                    iniciarButton.Enabled = true;
-                    iniciarButton.Focus();
-                }
-                else
-                {
-                    MessageBox.Show("Operacion cancelada");
-                }
-                seleccionForm.Dispose();
+                id_usuario = loginMng.iniciarLogin(userBox.Text, password);
+                username = userBox.Text;
                 if (id_usuario != 0)
                 {
-                    password = Encriptacion.getHashSha256(passBox.Text);
-                    usuario = userBox.Text;
+                    rolesDeUsuario = rolMng.getRolesConIDUsuario(id_usuario);
+                    if (rolesDeUsuario.Count > 1)
+                    {
+                        //Abro ventana para seleccionar rol, en caso de ser necesario
+                        SeleccionRolForm seleccionForm = new SeleccionRolForm(rolesDeUsuario);
+                        if (seleccionForm.ShowDialog(this) == DialogResult.OK)
+                        {
+                            id_rol_seleccionado = seleccionForm.get_IdRolSeleccionado();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Operacion cancelada");
+                        }
+                        seleccionForm.Dispose();
+                        this.limpiarCampos();
+                    }
+                    else
+                    {
+                        id_rol_seleccionado = rolesDeUsuario.ElementAt(0).id_rol;
+                    }
+
                     funcionalidades = funcMng.funcionalidadesXRol(id_rol_seleccionado);
                     DatosSesion.iniciarSesion(id_usuario, usuario, password, id_rol_seleccionado, funcionalidades);
 
-                }
-                else { 
-                
                 }
                 
             }
@@ -81,21 +86,32 @@ namespace PalcoNet.Login
 
         }
 
+        private void limpiarCampos()
+        {
+            userBox.Clear();
+            passBox.Clear();
+        }
+
         private void verificarCamposObligatorios()
         {
-            throw new NotImplementedException();
+            if ((String.IsNullOrEmpty(userBox.Text)) || (String.IsNullOrEmpty(passBox.Text))) {
+                throw new ArgumentException("Debe completar los datos de usuario y contraseña");
+            }
         }
 
         private void salirBtn_Click(object sender, EventArgs e)
         {
             
             /* TODO: Mensaje para verificar si desea salir*/
+            this.Dispose();
             this.Close();
         }
 
         private void linkRegistro_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            AltaUsuarioForm altaUsuarioForm = new AltaUsuarioForm();
+            altaUsuarioForm.Show();
+            this.Close();
         }
 
     }
