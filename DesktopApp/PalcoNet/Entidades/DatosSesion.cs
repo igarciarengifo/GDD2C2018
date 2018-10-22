@@ -24,5 +24,14 @@ namespace PalcoNet.Entidades
             sesion_iniciada = true;
             username = usuario;
         }
+
+        public static void cerrar_sesion()
+        {
+            sesion_iniciada = false;
+            funcionalidades.Clear();
+            password = "";
+            id_rol = 0;
+            id_usuario = 0;
+        }
     }
 }

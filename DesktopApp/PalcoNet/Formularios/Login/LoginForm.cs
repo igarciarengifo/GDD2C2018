@@ -19,7 +19,7 @@ namespace PalcoNet.Login
     {
         public string connectionString;
         int id_usuario, id_rol_seleccionado;
-        string password, usuario, username;
+        string password, username;
         private List<Funcionalidad> funcionalidades;
         List<Rol> rolesDeUsuario = new List<Rol>();
         Funcionalidad_Manager funcMng = new Funcionalidad_Manager();
@@ -29,16 +29,7 @@ namespace PalcoNet.Login
         public LoginForm()
         {
             InitializeComponent();
-   
-        }
 
-        private void completarDiferentesTipos()
-        {
-           /* Rol_Manager loginMger = new Rol_Manager();
-            List<Rol> todosLosRoles = loginMger.getAllRolesHabilitados();
-            iniciosComboBox.DisplayMember = "nombre";
-            iniciosComboBox.ValueMember = "id_rol";
-            iniciosComboBox.DataSource = todosLosRoles;*/
         }
 
         private void iniciarBtn_Click(object sender, EventArgs e)
@@ -74,7 +65,7 @@ namespace PalcoNet.Login
                     }
 
                     funcionalidades = funcMng.funcionalidadesXRol(id_rol_seleccionado);
-                    DatosSesion.iniciarSesion(id_usuario, usuario, password, id_rol_seleccionado, funcionalidades);
+                    DatosSesion.iniciarSesion(id_usuario, username, password, id_rol_seleccionado, funcionalidades);
 
                 }
                 

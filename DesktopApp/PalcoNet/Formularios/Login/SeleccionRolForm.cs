@@ -35,6 +35,7 @@ namespace PalcoNet.Formularios.Login
 
         private void acceptButton_Click(object sender, EventArgs e)
         {
+            id_RolSeleccionado = (int)rolesUsuarioBox.SelectedValue;
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

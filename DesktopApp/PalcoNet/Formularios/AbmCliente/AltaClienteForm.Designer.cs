@@ -60,6 +60,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.newClienteBtn = new System.Windows.Forms.Button();
             this.exitBtn = new System.Windows.Forms.Button();
+            this.habilitadoBox = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -347,7 +348,7 @@
             // 
             // newClienteBtn
             // 
-            this.newClienteBtn.Location = new System.Drawing.Point(220, 474);
+            this.newClienteBtn.Location = new System.Drawing.Point(220, 490);
             this.newClienteBtn.Name = "newClienteBtn";
             this.newClienteBtn.Size = new System.Drawing.Size(75, 23);
             this.newClienteBtn.TabIndex = 2;
@@ -357,7 +358,7 @@
             // 
             // exitBtn
             // 
-            this.exitBtn.Location = new System.Drawing.Point(405, 474);
+            this.exitBtn.Location = new System.Drawing.Point(405, 490);
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(75, 23);
             this.exitBtn.TabIndex = 3;
@@ -365,11 +366,22 @@
             this.exitBtn.UseVisualStyleBackColor = true;
             this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
             // 
+            // habilitadoBox
+            // 
+            this.habilitadoBox.AutoSize = true;
+            this.habilitadoBox.Location = new System.Drawing.Point(363, 449);
+            this.habilitadoBox.Name = "habilitadoBox";
+            this.habilitadoBox.Size = new System.Drawing.Size(109, 17);
+            this.habilitadoBox.TabIndex = 4;
+            this.habilitadoBox.Text = "¿Está Habilitado?";
+            this.habilitadoBox.UseVisualStyleBackColor = true;
+            // 
             // AltaClienteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(708, 518);
+            this.ClientSize = new System.Drawing.Size(708, 534);
+            this.Controls.Add(this.habilitadoBox);
             this.Controls.Add(this.exitBtn);
             this.Controls.Add(this.newClienteBtn);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -417,5 +429,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Button newClienteBtn;
         private System.Windows.Forms.Button exitBtn;
+        private System.Windows.Forms.CheckBox habilitadoBox;
     }
 }

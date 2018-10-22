@@ -1,4 +1,6 @@
 ﻿using PalcoNet.Entidades;
+using PalcoNet.Formularios.AbmCliente;
+using PalcoNet.Formularios.AbmEmpresaEspectaculo;
 using PalcoNet.Login;
 using System;
 using System.Collections.Generic;
@@ -104,6 +106,43 @@ namespace PalcoNet.Formularios
         {
             ToolStripItem status_label = statusStrip1.Items["StatusLabel"];
             status_label.Text = "Usuario: " + DatosSesion.username + " - Rol: " + DatosSesion.id_rol;
+        }
+
+        private void nuevaEmpresaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AltaEmpresaForm newEmpresaForm = new AltaEmpresaForm(new Empresa());
+            newEmpresaForm.ShowDialog();
+        }
+
+        private void consultarEmpresasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConsultaEmpresasForm consEmpresaForm = new ConsultaEmpresasForm();
+            consEmpresaForm.ShowDialog();
+        }
+
+        private void nuevoClienteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AltaClienteForm newClienteForm = new AltaClienteForm(new Cliente());
+            newClienteForm.ShowDialog();
+        }
+
+        private void consultarClientesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConsultaClientesForm consClientesForm = new ConsultaClientesForm();
+            consClientesForm.ShowDialog();
+        }
+
+        private void modificarUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DatosSesion.cerrar_sesion();
+            this.WindowState = FormWindowState.Minimized;
+            this.ShowInTaskbar = false;
+            iniciar_sesion();
         }
 
         

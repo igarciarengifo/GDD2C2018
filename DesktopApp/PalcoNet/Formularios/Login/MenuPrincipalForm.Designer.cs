@@ -35,7 +35,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.misDatosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modificarUsuarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.modificarMisDatosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cerrarSesionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.empresasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevaEmpresaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +45,9 @@
             this.gradosDePublicaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consultarGradosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rolesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nuevoRolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.consultarRolesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelEmpresas = new System.Windows.Forms.Panel();
             this.factComBtn = new System.Windows.Forms.Button();
             this.rendConsBtn = new System.Windows.Forms.Button();
@@ -94,7 +96,8 @@
             this.misDatosToolStripMenuItem,
             this.empresasToolStripMenuItem,
             this.clientesToolStripMenuItem,
-            this.gradosDePublicaciónToolStripMenuItem});
+            this.gradosDePublicaciónToolStripMenuItem,
+            this.rolesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1027, 24);
@@ -105,7 +108,6 @@
             // 
             this.misDatosToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.modificarUsuarioToolStripMenuItem,
-            this.modificarMisDatosToolStripMenuItem,
             this.cerrarSesionToolStripMenuItem});
             this.misDatosToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.misDatosToolStripMenuItem.Name = "misDatosToolStripMenuItem";
@@ -116,22 +118,17 @@
             // 
             this.modificarUsuarioToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.modificarUsuarioToolStripMenuItem.Name = "modificarUsuarioToolStripMenuItem";
-            this.modificarUsuarioToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.modificarUsuarioToolStripMenuItem.Text = "Modificar usuario";
-            // 
-            // modificarMisDatosToolStripMenuItem
-            // 
-            this.modificarMisDatosToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.modificarMisDatosToolStripMenuItem.Name = "modificarMisDatosToolStripMenuItem";
-            this.modificarMisDatosToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.modificarMisDatosToolStripMenuItem.Text = "Modificar mis datos";
+            this.modificarUsuarioToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.modificarUsuarioToolStripMenuItem.Text = "Modificar contraseña";
+            this.modificarUsuarioToolStripMenuItem.Click += new System.EventHandler(this.modificarUsuarioToolStripMenuItem_Click);
             // 
             // cerrarSesionToolStripMenuItem
             // 
             this.cerrarSesionToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.cerrarSesionToolStripMenuItem.Name = "cerrarSesionToolStripMenuItem";
-            this.cerrarSesionToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.cerrarSesionToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.cerrarSesionToolStripMenuItem.Text = "Cerrar sesión";
+            this.cerrarSesionToolStripMenuItem.Click += new System.EventHandler(this.cerrarSesionToolStripMenuItem_Click);
             // 
             // empresasToolStripMenuItem
             // 
@@ -147,12 +144,14 @@
             this.nuevaEmpresaToolStripMenuItem.Name = "nuevaEmpresaToolStripMenuItem";
             this.nuevaEmpresaToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.nuevaEmpresaToolStripMenuItem.Text = "Nueva empresa";
+            this.nuevaEmpresaToolStripMenuItem.Click += new System.EventHandler(this.nuevaEmpresaToolStripMenuItem_Click);
             // 
             // consultarEmpresasToolStripMenuItem
             // 
             this.consultarEmpresasToolStripMenuItem.Name = "consultarEmpresasToolStripMenuItem";
             this.consultarEmpresasToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.consultarEmpresasToolStripMenuItem.Text = "Consultar empresas";
+            this.consultarEmpresasToolStripMenuItem.Click += new System.EventHandler(this.consultarEmpresasToolStripMenuItem_Click);
             // 
             // clientesToolStripMenuItem
             // 
@@ -168,12 +167,14 @@
             this.nuevoClienteToolStripMenuItem.Name = "nuevoClienteToolStripMenuItem";
             this.nuevoClienteToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.nuevoClienteToolStripMenuItem.Text = "Nuevo cliente";
+            this.nuevoClienteToolStripMenuItem.Click += new System.EventHandler(this.nuevoClienteToolStripMenuItem_Click);
             // 
             // consultarClientesToolStripMenuItem
             // 
             this.consultarClientesToolStripMenuItem.Name = "consultarClientesToolStripMenuItem";
             this.consultarClientesToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.consultarClientesToolStripMenuItem.Text = "Consultar clientes";
+            this.consultarClientesToolStripMenuItem.Click += new System.EventHandler(this.consultarClientesToolStripMenuItem_Click);
             // 
             // gradosDePublicaciónToolStripMenuItem
             // 
@@ -195,6 +196,27 @@
             this.consultarGradosToolStripMenuItem.Name = "consultarGradosToolStripMenuItem";
             this.consultarGradosToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.consultarGradosToolStripMenuItem.Text = "Consultar grados";
+            // 
+            // rolesToolStripMenuItem
+            // 
+            this.rolesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nuevoRolToolStripMenuItem,
+            this.consultarRolesToolStripMenuItem});
+            this.rolesToolStripMenuItem.Name = "rolesToolStripMenuItem";
+            this.rolesToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.rolesToolStripMenuItem.Text = "Roles";
+            // 
+            // nuevoRolToolStripMenuItem
+            // 
+            this.nuevoRolToolStripMenuItem.Name = "nuevoRolToolStripMenuItem";
+            this.nuevoRolToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.nuevoRolToolStripMenuItem.Text = "Nuevo rol";
+            // 
+            // consultarRolesToolStripMenuItem
+            // 
+            this.consultarRolesToolStripMenuItem.Name = "consultarRolesToolStripMenuItem";
+            this.consultarRolesToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.consultarRolesToolStripMenuItem.Text = "Consultar roles";
             // 
             // panelEmpresas
             // 
@@ -309,7 +331,7 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.label1);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(201, 71);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(201, 70);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(694, 100);
             this.flowLayoutPanel1.TabIndex = 9;
@@ -370,7 +392,6 @@
         private System.Windows.Forms.FlowLayoutPanel flpCentral;
         private System.Windows.Forms.ToolStripMenuItem misDatosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modificarUsuarioToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem modificarMisDatosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cerrarSesionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem empresasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nuevaEmpresaToolStripMenuItem;
@@ -387,5 +408,8 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button factComBtn;
+        private System.Windows.Forms.ToolStripMenuItem rolesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nuevoRolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem consultarRolesToolStripMenuItem;
     }
 }

@@ -1,0 +1,76 @@
+﻿using PalcoNet.Entidades;
+using PalcoNet.Managers;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PalcoNet.Formularios.ABMUsuario
+{
+    public partial class CambiarPassForm : Form
+    {
+        public CambiarPassForm()
+        {
+            InitializeComponent();
+            userBox.Text = DatosSesion.username;
+        }
+
+        private void changePassBtn_Click(object sender, EventArgs e)
+        {
+            try {
+                this.verificarCamposObligatorios(); 
+                this.verificarPassActual();
+                this.verificarNuevaPass();
+                if (this.cambiarPassword() != 0)
+                {
+                    MessageBox.Show("Se modificó correctamente la contraseña");
+                }
+                else {
+                    MessageBox.Show("No pudo realizarse el cambio. Vuelva a intentarlo");
+                }
+                
+            }
+            
+        }
+
+        private void cambiarPassword()
+        {
+            string newPassHash = Encriptacion.getHashSha256(newPassBox.Text);
+            Usuario_Manager userMng = new Usuario_Manager();
+            userMng.cambiarPassword(newPassHash, DatosSesion.id_usuario); 
+        }
+
+        private void verificarNuevaPass()
+        {
+            if (newPassBox.Text != repeatPassBox.Text)
+            {
+                throw new Exception("No coinciden las contraseñas. Reingreselo");
+            }
+        }
+
+        private void verificarPassActual()
+        {
+            if (DatosSesion.password != Encriptacion.getHashSha256(actualPassBox.Text)) {
+                throw new Exception("La contraseña actual ingresada no coincide");
+            }
+        }
+
+        private void verificarCamposObligatorios()
+        {
+            if (String.IsNullOrEmpty(actualPassBox.Text) || String.IsNullOrEmpty(newPassBox.Text) || String.IsNullOrEmpty(repeatPassBox.Text)) {
+                throw new Exception("Todos los campos son obligatorios, debe completarlos"); 
+            }
+        }
+
+        private void cancelBtn_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
+            this.Close();
+        }
+    }
+}

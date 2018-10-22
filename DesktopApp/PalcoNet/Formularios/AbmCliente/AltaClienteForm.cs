@@ -17,6 +17,33 @@ namespace PalcoNet.Formularios.AbmCliente
         string user, pass, resultado;
         Cliente_Manager clienteMng = new Cliente_Manager();
 
+        public AltaClienteForm(Cliente cliente) {
+            if (cliente.id_cliente != 0)
+            {
+                habilitadoBox.Visible = true;
+                nameBox.Text = cliente.nombre;
+                lastNameBox.Text = cliente.apellido;
+                comboTipo.SelectedValue = cliente.tipo_documento;
+                documentoBox.Text = cliente.nro_documento.ToString();
+                cuilBox.Text = cuilBox.Text;
+                fechaNacBox.Value = cliente.fecha_nacimiento;
+                mailBox.Text = cliente.mail;
+                telBox.Text = cliente.telefono;
+                direccionBox.Text = cliente.direccion_calle;
+                nroBox.Text = cliente.direccion_nro.ToString();
+                pisoBox.Text = cliente.direccion_piso.ToString();
+                deptoBox.Text = cliente.direccion_depto;
+                localidadBox.Text = cliente.direccion_localidad;
+                codPostalBox.Text = cliente.codigo_postal;
+                habilitadoBox.Checked = cliente.esta_habilitado;
+
+            }
+            else {
+                habilitadoBox.Visible = false;
+           
+            }
+  
+        }
 
         public AltaClienteForm(string username, string passw)
         {
@@ -44,8 +71,8 @@ namespace PalcoNet.Formularios.AbmCliente
                 nuevaPersona.mail = mailBox.Text;
                 nuevaPersona.telefono = telBox.Text;
                 nuevaPersona.direccion_calle = direccionBox.Text;
-                nuevaPersona.direccion_nro = nroBox.Text;
-                nuevaPersona.direccion_piso = pisoBox.Text;
+                nuevaPersona.direccion_nro = Convert.ToInt32(nroBox.Text);
+                nuevaPersona.direccion_piso = Convert.ToInt32(pisoBox.Text);
                 nuevaPersona.direccion_depto = deptoBox.Text;
                 nuevaPersona.codigo_postal = codPostalBox.Text;
                 

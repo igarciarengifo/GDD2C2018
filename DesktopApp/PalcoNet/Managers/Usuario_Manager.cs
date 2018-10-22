@@ -58,5 +58,12 @@ namespace PalcoNet.Managers
                                         SQLArgumentosManager.nuevoParametro("@id_user", id_user)));
         }
 
+
+        public int cambiarPassword(string newPassHash, int id_usuario)
+        {
+            return (SQLManager.ejecutarNonQuery("LOOPP.SP_CambiarPassword",
+                                SQLArgumentosManager.nuevoParametro("@newPass", newPassHash)
+                                .add("@id_usuario", id_usuario)));
+        }
     }
 }
