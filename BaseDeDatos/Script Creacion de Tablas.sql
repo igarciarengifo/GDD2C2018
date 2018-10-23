@@ -192,7 +192,7 @@ Print '***Inicio de creacion de tablas***'
 	/*-14- Tabla Clientes*/
 	CREATE TABLE LOOPP.Clientes(
 		id_cliente int identity(1,1) NOT NULL,
-		estado varchar(50) NOT NULL DEFAULT('Habilitado'),
+		esta_habilitado bit NOT NULL DEFAULT('True'),
 		puntos int NOT NULL DEFAULT('0'),
 		nombre nvarchar(255) NOT NULL,
 		apellido nvarchar(255) NOT NULL,
