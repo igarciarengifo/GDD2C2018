@@ -85,7 +85,7 @@ Print '***Inicio de creacion de tablas***'
 		[username] [varchar](255) NOT NULL,
 		[password] [varchar](255) NOT NULL,
 		[loginFallidos] int NOT NULL DEFAULT (0),
-		[estado] [varchar](50) NOT NULL DEFAULT('Primer Login'),
+		[habilitado] bit NOT NULL DEFAULT('True'),
 		primary key ([id_usuario])
 	);
 
