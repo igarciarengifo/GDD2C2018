@@ -10,49 +10,46 @@ END
 
 	IF OBJECT_ID('LOOPP.Localidades_Vendidas') IS NOT NULL
 		DROP TABLE [LOOPP].[Localidades_Vendidas];
+	IF OBJECT_ID('LOOPP.Compras') IS NOT NULL
+		DROP TABLE [LOOPP].[Compras];
+	IF OBJECT_ID('LOOPP.Tarjetas_Asociadas') IS NOT NULL
+		DROP TABLE [LOOPP].[Tarjetas_Asociadas];
+	IF OBJECT_ID('LOOPP.Clientes') IS NOT NULL
+		DROP TABLE [LOOPP].[Clientes];
 	IF OBJECT_ID('LOOPP.Item_Factura') IS NOT NULL
 		DROP TABLE [LOOPP].[Item_Factura];
 	IF OBJECT_ID('LOOPP.Facturas') IS NOT NULL
 		DROP TABLE [LOOPP].[Facturas];
-	IF OBJECT_ID('LOOPP.Compras') IS NOT NULL
-		DROP TABLE [LOOPP].[Compras];
-		IF OBJECT_ID('LOOPP.Puntos') IS NOT NULL
-		DROP TABLE [LOOPP].[Puntos];
-	IF OBJECT_ID('LOOPP.Formas_Pago_Cliente') IS NOT NULL
-		DROP TABLE [LOOPP].[Formas_Pago_Cliente];
-	IF OBJECT_ID('LOOPP.Clientes') IS NOT NULL
-		DROP TABLE [LOOPP].[Clientes];
+	IF OBJECT_ID('LOOPP.Empresas') IS NOT NULL
+		DROP TABLE [LOOPP].[Empresas];
 	IF OBJECT_ID('LOOPP.Ubicac_X_Espectaculo') IS NOT NULL
 		DROP TABLE [LOOPP].[Ubicac_X_Espectaculo];
-	IF OBJECT_ID('LOOPP.Ubicaciones') IS NOT NULL
-		DROP TABLE [LOOPP].[Ubicaciones];
-	IF OBJECT_ID('LOOPP.Tipo_Ubicacion') IS NOT NULL
-		DROP TABLE [LOOPP].[Tipo_Ubicacion];
 	IF OBJECT_ID('LOOPP.Espectaculos') IS NOT NULL
 		DROP TABLE [LOOPP].[Espectaculos];
+	IF OBJECT_ID('LOOPP.Rol_X_Usuario') IS NOT NULL
+		DROP TABLE [LOOPP].[Rol_X_Usuario];
 	IF OBJECT_ID('LOOPP.Rubros') IS NOT NULL
 		DROP TABLE [LOOPP].[Rubros];
 	IF OBJECT_ID('LOOPP.Grados_Publicacion') IS NOT NULL
 		DROP TABLE [LOOPP].[Grados_Publicacion];
 	IF OBJECT_ID('LOOPP.Estados_Publicacion') IS NOT NULL
 		DROP TABLE [LOOPP].[Estados_Publicacion];
-	IF OBJECT_ID('LOOPP.Empresas') IS NOT NULL
-		DROP TABLE [LOOPP].[Empresas];
-	IF OBJECT_ID('LOOPP.Empresas') IS NOT NULL
-		DROP TABLE [LOOPP].[Empresas];
-	IF OBJECT_ID('LOOPP.Rol_X_Usuario') IS NOT NULL
-		DROP TABLE [LOOPP].[Rol_X_Usuario];
-	IF OBJECT_ID('LOOPP.Rol_X_Usuario') IS NOT NULL
-		DROP TABLE [LOOPP].[Rol_X_Usuario];
-	IF OBJECT_ID('LOOPP.Usuarios') IS NOT NULL
-		DROP TABLE [LOOPP].[Usuarios];
+	IF OBJECT_ID('LOOPP.Usuario_X_Rol') IS NOT NULL
+		DROP TABLE [LOOPP].[Usuario_X_Rol];
 	IF OBJECT_ID('LOOPP.Func_X_Rol') IS NOT NULL
 		DROP TABLE [LOOPP].[Func_X_Rol];
 	IF OBJECT_ID('LOOPP.Funcionalidades') IS NOT NULL
 		DROP TABLE [LOOPP].[Funcionalidades];
+	IF OBJECT_ID('LOOPP.Usuarios') IS NOT NULL
+		DROP TABLE [LOOPP].[Usuarios];
 	IF OBJECT_ID('LOOPP.Roles') IS NOT NULL
 		DROP TABLE [LOOPP].[Roles];
-	
+	IF OBJECT_ID('LOOPP.Formas_Pago') IS NOT NULL
+		DROP TABLE [LOOPP].[Formas_Pago];
+	IF OBJECT_ID('LOOPP.Ubicaciones') IS NOT NULL
+		DROP TABLE [LOOPP].[Ubicaciones];
+	IF OBJECT_ID('LOOPP.Tipo_Ubicacion') IS NOT NULL
+		DROP TABLE [LOOPP].[Tipo_Ubicacion];
 
 /*##########################################################################################################*/
 /*										CREACION DE TABLAS													*/
@@ -89,7 +86,8 @@ Print '***Inicio de creacion de tablas***'
 		[password] [varchar](255) NOT NULL,
 		[loginFallidos] int NOT NULL DEFAULT (0),
 		[habilitado] bit NOT NULL DEFAULT('True'),
-		primary key ([id_usuario])
+		primary key ([id_usuario]),
+		CONSTRAINT UC_Usuario UNIQUE (username)
 	);
 
 	/*-5- Tabla Rol por Usuario*/
@@ -196,7 +194,7 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE LOOPP.Clientes(
 		id_cliente int identity(1,1) NOT NULL,
 		estado nvarchar(50) NOT NULL DEFAULT('Habilitado'),
-		puntos_acumulados int NOT NULL DEFAULT('0'),
+		puntos int NOT NULL DEFAULT('0'),
 		nombre nvarchar(255) NOT NULL,
 		apellido nvarchar(255) NOT NULL,
 		tipo_documento nvarchar(20) NOT NULL DEFAULT('DNI'),
@@ -217,30 +215,20 @@ Print '***Inicio de creacion de tablas***'
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
 	);
 
-
-	/*-15- Formas de Pago Cliente*/
-	CREATE TABLE LOOPP.Formas_Pago_Cliente(
-		id_forma_pago_cliente int identity(1,1) NOT NULL,
-		descripcion nvarchar(20) NOT NULL,
+	/*-15- Tabla Tarjetas asociadas*/
+	CREATE TABLE LOOPP.Tarjetas_Asociadas(
 		nro_tarjeta bigint NOT NULL,
-		marca nvarchar(20) NOT NULL,
 		id_cliente int NOT NULL,
-		primary key ([id_forma_pago_cliente]),
+		marca nvarchar(20) NOT NULL,
+		primary key (nro_tarjeta),
 		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
 	);
 
-	/*-16- Puntos*/
-	CREATE TABLE LOOPP.Puntos(
-		id_puntos int identity(1,1) NOT NULL,
-		fecha_accion datetime NOT NULL,
-		descripcion nvarchar(60) NOT NULL,
-		pedir_puntos int NOT NULL DEFAULT('0'),
-		fecha_vencimiento datetime NOT NULL,
-		escanje bit NOT NULL DEFAULT('True'),
-		usados int NOT NULL DEFAULT('0'),
-		id_cliente int NOT NULL,
-		primary key ([id_puntos]),
-		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
+	/*-16- Formas de Pago*/
+	CREATE TABLE LOOPP.Formas_Pago(
+		id_forma_pago int identity(1,1) NOT NULL,
+		descripcion nvarchar(20) NOT NULL,
+		primary key ([id_forma_pago])
 	);
 
 	/*-17- Tabla Compras*/
@@ -248,11 +236,13 @@ Print '***Inicio de creacion de tablas***'
 		id_compra int identity(1,1) NOT NULL,
 		fecha_compra datetime NOT NULL,
 		importe_total numeric(18, 0) NOT NULL,
-		id_forma_pago_cliente int NOT NULL,
-		puntos  int NOT NULL DEFAULT('0'),
+		id_forma_pago int NOT NULL,
+		nro_tarjeta bigint NOT NULL,
+		id_cliente int NOT NULL,
 		primary key ([id_compra]),
-		foreign key ([id_forma_pago_cliente]) references [LOOPP].[Formas_Pago_Cliente]([id_forma_pago_cliente]),
-		
+		foreign key ([id_forma_pago]) references [LOOPP].[Formas_Pago]([id_forma_pago]),
+		foreign key ([nro_tarjeta]) references [LOOPP].[Tarjetas_Asociadas]([nro_tarjeta]),
+		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
 	);
 
 	/*-18- Tabla Facturas*/
