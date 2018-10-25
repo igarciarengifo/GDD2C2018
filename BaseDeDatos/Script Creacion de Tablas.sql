@@ -86,7 +86,8 @@ Print '***Inicio de creacion de tablas***'
 		[password] [varchar](255) NOT NULL,
 		[loginFallidos] int NOT NULL DEFAULT (0),
 		[habilitado] bit NOT NULL DEFAULT('True'),
-		primary key ([id_usuario])
+		primary key ([id_usuario]),
+		CONSTRAINT UC_Usuario UNIQUE (username)
 	);
 
 	/*-5- Tabla Rol por Usuario*/
