@@ -22,27 +22,32 @@ namespace PalcoNet.Formularios.ABMUsuario
 
         private void changePassBtn_Click(object sender, EventArgs e)
         {
-            try {
-                this.verificarCamposObligatorios(); 
+            try
+            {
+                this.verificarCamposObligatorios();
                 this.verificarPassActual();
                 this.verificarNuevaPass();
                 if (this.cambiarPassword() != 0)
                 {
                     MessageBox.Show("Se modificó correctamente la contraseña");
                 }
-                else {
+                else
+                {
                     MessageBox.Show("No pudo realizarse el cambio. Vuelva a intentarlo");
                 }
-                
+
+            }
+            catch (Exception exc) {
+                MessageBox.Show(exc.Message);
             }
             
         }
 
-        private void cambiarPassword()
+        private int cambiarPassword()
         {
             string newPassHash = Encriptacion.getHashSha256(newPassBox.Text);
             Usuario_Manager userMng = new Usuario_Manager();
-            userMng.cambiarPassword(newPassHash, DatosSesion.id_usuario); 
+            return userMng.cambiarPassword(newPassHash, DatosSesion.id_usuario); 
         }
 
         private void verificarNuevaPass()

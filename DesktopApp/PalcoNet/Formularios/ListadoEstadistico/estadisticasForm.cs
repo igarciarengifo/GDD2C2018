@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PalcoNet.Listado_Estadistico
+namespace PalcoNet.Formularios.ListadoEstadistico
 {
-    public partial class Form1 : Form
+    public partial class estadisticasForm : Form
     {
-        public Form1()
+        public estadisticasForm()
         {
             InitializeComponent();
         }

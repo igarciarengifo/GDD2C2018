@@ -97,6 +97,12 @@
     <Compile Include="Formularios\ABMUsuario\AltaUsuarioForm.Designer.cs">
       <DependentUpon>AltaUsuarioForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\ABMUsuario\CambiarPassForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\ABMUsuario\CambiarPassForm.Designer.cs">
+      <DependentUpon>CambiarPassForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\CanjePuntos\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,11 +139,11 @@
     <Compile Include="Formularios\HistorialCliente\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\ListadoEstadistico\Form1.cs">
+    <Compile Include="Formularios\ListadoEstadistico\estadisticasForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\ListadoEstadistico\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Formularios\ListadoEstadistico\estadisticasForm.Designer.cs">
+      <DependentUpon>estadisticasForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Login\LoginForm.cs">
       <SubType>Form</SubType>
@@ -151,10 +157,10 @@
     <Compile Include="Formularios\Login\SeleccionRolForm.Designer.cs">
       <DependentUpon>SeleccionRolForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\MenuPrincipalForm.cs">
+    <Compile Include="Formularios\Login\MenuPrincipalForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\MenuPrincipalForm.Designer.cs">
+    <Compile Include="Formularios\Login\MenuPrincipalForm.Designer.cs">
       <DependentUpon>MenuPrincipalForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Managers\Cliente_Manager.cs" />
@@ -182,13 +188,19 @@
     <EmbeddedResource Include="Formularios\ABMUsuario\AltaUsuarioForm.resx">
       <DependentUpon>AltaUsuarioForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\ABMUsuario\CambiarPassForm.resx">
+      <DependentUpon>CambiarPassForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\ListadoEstadistico\estadisticasForm.resx">
+      <DependentUpon>estadisticasForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Login\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Login\SeleccionRolForm.resx">
       <DependentUpon>SeleccionRolForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\MenuPrincipalForm.resx">
+    <EmbeddedResource Include="Formularios\Login\MenuPrincipalForm.resx">
       <DependentUpon>MenuPrincipalForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

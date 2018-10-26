@@ -145,6 +145,17 @@ namespace PalcoNet.Formularios
             iniciar_sesion();
         }
 
+        private void historialPuntosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void canjeDePuntosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+      
         
     }
 }

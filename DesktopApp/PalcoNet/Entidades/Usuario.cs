@@ -12,6 +12,6 @@ namespace PalcoNet.Entidades
         public String username;
         public String password;
         public int loginFallidos;
-        public bool esta_habilitado;
+        public bool habilitado;
     }
 }

@@ -82,12 +82,14 @@
             this.historialPuntosToolStripMenuItem.Name = "historialPuntosToolStripMenuItem";
             this.historialPuntosToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.historialPuntosToolStripMenuItem.Text = "Historial Puntos";
+            this.historialPuntosToolStripMenuItem.Click += new System.EventHandler(this.historialPuntosToolStripMenuItem_Click);
             // 
             // canjeDePuntosToolStripMenuItem
             // 
             this.canjeDePuntosToolStripMenuItem.Name = "canjeDePuntosToolStripMenuItem";
             this.canjeDePuntosToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.canjeDePuntosToolStripMenuItem.Text = "Canje de Puntos";
+            this.canjeDePuntosToolStripMenuItem.Click += new System.EventHandler(this.canjeDePuntosToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 

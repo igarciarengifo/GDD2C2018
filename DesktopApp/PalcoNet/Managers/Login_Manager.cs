@@ -19,7 +19,7 @@ namespace PalcoNet.Managers
             Usuario usuarioLogin = usuario_Mgr.getUsuario(user);
             if (usuarioLogin != null)
             {
-                if (usuarioLogin.esta_habilitado)
+                if (usuarioLogin.habilitado)
                 {
                     throw new System.ArgumentException("Usuario bloqueado. Contacte con su Administrador para desbloquear la cuenta");
                 } 

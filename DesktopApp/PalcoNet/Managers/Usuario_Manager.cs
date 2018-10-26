@@ -39,7 +39,7 @@ namespace PalcoNet.Managers
             nuevoUsuario.id_usuario = Convert.ToInt32(row["id_usuario"]);
             nuevoUsuario.username = Convert.ToString(row["username"]);
             nuevoUsuario.password = Convert.ToString(row["password"]);
-            nuevoUsuario.esta_habilitado = Convert.ToBoolean(row["esta_habilitado"]);
+            nuevoUsuario.habilitado = Convert.ToBoolean(row["esta_habilitado"]);
             return nuevoUsuario;
         }
 
