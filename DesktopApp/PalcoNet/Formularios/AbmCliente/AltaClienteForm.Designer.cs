@@ -352,7 +352,7 @@
             this.newClienteBtn.Name = "newClienteBtn";
             this.newClienteBtn.Size = new System.Drawing.Size(75, 23);
             this.newClienteBtn.TabIndex = 2;
-            this.newClienteBtn.Text = "Crear";
+            this.newClienteBtn.Text = "Aceptar";
             this.newClienteBtn.UseVisualStyleBackColor = true;
             this.newClienteBtn.Click += new System.EventHandler(this.newClienteBtn_Click);
             // 
@@ -362,7 +362,7 @@
             this.exitBtn.Name = "exitBtn";
             this.exitBtn.Size = new System.Drawing.Size(75, 23);
             this.exitBtn.TabIndex = 3;
-            this.exitBtn.Text = "Salir";
+            this.exitBtn.Text = "Cancelar";
             this.exitBtn.UseVisualStyleBackColor = true;
             this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
             // 

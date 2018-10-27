@@ -148,6 +148,7 @@
             this.empresasLinkLabel.TabIndex = 3;
             this.empresasLinkLabel.TabStop = true;
             this.empresasLinkLabel.Text = "Empresas con mayor cantidad de localidades no vendidas";
+            this.empresasLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.empresasLinkLabel_LinkClicked);
             // 
             // puntosLinkLabel
             // 
@@ -158,6 +159,7 @@
             this.puntosLinkLabel.TabIndex = 4;
             this.puntosLinkLabel.TabStop = true;
             this.puntosLinkLabel.Text = "Clientes con mayores puntos vencidos";
+            this.puntosLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.puntosLinkLabel_LinkClicked);
             // 
             // comprasLinkLabel
             // 
@@ -168,6 +170,7 @@
             this.comprasLinkLabel.TabIndex = 5;
             this.comprasLinkLabel.TabStop = true;
             this.comprasLinkLabel.Text = "Clientes con mayor cantidad de compras";
+            this.comprasLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.comprasLinkLabel_LinkClicked);
             // 
             // cancelBtn
             // 
@@ -177,6 +180,7 @@
             this.cancelBtn.TabIndex = 6;
             this.cancelBtn.Text = "Cancelar";
             this.cancelBtn.UseVisualStyleBackColor = true;
+            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
             // estadisticasForm
             // 

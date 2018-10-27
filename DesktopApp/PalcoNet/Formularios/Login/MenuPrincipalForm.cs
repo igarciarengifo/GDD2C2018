@@ -1,6 +1,7 @@
 ﻿using PalcoNet.Entidades;
 using PalcoNet.Formularios.AbmCliente;
 using PalcoNet.Formularios.AbmEmpresaEspectaculo;
+using PalcoNet.Formularios.ABMUsuario;
 using PalcoNet.Login;
 using System;
 using System.Collections.Generic;
@@ -134,7 +135,8 @@ namespace PalcoNet.Formularios
 
         private void modificarUsuarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            CambiarPassForm cambiarPassForm = new CambiarPassForm();
+            cambiarPassForm.ShowDialog();
         }
 
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)

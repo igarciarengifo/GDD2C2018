@@ -76,6 +76,12 @@ namespace PalcoNet.Managers
 
 
 
+        public static T ejecutarEscalarQuery<T>(string stringComando) { 
+            return ejecutarEscalarQuery<T>(stringComando, null);
+        
+        }
+
+
         public static T ejecutarEscalarQuery<T>(string stringComando, SQLArgumentosManager argManager)
         {
             SqlCommand spCommand = new SqlCommand(stringComando, connection);
