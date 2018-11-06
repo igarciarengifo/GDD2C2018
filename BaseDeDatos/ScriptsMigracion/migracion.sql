@@ -109,6 +109,14 @@ FROM gd_esquema.Maestra
 GROUP BY Ubicacion_Fila, Ubicacion_Asiento, Ubicacion_Sin_numerar, Ubicacion_Tipo_Codigo
 ORDER BY Ubicacion_Tipo_Codigo, Ubicacion_Fila, Ubicacion_Asiento
 
+/*Creacion catalogo de Canje*/
+
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES (10, 'Entrada gratis', 1000);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %30 en entradas', 800);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %20 en entradas', 500);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %10 en entradas', 300);
+
+
 /*Migracion de clientes*/
 
 /*Se agrupa clientes de la tabla Maestra y se inserta en una tabla Temporal*/
