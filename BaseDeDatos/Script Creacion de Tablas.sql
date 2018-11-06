@@ -156,7 +156,7 @@ Print '***Inicio de creacion de tablas***'
 		direccion nvarchar(50) NOT NULL,
 		id_estado_publicacion int not null,
 		id_grado_publicacion int not null,
-		precio numeric(18,2) NOT null,
+		precio_base numeric(18,2) NOT null,
 		primary key ([id_espectaculo]),
 		foreign key ([id_usuario_responsable]) references [LOOPP].[Usuarios]([id_usuario]),
 		foreign key ([id_rubro]) references [LOOPP].[Rubros]([id_rubro]),
@@ -187,6 +187,7 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE [LOOPP].[Ubicac_X_Espectaculo](
 		[id_espectaculo] [int] NOT NULL,
 		[id_ubicacion] [int] NOT NULL,
+		[precio] numeric(18,2) NOT null,
 		PRIMARY KEY ([id_espectaculo], [id_ubicacion]),
 		foreign key ([id_espectaculo]) references [LOOPP].[Espectaculos]([id_espectaculo]),
 		foreign key ([id_ubicacion]) references [LOOPP].[Ubicaciones]([id_ubicacion])
@@ -197,13 +198,12 @@ Print '***Inicio de creacion de tablas***'
 		id_cliente int identity(1,1) NOT NULL,
 		estado nvarchar(50) NOT NULL DEFAULT('Habilitado'),
 		puntos_acumulados int NOT NULL DEFAULT('0'),
+		fecha_vencimiento date null,
 		nombre nvarchar(255) NOT NULL,
 		apellido nvarchar(255) NOT NULL,
 		tipo_documento nvarchar(20) NOT NULL DEFAULT('DNI'),
 		nro_documento numeric(18,0) NOT NULL,
 		cuil nvarchar(15) NULL,
-		fecha_nacimiento datetime NULL,
-		fecha_creacion datetime NULL,
 		mail nvarchar(255) NOT NULL,
 		telefono nvarchar(15) NULL,
 		direccion_calle nvarchar(255) NULL,
@@ -212,6 +212,8 @@ Print '***Inicio de creacion de tablas***'
 		direccion_depto nvarchar(255) NULL,
 		direccion_localidad nvarchar(255) NULL,
 		codigo_postal nvarchar(255) NULL,
+		fecha_nacimiento datetime NULL,
+		fecha_creacion datetime NULL,
 		id_usuario int NOT NULL,
 		primary key ([id_cliente]),
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
@@ -228,34 +230,43 @@ Print '***Inicio de creacion de tablas***'
 		primary key ([id_forma_pago_cliente]),
 		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
 	);
+	
+	/*-16- Catalogo de canjes*/
+	CREATE TABLE LOOPP.Catalogo_Canjes(
+		id_codigo int identity(1,1) NOT NULL,
+		stock numeric(18, 0) not null,
+		descripcion	nvarchar(30) NOT NULL,
+		puntos_validos numeric(18, 0) not NULL,
+		primary key ([id_codigo])
+	);
 
-	/*-16- Puntos*/
-	CREATE TABLE LOOPP.Puntos(
-		id_puntos int identity(1,1) NOT NULL,
-		fecha_accion datetime NOT NULL,
-		descripcion nvarchar(60) NOT NULL,
-		pedir_puntos int NOT NULL DEFAULT('0'),
-		fecha_vencimiento datetime NOT NULL,
-		escanje bit NOT NULL DEFAULT('True'),
-		usados int NOT NULL DEFAULT('0'),
+	/*-17- Canjes*/
+	CREATE TABLE LOOPP.Canjes(
+		id_canje int identity(1,1) NOT NULL,
+		fecha_canje datetime NOT NULL,
+		puntos_canjeados numeric(18, 0) not NULL,
+		id_codigo int NOT NULL,
 		id_cliente int NOT NULL,
-		primary key ([id_puntos]),
+		primary key ([id_canje]),
+		foreign key (id_codigo) references [LOOPP].[Catalogo_Canjes](id_codigo),
 		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
 	);
 
-	/*-17- Tabla Compras*/
+	/*-18- Tabla Compras*/
 	CREATE TABLE LOOPP.Compras(
 		id_compra int identity(1,1) NOT NULL,
 		fecha_compra datetime NOT NULL,
 		importe_total numeric(18, 0) NOT NULL,
 		id_forma_pago_cliente int NOT NULL,
 		puntos  int NOT NULL DEFAULT('0'),
+		id_cliente int NOT NULL,
 		primary key ([id_compra]),
 		foreign key ([id_forma_pago_cliente]) references [LOOPP].[Formas_Pago_Cliente]([id_forma_pago_cliente]),
+		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
 		
 	);
 
-	/*-18- Tabla Facturas*/
+	/*-19- Tabla Facturas*/
 	CREATE TABLE LOOPP.Facturas(
 		nro_factura int NOT NULL,
 		fecha_factura datetime NOT NULL,
@@ -267,7 +278,7 @@ Print '***Inicio de creacion de tablas***'
 		foreign key ([id_espectaculo]) references [LOOPP].[Espectaculos]([id_espectaculo])
 	);
 
-	/*-19- Tabla Items Factura*/
+	/*-20- Tabla Items Factura*/
 	CREATE TABLE LOOPP.Item_Factura(
 		nro_item int identity(1,1) NOT NULL,
 		nro_factura int NOT NULL,
@@ -279,7 +290,7 @@ Print '***Inicio de creacion de tablas***'
 	);
 
 
-	/*-20- Tabla Localidades vendidas*/
+	/*-21- Tabla Localidades vendidas*/
 	CREATE TABLE LOOPP.Localidades_Vendidas(
 		id_compra int NOT NULL,
 		id_espectaculo int NOT NULL,

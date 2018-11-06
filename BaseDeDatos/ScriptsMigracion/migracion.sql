@@ -72,9 +72,10 @@ INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Publicar Espectaculo'); 
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Modificar Publicacion'); --7
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Facturar rendiciones'); --8
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Historal Cliente');  --9
-INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Canje Puntos'); --10 
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Canjear Puntos'); --10 
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Listado Estadistico');  --11
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Grado Publicacion');  --12
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM de Rubros');  --13
 
 
 /*Creacion de Funcionalidad_X_Rol*/
@@ -84,6 +85,7 @@ INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,3);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,8);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,11);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,12);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,13);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,4);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,5);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,9);
@@ -169,6 +171,11 @@ select left(email,charindex('@',email,1)-1) userName
 		,'1234' pass
 from #Temp_Cli_Incons
 where cantDni=1 and cantEmail=1
+
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
+SELECT id_usuario,2
+FROM [LOOPP].[Usuarios]
+where id_usuario not in (select id_usuario from [LOOPP].[Rol_X_Usuario])
 /*Se inserta tabla clientes con los datos de clientes que sean unicos*/
 insert into [LOOPP].[Clientes] (
 	   [nombre]
@@ -207,6 +214,11 @@ select left(email,charindex('@',email,1)-1)+'_duplicado' userName
 		,'1234' pass
 from #Temp_Cli_Incons
 where cantDni=1 and cantEmail>1
+
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
+SELECT id_usuario,2
+FROM [LOOPP].[Usuarios]
+where id_usuario not in (select id_usuario from [LOOPP].[Rol_X_Usuario])
 
 /*Se inserta tabla clientes con los datos de clientes que poseen datos incosistentes
   Como por ejemplo 2 emials iguales para clientes con distinto dni*/
