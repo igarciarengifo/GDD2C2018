@@ -109,7 +109,7 @@ Print '***Inicio de creacion de tablas***'
 		razon_social nvarchar(255) NOT NULL,
 		cuit nvarchar(255) NOT NULL,
 		fecha_creacion datetime NULL,
-		mail nvarchar(50) NOT NULL,
+		mail nvarchar(50) NULL,
 		telefono nvarchar(15) NULL,
 		direccion_calle nvarchar(50) NULL,
 		direccion_nro numeric(18, 0) NULL,
