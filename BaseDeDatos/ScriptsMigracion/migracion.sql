@@ -262,3 +262,75 @@ where cantDni=1 and cantEmail>1
 order by dni
 
 DROP TABLE #Temp_Cli_Incons;
+
+
+/*Migracion de Empresas*/
+
+SELECT 
+	Espec_Empresa_Razon_Social,
+	Espec_Empresa_Cuit, 
+	Espec_Empresa_Fecha_Creacion,
+	Espec_Empresa_Mail email,
+	Espec_Empresa_Dom_Calle,
+	Espec_Empresa_Nro_Calle,
+	Espec_Empresa_Piso,
+	Espec_Empresa_Depto,
+	Espec_Empresa_Cod_Postal
+into #Temp_Empresas
+FROM [GD2C2018].[gd_esquema].[Maestra]
+where Espec_Empresa_Cuit  is not null
+group by 
+	Espec_Empresa_Razon_Social,
+	Espec_Empresa_Cuit, 
+	Espec_Empresa_Fecha_Creacion,
+	Espec_Empresa_Mail,
+	Espec_Empresa_Dom_Calle,
+	Espec_Empresa_Nro_Calle,
+	Espec_Empresa_Piso,
+	Espec_Empresa_Depto,
+	Espec_Empresa_Cod_Postal
+;
+
+/*Se inserta tabla usuarios antes de insertar la empresa, ya que empresa tiene un FK a la tabla usuarios*/
+
+insert into [LOOPP].[Usuarios] (
+		[username]
+		,[password])
+select left(email,charindex('@',email,1)-1) userName
+		,'1234' pass
+from #Temp_Empresas
+
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
+SELECT id_usuario,3
+FROM [LOOPP].[Usuarios]
+where id_usuario not in (select id_usuario from [LOOPP].[Rol_X_Usuario])
+
+/*Se inserta tabla empresas */
+
+insert into [LOOPP].[Empresas] (
+	 razon_social,
+	 cuit,
+	 fecha_creacion,
+	 mail,
+	 direccion_calle,
+	 direccion_nro,
+	 direccion_piso,
+	 direccion_depto,
+	 cod_postal,
+	 id_usuario )
+select	Espec_Empresa_Razon_Social,
+		Espec_Empresa_Cuit, 
+		Espec_Empresa_Fecha_Creacion,
+		 email,
+		Espec_Empresa_Dom_Calle,
+		Espec_Empresa_Nro_Calle,
+		Espec_Empresa_Piso,
+		Espec_Empresa_Depto,
+		Espec_Empresa_Cod_Postal,
+		usu.id_usuario 
+FROM #Temp_Empresas
+inner join [LOOPP].[Usuarios] usu
+on left(email,charindex('@',email,1)-1)=usu.username
+order by Espec_Empresa_Cuit
+
+DROP TABLE #Temp_Empresas;
