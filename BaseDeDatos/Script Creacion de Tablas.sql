@@ -16,10 +16,12 @@ END
 		DROP TABLE [LOOPP].[Facturas];
 	IF OBJECT_ID('LOOPP.Compras') IS NOT NULL
 		DROP TABLE [LOOPP].[Compras];
-		IF OBJECT_ID('LOOPP.Puntos') IS NOT NULL
-		DROP TABLE [LOOPP].[Puntos];
 	IF OBJECT_ID('LOOPP.Formas_Pago_Cliente') IS NOT NULL
 		DROP TABLE [LOOPP].[Formas_Pago_Cliente];
+	IF OBJECT_ID('LOOPP.Canjes') IS NOT NULL
+		DROP TABLE [LOOPP].Canjes;
+	IF OBJECT_ID('LOOPP.Catalogo_Canjes') IS NOT NULL
+		DROP TABLE [LOOPP].Catalogo_Canjes;
 	IF OBJECT_ID('LOOPP.Clientes') IS NOT NULL
 		DROP TABLE [LOOPP].[Clientes];
 	IF OBJECT_ID('LOOPP.Ubicac_X_Espectaculo') IS NOT NULL
