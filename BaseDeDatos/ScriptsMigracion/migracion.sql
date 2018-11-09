@@ -334,3 +334,17 @@ on left(email,charindex('@',email,1)-1)=usu.username
 order by Espec_Empresa_Cuit
 
 DROP TABLE #Temp_Empresas;
+
+/*Migracion Forma de pago clientes*/
+
+insert into [LOOPP].[Formas_Pago_Cliente] (
+	descripcion,
+	id_cliente
+	 )
+select	
+		[Forma_Pago_Desc],
+		clie.id_cliente 
+FROM [gd_esquema].[Maestra] m
+inner join [LOOPP].[Clientes] clie on clie.nro_documento = m.Cli_Dni
+where Forma_Pago_Desc is not null
+group by Forma_Pago_Desc, clie.id_cliente
