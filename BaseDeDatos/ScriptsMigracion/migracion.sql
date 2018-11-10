@@ -10,6 +10,7 @@ VALUES ('Publicada');
 INSERT INTO LOOPP.Estados_Publicacion (descripcion)
 VALUES ('Finalizada');
 GO
+-------------------------------------------------------------------------------
 
 /*Creacion de Tipo_Ubicacion*/
 
@@ -32,6 +33,7 @@ SELECT
 FROM gd_esquema.Maestra
 ORDER BY Ubicacion_Tipo_Codigo
 GO
+-------------------------------------------------------------------------------
 
 /*Creacion de Rubros*/
 
@@ -40,29 +42,38 @@ INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Musical');
 INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Obra Teatral');
 INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Humoristico');
 INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Audio Visual');
+-------------------------------------------------------------------------------
 
 /*Grados de Publicacion*/
+INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision,descripcion) VALUES (0,0.00,'No Definido');
 INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision,descripcion) VALUES (1,0.30,'Alta');
-INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision, descripcion) VALUES ( 2, 0.25, 'Media');
-INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision, descripcion) VALUES ( 3, 0.10, 'Baja');
+INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision, descripcion) VALUES (2, 0.25, 'Media');
+INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision, descripcion) VALUES (3, 0.10, 'Baja');
+-------------------------------------------------------------------------------
 
 /*Creacion de Roles*/
 
 INSERT INTO [LOOPP].[Roles]([nombre]) VALUES ('Administrativo');
 INSERT INTO [LOOPP].[Roles]([nombre]) VALUES ('Cliente');
 INSERT INTO [LOOPP].[Roles]([nombre]) VALUES ('Empresa');
+-------------------------------------------------------------------------------
 
 /*Creacion de usuario Admin*/
+
 INSERT INTO [LOOPP].[Usuarios] (username,password)
 --user :admin pass: w23e
 VALUES ('admin', '52d77462b24987175c8d7dab901a5967e927ffc8d0b6e4a234e07a4aec5e3724');
+-------------------------------------------------------------------------------
 
 /*Creacion de Rol_X_Usuario para el admin*/
+
 INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) VALUES (1,1);
 INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) VALUES (1,2);
 INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) VALUES (1,3);
+-------------------------------------------------------------------------------
 
 /*Creacion de funcionalidades*/
+
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Rol');  --1
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Clientes'); --2
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Empresas'); --3
@@ -76,9 +87,10 @@ INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Canjear Puntos'); --10
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Listado Estadistico');  --11
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Grado Publicacion');  --12
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM de Rubros');  --13
-
+-------------------------------------------------------------------------------
 
 /*Creacion de Funcionalidad_X_Rol*/
+
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,1);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,2);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,3);
@@ -92,6 +104,7 @@ INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,9);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,10);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (3,6);
 INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (3,7);
+-------------------------------------------------------------------------------
 
 /*Creacion de ubicaciones*/
 
@@ -108,6 +121,7 @@ SELECT
 FROM gd_esquema.Maestra
 GROUP BY Ubicacion_Fila, Ubicacion_Asiento, Ubicacion_Sin_numerar, Ubicacion_Tipo_Codigo
 ORDER BY Ubicacion_Tipo_Codigo, Ubicacion_Fila, Ubicacion_Asiento
+-------------------------------------------------------------------------------
 
 /*Creacion catalogo de Canje*/
 
@@ -115,7 +129,7 @@ INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES (1
 INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %30 en entradas', 800);
 INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %20 en entradas', 500);
 INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %10 en entradas', 300);
-
+-------------------------------------------------------------------------------
 
 /*Migracion de clientes*/
 
@@ -217,9 +231,11 @@ order by dni
 /*Se inserta tabla usuarios antes de insertar el cliente, ya que cliente tiene un FK a la tabla usuarios*/
 insert into [LOOPP].[Usuarios] (
 		[username]
-		,[password])
+		,[password]
+		,[habilitado])
 select left(email,charindex('@',email,1)-1)+'_duplicado' userName
 		,'1234' pass
+		,'False'
 from #Temp_Cli_Incons
 where cantDni=1 and cantEmail>1
 
@@ -262,7 +278,7 @@ where cantDni=1 and cantEmail>1
 order by dni
 
 DROP TABLE #Temp_Cli_Incons;
-
+-------------------------------------------------------------------------------
 
 /*Migracion de Empresas*/
 
@@ -334,6 +350,7 @@ on left(email,charindex('@',email,1)-1)=usu.username
 order by Espec_Empresa_Cuit
 
 DROP TABLE #Temp_Empresas;
+-------------------------------------------------------------------------------
 
 /*Migracion Forma de pago clientes*/
 
@@ -348,3 +365,56 @@ FROM [gd_esquema].[Maestra] m
 inner join [LOOPP].[Clientes] clie on clie.nro_documento = m.Cli_Dni
 where Forma_Pago_Desc is not null
 group by Forma_Pago_Desc, clie.id_cliente
+-------------------------------------------------------------------------------
+
+/*Migracion de Espectaculos*/
+
+/*Se genera una tabla temporal con los datos unicos sin repetidos*/
+SELECT [Espectaculo_Cod] id
+      ,[Espectaculo_Descripcion] descripcion
+      ,[Espectaculo_Fecha]
+      ,[Espectaculo_Fecha_Venc] venc_publicacion
+      ,[Espectaculo_Rubro_Descripcion] rubro
+      ,[Espectaculo_Estado] estado
+	  ,left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1) usuario
+into #TEMP_Espectaculo
+  FROM [GD2C2018].[gd_esquema].[Maestra]
+  where Espectaculo_Fecha>Espectaculo_Fecha_Venc
+  group by [Espectaculo_Cod]
+      ,[Espectaculo_Descripcion]
+      ,[Espectaculo_Fecha]
+      ,[Espectaculo_Fecha_Venc]
+      ,[Espectaculo_Rubro_Descripcion]
+      ,[Espectaculo_Estado]
+	  ,left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1)
+  order by [Espectaculo_Cod]
+  --7.803 rows
+
+/*Se inserta tabla Estapectaculos*/
+
+	insert into [LOOPP].[Espectaculos](
+			 [id_espectaculo]
+			,[id_usuario_responsable]
+			,[id_rubro]
+			,[fecha_publicacion]
+			,[fecha_evento]
+			,[descripcion]
+			,[id_estado_publicacion]
+			,[id_grado_publicacion]
+			)
+	select t.id
+			,u.id_usuario
+			,1--rubro 'No Definido'
+			,t.venc_publicacion
+			,t.Espectaculo_Fecha
+			,t.descripcion
+			,e.id_estado_publicacion
+			,1--grado de publicacion 'No Definido'
+	from #TEMP_Espectaculo t
+	inner join [LOOPP].[Usuarios] u
+	on t.usuario=u.username
+	inner join [LOOPP].[Estados_Publicacion] e
+	on t.estado=e.descripcion
+
+	Drop table #TEMP_Espectaculo;
+-------------------------------------------------------------------------------

@@ -149,16 +149,16 @@ Print '***Inicio de creacion de tablas***'
 
 	/*-10- Tabla Espectaculos*/
 	CREATE TABLE LOOPP.Espectaculos(
-		id_espectaculo int identity(1,1) NOT NULL,
+		id_espectaculo int NOT NULL,
 		id_usuario_responsable int not null,
 		id_rubro int not null,
 		fecha_publicacion datetime NOT NULL,
 		fecha_evento datetime NOT NULL,
 		descripcion nvarchar(255) NOT NULL,
-		direccion nvarchar(50) NOT NULL,
+		direccion nvarchar(50) NULL,
 		id_estado_publicacion int not null,
 		id_grado_publicacion int not null,
-		precio_base numeric(18,2) NOT null,
+		precio_base numeric(18,2) NOT null DEFAULT(0.00),
 		primary key ([id_espectaculo]),
 		foreign key ([id_usuario_responsable]) references [LOOPP].[Usuarios]([id_usuario]),
 		foreign key ([id_rubro]) references [LOOPP].[Rubros]([id_rubro]),
