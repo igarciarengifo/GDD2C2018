@@ -462,3 +462,47 @@ into #TEMP_Espectaculo
 
 	Drop table #Temp_Ubic_Espec;
 -------------------------------------------------------------------------------
+
+/*Migracion de Facturas*/
+
+/*Se genera una tabla temporal con los datos unicos sin repetidos*/
+SELECT [Espec_Empresa_Cuit]
+      ,[Espectaculo_Cod]
+	  ,[Espectaculo_Fecha]
+      ,[Factura_Nro]
+      ,[Factura_Fecha]
+      ,[Factura_Total]
+into #Temp_Factura
+FROM [GD2C2018].[gd_esquema].[Maestra]
+where [Factura_Nro] is not null
+group by [Espec_Empresa_Cuit]
+      ,[Espectaculo_Cod]
+	  ,[Espectaculo_Fecha]
+      ,[Factura_Nro]
+      ,[Factura_Fecha]
+      ,[Factura_Total]
+order by [Espec_Empresa_Cuit]
+      ,[Espectaculo_Cod]
+	  ,[Factura_Nro]
+--7.664 rows
+
+insert into [LOOPP].[Facturas](
+			[nro_factura]
+		   ,[fecha_factura]
+		   ,[total_factura]
+		   ,[id_empresa]
+		   ,[id_espectaculo])
+select t.Factura_Nro
+	  ,t.Factura_Fecha
+	  ,t.Factura_Total
+	  ,em.id_empresa
+	  ,es.id_espectaculo
+from #Temp_Factura t
+inner join [LOOPP].[Empresas] em
+	on t.Espec_Empresa_Cuit=em.cuit
+inner join [LOOPP].[Espectaculos] es
+	on t.Espectaculo_Cod=es.id_espectaculo
+order by t.Factura_Nro
+
+Drop table #Temp_Factura;
+-------------------------------------------------------------------------------
