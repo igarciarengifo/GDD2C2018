@@ -506,3 +506,20 @@ order by t.Factura_Nro
 
 Drop table #Temp_Factura;
 -------------------------------------------------------------------------------
+
+/*Migracion de Items Factura*/
+
+insert into [LOOPP].[Item_Factura](
+			[nro_factura]
+			,[monto]
+			,[cantidad]
+			,[descripcion])
+SELECT [Factura_Nro]
+      ,[Item_Factura_Monto]
+      ,[Item_Factura_Cantidad]
+      ,[Item_Factura_Descripcion]
+FROM [GD2C2018].[gd_esquema].[Maestra]
+where [Factura_Nro] is not null
+order by [Factura_Nro]
+--94.142 rows
+-------------------------------------------------------------------------------
