@@ -22,6 +22,10 @@ END
 		DROP TABLE [LOOPP].Canjes;
 	IF OBJECT_ID('LOOPP.Catalogo_Canjes') IS NOT NULL
 		DROP TABLE [LOOPP].Catalogo_Canjes;
+	IF OBJECT_ID('LOOPP.Rol_X_Usuario') IS NOT NULL
+		DROP TABLE [LOOPP].[Rol_X_Usuario];
+	IF OBJECT_ID('LOOPP.Tarjetas_Asociadas') IS NOT NULL
+		DROP TABLE [LOOPP].[Tarjetas_Asociadas];
 	IF OBJECT_ID('LOOPP.Clientes') IS NOT NULL
 		DROP TABLE [LOOPP].[Clientes];
 	IF OBJECT_ID('LOOPP.Ubicac_X_Espectaculo') IS NOT NULL
@@ -40,12 +44,6 @@ END
 		DROP TABLE [LOOPP].[Estados_Publicacion];
 	IF OBJECT_ID('LOOPP.Empresas') IS NOT NULL
 		DROP TABLE [LOOPP].[Empresas];
-	IF OBJECT_ID('LOOPP.Empresas') IS NOT NULL
-		DROP TABLE [LOOPP].[Empresas];
-	IF OBJECT_ID('LOOPP.Rol_X_Usuario') IS NOT NULL
-		DROP TABLE [LOOPP].[Rol_X_Usuario];
-	IF OBJECT_ID('LOOPP.Rol_X_Usuario') IS NOT NULL
-		DROP TABLE [LOOPP].[Rol_X_Usuario];
 	IF OBJECT_ID('LOOPP.Usuarios') IS NOT NULL
 		DROP TABLE [LOOPP].[Usuarios];
 	IF OBJECT_ID('LOOPP.Func_X_Rol') IS NOT NULL
