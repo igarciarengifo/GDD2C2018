@@ -372,17 +372,16 @@ group by Forma_Pago_Desc, clie.id_cliente
 /*Se genera una tabla temporal con los datos unicos sin repetidos*/
 SELECT [Espectaculo_Cod] id
       ,[Espectaculo_Descripcion] descripcion
-      ,[Espectaculo_Fecha]
+      --,[Espectaculo_Fecha] se agrega en tabla Ubicac_X_Espectaculo
       ,[Espectaculo_Fecha_Venc] venc_publicacion
       ,[Espectaculo_Rubro_Descripcion] rubro
       ,[Espectaculo_Estado] estado
 	  ,left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1) usuario
 into #TEMP_Espectaculo
   FROM [GD2C2018].[gd_esquema].[Maestra]
-  where Espectaculo_Fecha>Espectaculo_Fecha_Venc
   group by [Espectaculo_Cod]
       ,[Espectaculo_Descripcion]
-      ,[Espectaculo_Fecha]
+      --,[Espectaculo_Fecha]
       ,[Espectaculo_Fecha_Venc]
       ,[Espectaculo_Rubro_Descripcion]
       ,[Espectaculo_Estado]
@@ -397,7 +396,6 @@ into #TEMP_Espectaculo
 			,[id_usuario_responsable]
 			,[id_rubro]
 			,[fecha_publicacion]
-			,[fecha_evento]
 			,[descripcion]
 			,[id_estado_publicacion]
 			,[id_grado_publicacion]
@@ -406,7 +404,6 @@ into #TEMP_Espectaculo
 			,u.id_usuario
 			,1--rubro 'No Definido'
 			,t.venc_publicacion
-			,t.Espectaculo_Fecha
 			,t.descripcion
 			,e.id_estado_publicacion
 			,1--grado de publicacion 'No Definido'
@@ -417,4 +414,51 @@ into #TEMP_Espectaculo
 	on t.estado=e.descripcion
 
 	Drop table #TEMP_Espectaculo;
+-------------------------------------------------------------------------------
+
+/*Migracion de Ubicacion por Espectaculo*/
+
+/*Se genera una tabla temporal con los datos unicos sin repetidos*/
+	SELECT [Espectaculo_Cod]
+		  ,[Espectaculo_Fecha]
+		  ,[Ubicacion_Fila]
+		  ,[Ubicacion_Asiento]
+		  ,[Ubicacion_Sin_numerar]
+		  ,[Ubicacion_Precio]
+		  ,[Ubicacion_Tipo_Codigo]
+		  ,[Ubicacion_Tipo_Descripcion]
+	into #Temp_Ubic_Espec
+	FROM [GD2C2018].[gd_esquema].[Maestra]
+	group by [Espectaculo_Cod]
+		  ,[Espectaculo_Fecha]
+		  ,[Ubicacion_Fila]
+		  ,[Ubicacion_Asiento]
+		  ,[Ubicacion_Sin_numerar]
+		  ,[Ubicacion_Precio]
+		  ,[Ubicacion_Tipo_Codigo]
+		  ,[Ubicacion_Tipo_Descripcion]
+	order by [Espectaculo_Cod]
+	--238.143
+
+	insert into [LOOPP].[Ubicac_X_Espectaculo] (
+				[id_espectaculo]
+				,[id_ubicacion]
+				,[precio]
+				,[fecha_espectaculo]
+				,[hora_espectaculo])
+	select e.id_espectaculo
+		  ,u.id_ubicacion
+		  ,t.Ubicacion_Precio
+		  ,cast(t.Espectaculo_Fecha as date) fecha
+		  ,'00:00:00' hora
+	from #Temp_Ubic_Espec t
+	inner join [LOOPP].[Espectaculos] e
+		on t.Espectaculo_Cod=e.id_espectaculo
+	inner join [LOOPP].[Ubicaciones] u
+		on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
+	inner join [LOOPP].[Tipo_Ubicacion] tu
+		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion and t.Ubicacion_Tipo_Descripcion=tu.descripcion
+	order by e.id_espectaculo,u.id_ubicacion
+
+	Drop table #Temp_Ubic_Espec;
 -------------------------------------------------------------------------------

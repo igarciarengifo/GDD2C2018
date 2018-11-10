@@ -153,7 +153,6 @@ Print '***Inicio de creacion de tablas***'
 		id_usuario_responsable int not null,
 		id_rubro int not null,
 		fecha_publicacion datetime NOT NULL,
-		fecha_evento datetime NOT NULL,
 		descripcion nvarchar(255) NOT NULL,
 		direccion nvarchar(50) NULL,
 		id_estado_publicacion int not null,
@@ -190,6 +189,8 @@ Print '***Inicio de creacion de tablas***'
 		[id_espectaculo] [int] NOT NULL,
 		[id_ubicacion] [int] NOT NULL,
 		[precio] numeric(18,2) NOT null,
+		[fecha_espectaculo] date not null,
+		[hora_espectaculo] time not null,
 		PRIMARY KEY ([id_espectaculo], [id_ubicacion]),
 		foreign key ([id_espectaculo]) references [LOOPP].[Espectaculos]([id_espectaculo]),
 		foreign key ([id_ubicacion]) references [LOOPP].[Ubicaciones]([id_ubicacion])
@@ -226,8 +227,8 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE LOOPP.Formas_Pago_Cliente(
 		id_forma_pago_cliente int identity(1,1) NOT NULL,
 		descripcion nvarchar(20) NOT NULL,
-		nro_tarjeta bigint NOT NULL,
-		marca nvarchar(20) NOT NULL,
+		nro_tarjeta bigint,
+		marca nvarchar(20),
 		id_cliente int NOT NULL,
 		primary key ([id_forma_pago_cliente]),
 		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
