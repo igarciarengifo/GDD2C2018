@@ -25,11 +25,14 @@ AS
 					[username]
 					,[password])
 		values (@user,@pass);
-
+		
 		declare @idUsu int;
 		select @idUsu=[id_usuario]
 		from [LOOPP].[Usuarios]
 		where [username]=@user;
+
+		INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
+		VALUES (@idUsu,2);
 
 		if not exists (select 1 from [LOOPP].[Clientes] where tipo_documento=@tipo_doc and nro_documento=@documento and mail=@mail)
 		begin
