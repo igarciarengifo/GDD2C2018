@@ -260,6 +260,7 @@ Print '***Inicio de creacion de tablas***'
 		id_compra int identity(1,1) NOT NULL,
 		fecha_compra datetime NOT NULL,
 		importe_total numeric(18, 0) NOT NULL,
+		cantidad_compra numeric(18, 0) NOT NULL,
 		id_forma_pago_cliente int NOT NULL,
 		puntos  int NOT NULL DEFAULT('0'),
 		id_cliente int NOT NULL,
