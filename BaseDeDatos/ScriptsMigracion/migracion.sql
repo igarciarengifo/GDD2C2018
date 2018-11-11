@@ -17,7 +17,7 @@ GO
 INSERT INTO LOOPP.Tipo_Ubicacion ( 
 	id_tipo_ubicacion, 
 	descripcion, 
-	porcentual)
+	porcentual )
 SELECT 
 	DISTINCT Ubicacion_Tipo_Codigo, 
 	Ubicacion_Tipo_Descripcion,
@@ -421,6 +421,7 @@ into #TEMP_Espectaculo
 /*Se genera una tabla temporal con los datos unicos sin repetidos*/
 	SELECT [Espectaculo_Cod]
 		  ,[Espectaculo_Fecha]
+		  ,[Espectaculo_Fecha_Venc]
 		  ,[Ubicacion_Fila]
 		  ,[Ubicacion_Asiento]
 		  ,[Ubicacion_Sin_numerar]
@@ -431,6 +432,7 @@ into #TEMP_Espectaculo
 	FROM [GD2C2018].[gd_esquema].[Maestra]
 	group by [Espectaculo_Cod]
 		  ,[Espectaculo_Fecha]
+		  ,[Espectaculo_Fecha_Venc]
 		  ,[Ubicacion_Fila]
 		  ,[Ubicacion_Asiento]
 		  ,[Ubicacion_Sin_numerar]
@@ -445,11 +447,13 @@ into #TEMP_Espectaculo
 				,[id_ubicacion]
 				,[precio]
 				,[fecha_espectaculo]
+				,[fecha_Venc_espectaculo]
 				,[hora_espectaculo])
 	select e.id_espectaculo
 		  ,u.id_ubicacion
 		  ,t.Ubicacion_Precio
 		  ,cast(t.Espectaculo_Fecha as date) fecha
+		  ,cast(t.Espectaculo_Fecha_Venc as date) fechaV		  		  		  
 		  ,'00:00:00' hora
 	from #Temp_Ubic_Espec t
 	inner join [LOOPP].[Espectaculos] e
