@@ -548,3 +548,47 @@ inner join LOOPP.Tipo_Ubicacion tu on tu.id_tipo_ubicacion = u.id_tipo_ubicacion
 where Compra_Fecha is not null
 group by [Compra_Fecha], Ubicacion_Precio, porcentual ,[Compra_Cantidad], clie.id_cliente, f.id_forma_pago_cliente, Ubicacion_Asiento, Ubicacion_Fila
 order by Compra_Fecha;
+
+---------------------------------------------------------------------------------
+
+/*Migracion Localidades Vendidas*/
+
+/*Se genera una tabla temporal con los datos unicos sin repetidos*/
+	SELECT [Espectaculo_Cod]
+		  ,[Ubicacion_Fila]
+		  ,[Ubicacion_Asiento]
+		  ,[Ubicacion_Sin_numerar]
+		  ,[Cli_Dni]
+		  ,[Compra_Fecha]
+
+	into #Temp_Ubic_Espec_compra
+	FROM [GD2C2018].[gd_esquema].[Maestra]
+	group by  [Espectaculo_Cod]
+		  ,[Ubicacion_Fila]
+		  ,[Ubicacion_Asiento]
+		  ,[Ubicacion_Sin_numerar]
+		  ,[Cli_Dni]
+		  ,[Compra_Fecha]
+	order by [Espectaculo_Cod]
+
+	--332.285
+
+insert into [LOOPP].[Localidades_Vendidas] (
+			[id_espectaculo]
+			,[id_compra]
+			,[id_ubicacion] )
+select 
+			uxe.id_espectaculo,
+			c.id_compra,
+			uxe.id_ubicacion
+	FROM #Temp_Ubic_Espec_compra t
+inner join [LOOPP].[Ubicaciones] u on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
+inner join LOOPP.Ubicac_X_Espectaculo uxe 
+	on uxe.id_espectaculo = t.Espectaculo_Cod and uxe.id_ubicacion = u.id_ubicacion
+inner join [LOOPP].[Clientes] clie on clie.nro_documento = t.Cli_Dni
+inner join [LOOPP].[Compras]c on  c.id_cliente = clie.id_cliente  and c.fecha_compra = t.Compra_Fecha
+order by c.id_compra 
+
+--130.362
+
+drop table #Temp_Ubic_Espec_compra
