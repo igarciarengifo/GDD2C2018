@@ -1,0 +1,7 @@
+IF OBJECT_ID('LOOPP.SP_GetAllUbicaciones') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetAllUbicaciones
+GO
+CREATE PROCEDURE LOOPP.SP_GetAllUbicaciones
+AS
+	SELECT * from LOOPP.Ubicaciones
+GO
