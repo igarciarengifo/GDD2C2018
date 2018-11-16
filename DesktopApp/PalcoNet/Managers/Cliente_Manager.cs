@@ -70,7 +70,8 @@ namespace PalcoNet.Managers
             cliente.direccion_depto = row["direccion_depto"].ToString();
             cliente.direccion_localidad = row["direccion_localidad"].ToString();
             cliente.codigo_postal = row["codigo_postal"].ToString();
-            cliente.esta_habilitado = (Boolean)row["esta_habilitado"];
+            cliente.estado = row["estado"].ToString();
+            cliente.baja_logica = (Boolean)row["baja_logica"];
             return cliente;
         }
     }

@@ -18,6 +18,7 @@ namespace PalcoNet.Formularios.AbmCliente
         Cliente_Manager clienteMng = new Cliente_Manager();
 
         public AltaClienteForm(Cliente cliente) {
+            InitializeComponent();
             if (cliente.id_cliente != 0)
             {
                 habilitadoBox.Visible = true;
@@ -35,7 +36,7 @@ namespace PalcoNet.Formularios.AbmCliente
                 deptoBox.Text = cliente.direccion_depto;
                 localidadBox.Text = cliente.direccion_localidad;
                 codPostalBox.Text = cliente.codigo_postal;
-                habilitadoBox.Checked = cliente.esta_habilitado;
+                habilitadoBox.Checked = cliente.baja_logica;
 
             }
             else {

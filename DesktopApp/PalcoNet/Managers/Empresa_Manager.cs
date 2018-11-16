@@ -65,7 +65,7 @@ namespace PalcoNet.Managers
             empresa.direccion_localidad = row["direccion_localidad"].ToString();
             empresa.cod_postal = row["cod_postal"].ToString();
             empresa.ciudad = row["ciudad"].ToString();
-            empresa.esta_habilitado = (Boolean)row["esta_habilitado"];
+            empresa.baja_logica = (Boolean)row["baja_logica"];
             return empresa;
         }
     }

@@ -190,7 +190,7 @@ insert into [LOOPP].[Usuarios] (
 		[username]
 		,[password])
 select left(email,charindex('@',email,1)-1) userName
-		,'1234' pass
+		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
 from #Temp_Cli_Incons
 where cantDni=1 and cantEmail=1
 
@@ -234,8 +234,8 @@ insert into [LOOPP].[Usuarios] (
 		,[password]
 		,[habilitado])
 select left(email,charindex('@',email,1)-1)+'_duplicado' userName
-		,'1234' pass
-		,'False'
+		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
+		,'True'
 from #Temp_Cli_Incons
 where cantDni=1 and cantEmail>1
 
@@ -258,6 +258,7 @@ insert into [LOOPP].[Clientes] (
       ,[direccion_depto]
       ,[codigo_postal]
 	  ,[estado]
+	  ,[baja_logica]
       ,[id_usuario] )
 select [Nombre]
 		 ,[Apellido]
@@ -270,6 +271,7 @@ select [Nombre]
 		 ,[Cli_Depto]
 		 ,[Cli_Cod_Postal]
 		 ,'Inconsistente' estado
+		 ,'False'
 		 ,usu.id_usuario
 from #Temp_Cli_Incons tmp
 inner join [LOOPP].[Usuarios] usu
@@ -313,7 +315,7 @@ insert into [LOOPP].[Usuarios] (
 		[username]
 		,[password])
 select left(email,charindex('@',email,1)-1) userName
-		,'1234' pass
+		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
 from #Temp_Empresas
 
 INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 

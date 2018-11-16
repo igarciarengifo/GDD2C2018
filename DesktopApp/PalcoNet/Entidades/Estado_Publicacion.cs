@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PalcoNet.Entidades
 {
-    public class Funcionalidad
+    public class Estado_Publicacion
     {
-        public Int32 id_funcionalidad { get; set; }
-        public string nombre { get; set; }
+        public int id_estado_publicacion;
+        public string descripcion;
     }
 }

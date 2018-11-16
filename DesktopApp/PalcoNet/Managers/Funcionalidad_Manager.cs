@@ -33,7 +33,7 @@ namespace PalcoNet.Managers
         {
             Funcionalidad func = new Funcionalidad();
             func.id_funcionalidad = Convert.ToInt32(row["id_funcionalidad"]);
-            func.descripcion = Convert.ToString(row["descripcion"]);
+            func.nombre = Convert.ToString(row["nombre"]);
             return func;
         }
     }

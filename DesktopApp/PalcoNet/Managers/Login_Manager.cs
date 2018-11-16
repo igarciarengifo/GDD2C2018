@@ -19,13 +19,17 @@ namespace PalcoNet.Managers
             Usuario usuarioLogin = usuario_Mgr.getUsuario(user);
             if (usuarioLogin != null)
             {
-                if (usuarioLogin.habilitado)
+                if (!(usuarioLogin.habilitado))
                 {
                     throw new System.ArgumentException("Usuario bloqueado. Contacte con su Administrador para desbloquear la cuenta");
-                } 
+                }
+                
                 if (usuarioLogin.password == passHash)
                 {
                     id_usuario = usuarioLogin.id_usuario;
+                    if (usuario_Mgr.hasInvalidData(id_usuario)) {
+                        throw new Exception("El usuario tiene datos personales inconsistentes. Contacte con el administrador para realizar los cambios.");
+                    }
                     usuario_Mgr.reiniciarIntentos(usuarioLogin.id_usuario);
                 }
                 else {

@@ -18,6 +18,7 @@ namespace PalcoNet.Formularios.Login
 
         public SeleccionRolForm(List<Rol> roles)
         {
+            InitializeComponent();
             rolesUsuario = roles;
             this.cargarRolesSesion();
         }
@@ -45,5 +46,7 @@ namespace PalcoNet.Formularios.Login
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+
+ 
     }
 }

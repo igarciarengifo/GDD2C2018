@@ -116,7 +116,7 @@ Print '***Inicio de creacion de tablas***'
 		direccion_localidad nvarchar(50) NULL DEFAULT ('No definido'),
 		cod_postal nvarchar(50) NULL DEFAULT ('No definido'),
 		ciudad nvarchar(50) NULL DEFAULT ('No definido'),
-		esta_habilitado bit NOT NULL DEFAULT('True'),
+		baja_logica bit NOT NULL DEFAULT('False'),
 		id_usuario int not null,
 		primary key ([id_empresa]),
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
@@ -199,6 +199,7 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE LOOPP.Clientes(
 		id_cliente int identity(1,1) NOT NULL,
 		estado nvarchar(50) NOT NULL DEFAULT('Habilitado'),
+		baja_logica bit DEFAULT ('False'),
 		puntos_acumulados int NOT NULL DEFAULT('0'),
 		fecha_vencimiento date null,
 		nombre nvarchar(255) NOT NULL,

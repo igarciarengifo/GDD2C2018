@@ -1,6 +1,6 @@
 ﻿namespace PalcoNet.Formularios.ListadoEstadistico
 {
-    partial class estadisticasForm
+    partial class EstadisticasForm
     {
         /// <summary>
         /// Required designer variable.

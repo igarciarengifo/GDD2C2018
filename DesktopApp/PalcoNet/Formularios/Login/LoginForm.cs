@@ -57,6 +57,7 @@ namespace PalcoNet.Login
                             MessageBox.Show("Operacion cancelada");
                         }
                         seleccionForm.Dispose();
+                        seleccionForm.Close();
                         this.limpiarCampos();
                     }
                     else
@@ -66,7 +67,7 @@ namespace PalcoNet.Login
 
                     funcionalidades = funcMng.funcionalidadesXRol(id_rol_seleccionado);
                     DatosSesion.iniciarSesion(id_usuario, username, password, id_rol_seleccionado, funcionalidades);
-
+                    this.Close();
                 }
                 
             }

@@ -39,7 +39,7 @@ namespace PalcoNet.Managers
             nuevoUsuario.id_usuario = Convert.ToInt32(row["id_usuario"]);
             nuevoUsuario.username = Convert.ToString(row["username"]);
             nuevoUsuario.password = Convert.ToString(row["password"]);
-            nuevoUsuario.habilitado = Convert.ToBoolean(row["esta_habilitado"]);
+            nuevoUsuario.habilitado = Convert.ToBoolean(row["habilitado"]);
             return nuevoUsuario;
         }
 
@@ -64,6 +64,12 @@ namespace PalcoNet.Managers
             return (SQLManager.ejecutarNonQuery("LOOPP.SP_CambiarPassword",
                                 SQLArgumentosManager.nuevoParametro("@newPass", newPassHash)
                                 .add("@id_usuario", id_usuario)));
+        }
+
+        public bool hasInvalidData(int id_usuario)
+        {
+            return SQLManager.ejecutarEscalarQuery<bool>("LOOPP.SP_UserHasInvalidInfo",
+                        SQLArgumentosManager.nuevoParametro("@id_user", id_usuario));
         }
     }
 }

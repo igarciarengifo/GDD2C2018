@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace PalcoNet.Entidades
 {
-    public class Funcionalidad
+    public class Ubicacion
     {
-        public Int32 id_funcionalidad { get; set; }
-        public string nombre { get; set; }
+        public int id_ubicacion, id_tipo_ubicacion;
+        public string fila, asiento;
+        public Boolean sin_numerar;
     }
 }

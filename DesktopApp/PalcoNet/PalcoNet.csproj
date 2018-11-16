@@ -52,8 +52,12 @@
     <Compile Include="Entidades\DatosSesion.cs" />
     <Compile Include="Entidades\Empresa.cs" />
     <Compile Include="Entidades\Encriptacion.cs" />
+    <Compile Include="Entidades\Estado_Publicacion.cs" />
     <Compile Include="Entidades\Funcionalidad.cs" />
+    <Compile Include="Entidades\Grado_Publicacion.cs" />
     <Compile Include="Entidades\Rol.cs" />
+    <Compile Include="Entidades\Rubro.cs" />
+    <Compile Include="Entidades\Ubicacion.cs" />
     <Compile Include="Entidades\Usuario.cs" />
     <Compile Include="Formularios\AbmCliente\AltaClienteForm.cs">
       <SubType>Form</SubType>
@@ -115,17 +119,11 @@
     <Compile Include="Formularios\Comprar\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\EditarPublicacion\Form1.cs">
+    <Compile Include="Formularios\GenerarPublicacion\NuevaPublicacionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\EditarPublicacion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Formularios\GenerarPublicacion\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Formularios\GenerarPublicacion\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Formularios\GenerarPublicacion\NuevaPublicacionForm.Designer.cs">
+      <DependentUpon>NuevaPublicacionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\GenerarRendicionComisiones\Form1.cs">
       <SubType>Form</SubType>
@@ -139,11 +137,11 @@
     <Compile Include="Formularios\HistorialCliente\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\ListadoEstadistico\estadisticasForm.cs">
+    <Compile Include="Formularios\ListadoEstadistico\EstadisticasForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\ListadoEstadistico\estadisticasForm.Designer.cs">
-      <DependentUpon>estadisticasForm.cs</DependentUpon>
+    <Compile Include="Formularios\ListadoEstadistico\EstadisticasForm.Designer.cs">
+      <DependentUpon>EstadisticasForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Login\LoginForm.cs">
       <SubType>Form</SubType>
@@ -165,11 +163,17 @@
     </Compile>
     <Compile Include="Managers\Cliente_Manager.cs" />
     <Compile Include="Managers\Empresa_Manager.cs" />
+    <Compile Include="Managers\Estadisticas_Manager.cs" />
+    <Compile Include="Managers\Estado_Publicacion_Manager.cs" />
     <Compile Include="Managers\Funcionalidad_Manager.cs" />
+    <Compile Include="Managers\Grados_Publicacion_Manager.cs" />
     <Compile Include="Managers\Login_Manager.cs" />
+    <Compile Include="Managers\Publicacion_Manager.cs" />
     <Compile Include="Managers\Rol_Manager.cs" />
+    <Compile Include="Managers\Rubro_Manager.cs" />
     <Compile Include="Managers\SQLArgumentosManager.cs" />
     <Compile Include="Managers\SQLManager.cs" />
+    <Compile Include="Managers\Ubicaciones_Manager.cs" />
     <Compile Include="Managers\Usuario_Manager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -191,8 +195,11 @@
     <EmbeddedResource Include="Formularios\ABMUsuario\CambiarPassForm.resx">
       <DependentUpon>CambiarPassForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\ListadoEstadistico\estadisticasForm.resx">
-      <DependentUpon>estadisticasForm.cs</DependentUpon>
+    <EmbeddedResource Include="Formularios\GenerarPublicacion\NuevaPublicacionForm.resx">
+      <DependentUpon>NuevaPublicacionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\ListadoEstadistico\EstadisticasForm.resx">
+      <DependentUpon>EstadisticasForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Login\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -225,7 +232,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Formularios\EditarPublicacion\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

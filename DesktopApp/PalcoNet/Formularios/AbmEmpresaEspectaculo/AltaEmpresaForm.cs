@@ -17,6 +17,8 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
         string user, pass, resultado;
         Empresa_Manager empresaMng = new Empresa_Manager();
         public AltaEmpresaForm(Empresa empresa) {
+
+            InitializeComponent();
             if (empresa.id_empresa != 0)
             {
                 habilitadoCheck.Visible = true;
@@ -31,7 +33,7 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
                 localidadBox.Text = empresa.direccion_localidad;
                 ciudadBox.Text = empresa.ciudad;
                 codPostalBox.Text = empresa.cod_postal;
-                habilitadoCheck.Checked = empresa.esta_habilitado;
+                habilitadoCheck.Checked = empresa.baja_logica;
 
             }
             else {

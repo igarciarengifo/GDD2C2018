@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace PalcoNet.Formularios.ListadoEstadistico
 {
-    public partial class estadisticasForm : Form
+    public partial class EstadisticasForm : Form
     {
         Estadisticas_Manager estadisticasMng = new Estadisticas_Manager();
-        public estadisticasForm()
+        public EstadisticasForm()
         {
             InitializeComponent();
             this.cargarAniosDeConsulta();

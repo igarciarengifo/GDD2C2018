@@ -12,7 +12,7 @@ namespace PalcoNet.Entidades
         public DateTime fecha_creacion;
         public int direccion_nro, direccion_piso, id_empresa;
         public int id_usuario;
-        public Boolean esta_habilitado;
+        public Boolean baja_logica;
         public Empresa() {
             id_usuario = 0;
         }

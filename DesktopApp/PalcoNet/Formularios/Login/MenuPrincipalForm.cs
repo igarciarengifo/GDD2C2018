@@ -2,6 +2,8 @@
 using PalcoNet.Formularios.AbmCliente;
 using PalcoNet.Formularios.AbmEmpresaEspectaculo;
 using PalcoNet.Formularios.ABMUsuario;
+using PalcoNet.Formularios.GenerarPublicacion;
+using PalcoNet.Formularios.ListadoEstadistico;
 using PalcoNet.Login;
 using System;
 using System.Collections.Generic;
@@ -26,7 +28,9 @@ namespace PalcoNet.Formularios
             rendConsBtn.Visible = false;
             newPubBtn.Visible = false;
             editPubBtn.Visible = false;
-            puntosBtn.Visible = false;
+            historialClienteBtn.Visible = false;
+            estadisticasBtn.Visible = false;
+            menuStrip1.Visible = false;
             this.iniciar_sesion();
 
         }
@@ -37,6 +41,7 @@ namespace PalcoNet.Formularios
             login_scr.ShowDialog();
             if (DatosSesion.sesion_iniciada)
             {
+                menuStrip1.Visible = true;
                 this.habilitar_func_x_rol();
             }
         }
@@ -46,66 +51,80 @@ namespace PalcoNet.Formularios
             List<Funcionalidad> f = DatosSesion.funcionalidades;
             flpCentral.Controls.Clear();
 
-            if (f.Any(func => func.descripcion.Equals("Nueva Publicacion")))
+            if (f.Any(func => func.nombre.Equals("Publicar Espectaculo")))
             {
                 newPubBtn.Visible = true;
                 flpCentral.Controls.Add(newPubBtn);
             }
 
-            if (f.Any(func => func.descripcion.Equals("Editar Publicacion")))
+            if (f.Any(func => func.nombre.Equals("Modificar Publicacion")))
             {
                 editPubBtn.Visible = true;
                 flpCentral.Controls.Add(editPubBtn);
             }
 
-            if (f.Any(func => func.descripcion.Equals("Comprar")))
+            if (f.Any(func => func.nombre.Equals("Comprar Entrada")))
             {
                 comprarBtn.Visible = true;
                 flpCentral.Controls.Add(comprarBtn);
             }
 
-            if (f.Any(func => func.descripcion.Equals("Editar Compra")))
+            if (f.Any(func => func.nombre.Equals("Modificar Compra")))
             {
                 editCompBtn.Visible = true;
                 flpCentral.Controls.Add(editCompBtn);
             }
 
-            if (f.Any(func => func.descripcion.Equals("Puntos")))
+            if (f.Any(func => func.nombre.Equals("Historial Cliente")))
             {
-                puntosBtn.Visible = true;
-                flpCentral.Controls.Add(puntosBtn);
+                historialClienteBtn.Visible = true;
+                flpCentral.Controls.Add(historialClienteBtn);
             }
 
-            if (f.Any(func => func.descripcion.Equals("Consultar Rendicion")))
+            if (f.Any(func => func.nombre.Equals("Facturar rendiciones")))
             {
                 rendConsBtn.Visible = true;
+                factComBtn.Visible = true;
+                flpCentral.Controls.Add(factComBtn);
                 flpCentral.Controls.Add(rendConsBtn);
             }
 
-            if (f.Any(func => func.descripcion.Equals("Facturar Comisión")))
+            if (f.Any(func => func.nombre.Equals("Listado Estadistico")))
             {
-                rendConsBtn.Visible = true;
-                flpCentral.Controls.Add(factComBtn);
+
+                estadisticasBtn.Visible = true;
+                flpCentral.Controls.Add(estadisticasBtn);
             }
+
+            ToolStripItemCollection items = menuStrip1.Items;
+
+            ToolStripItem menu_roles = menuStrip1.Items.Find("rolesToolStripMenuItem", true)[0];
+            menu_roles.Visible = f.Any(func => func.nombre.Equals("ABM Rol"));
+
+            ToolStripItem menu_clientes = menuStrip1.Items.Find("clientesToolStripMenuItem", true)[0];
+            menu_clientes.Visible = f.Any(func => func.nombre.Equals("ABM Clientes"));
+
+            ToolStripItem menu_empresas = menuStrip1.Items.Find("empresasToolStripMenuItem", true)[0];
+            menu_empresas.Visible = f.Any(func => func.nombre.Equals("ABM Empresas"));
+
+            ToolStripItem menu_grados = menuStrip1.Items.Find("gradosDePublicaciónToolStripMenuItem", true)[0];
+            menu_grados.Visible = f.Any(func => func.nombre.Equals("ABM Grado Publicacion"));
+
+            ToolStripItem menu_historial_puntos = menuStrip1.Items.Find("puntosToolStripMenuItem", true)[0];
+            menu_historial_puntos.Visible = f.Any(func => func.nombre.Equals("Canjear Puntos"));
+
         }
 
         private void MenuPrincipalForm_Load(object sender, EventArgs e)
         {
          
-            toolTip1.ToolTipTitle = "Gestión puntos";
-            toolTip1.UseAnimation = true;
-            toolTip1.ShowAlways = true;
-            toolTip1.AutoPopDelay = 5000;
-            toolTip1.InitialDelay = 1000;
-            toolTip1.ReshowDelay = 500;
-            toolTip1.SetToolTip(puntosBtn, "Boton derecho para más opciones.");
             this.WindowState = FormWindowState.Maximized;
             this.actualizarStatusLabel();
         }
 
         private void actualizarStatusLabel()
         {
-            ToolStripItem status_label = statusStrip1.Items["StatusLabel"];
+            ToolStripItem status_label = statusStrip1.Items["estadoActualLabel"];
             status_label.Text = "Usuario: " + DatosSesion.username + " - Rol: " + DatosSesion.id_rol;
         }
 
@@ -153,6 +172,23 @@ namespace PalcoNet.Formularios
         }
 
         private void canjeDePuntosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void newPubBtn_Click(object sender, EventArgs e)
+        {
+            NuevaPublicacionForm nuevaPublicacionForm = new NuevaPublicacionForm();
+            nuevaPublicacionForm.ShowDialog();
+        }
+
+        private void estadisticasBtn_Click(object sender, EventArgs e)
+        {
+            EstadisticasForm estadisticasForm = new EstadisticasForm();
+            estadisticasForm.ShowDialog();
+        }
+
+        private void editPubBtn_Click(object sender, EventArgs e)
         {
 
         }
