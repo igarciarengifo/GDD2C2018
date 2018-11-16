@@ -31,7 +31,7 @@ namespace PalcoNet.Managers
                     /*Itero sobre el Dictionary para agregar los parametros*/
                     foreach (KeyValuePair<string, object> entry in argManager.parametros)
                     {
-                        spCommand.Parameters.Add(new SqlParameter(entry.Key, entry.Value));
+                        spCommand.Parameters.Add(new SqlParameter(entry.Key, entry.Value == null ? DBNull.Value : entry.Value));
                     }
                 }
                 
@@ -61,7 +61,7 @@ namespace PalcoNet.Managers
                     /*Itero sobre el Dictionary para agregar los parametros*/
                     foreach (KeyValuePair<string, object> entry in argManager.parametros)
                     {
-                        spCommand.Parameters.Add(new SqlParameter(entry.Key, entry.Value));
+                        spCommand.Parameters.Add(new SqlParameter(entry.Key, entry.Value == null ? DBNull.Value : entry.Value));
                     }
                 }
 
@@ -97,7 +97,7 @@ namespace PalcoNet.Managers
                     /*Itero sobre el Dictionary para agregar los parametros*/
                     foreach (KeyValuePair<string, object> entry in argManager.parametros)
                     {
-                        spCommand.Parameters.Add(new SqlParameter(entry.Key, entry.Value));
+                        spCommand.Parameters.Add(new SqlParameter(entry.Key, entry.Value == null ? DBNull.Value : entry.Value));
                     }
                 }
 

@@ -71,21 +71,48 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
                 nuevaEmpresa.razon_social = razonSocialBox.Text;
                 nuevaEmpresa.cuit = cuitBox.Text;
                 nuevaEmpresa.mail = emailBox.Text;
-                nuevaEmpresa.telefono= telBox.Text;
+                nuevaEmpresa.telefono = telBox.Text;
                 nuevaEmpresa.direccion_calle = dirBox.Text;
                 nuevaEmpresa.direccion_nro = Convert.ToInt32(nroCalle.Text);
-                nuevaEmpresa.direccion_piso = Convert.ToInt32(pisoBox.Text);
+                nuevaEmpresa.direccion_piso = this.completarPiso();
                 nuevaEmpresa.direccion_depto = deptoBox.Text;
                 nuevaEmpresa.direccion_localidad = localidadBox.Text;
                 nuevaEmpresa.ciudad = ciudadBox.Text;
                 nuevaEmpresa.cod_postal = codPostalBox.Text;
-             
+
                 resultado = empresaMng.altaEmpresaYUsuario(user, pass, nuevaEmpresa);
-                MessageBox.Show(resultado);
+                if (resultado.Equals("OK"))
+                {
+                    MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
+                }
+                else
+                {
+                    MessageBox.Show(resultado,
+                        "No pudo realizarse operacion",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation,
+                        MessageBoxDefaultButton.Button1);
+                }
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
+            }
+
+            finally {
+                this.Dispose();
+                this.Close();
+            }
+        }
+
+        private Nullable<int> completarPiso()
+        {
+            if (String.IsNullOrEmpty(pisoBox.Text))
+            {
+                return null;
+            }
+            else {
+                return Convert.ToInt32(pisoBox.Text);
             }
         }
 

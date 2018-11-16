@@ -41,17 +41,18 @@ namespace PalcoNet.Formularios.ABMUsuario
             {
 
                 this.verificarCamposObligatorios();
-                if (tipoComboBox.SelectedText.Equals("Cliente")){
-                   var  nuevaEntidadForm = new AltaClienteForm(userBox.Text,passBox.Text);
-                   
-                   if (nuevaEntidadForm.ShowDialog(this) == DialogResult.OK)
-                   {
-                       MessageBox.Show(nuevaEntidadForm.getResultado());
-                   }
-                   else
-                   {
-                       throw new Exception("Operacion cancelada");
-                   }
+                if (tipoComboBox.SelectedText.Equals("Cliente"))
+                {
+                    var nuevaEntidadForm = new AltaClienteForm(userBox.Text, passBox.Text);
+
+                    if (nuevaEntidadForm.ShowDialog(this) == DialogResult.OK)
+                    {
+                        MessageBox.Show(nuevaEntidadForm.getResultado());
+                    }
+                    else
+                    {
+                        throw new Exception("Operacion cancelada");
+                    }
                 }
                 else
                 {
@@ -65,10 +66,16 @@ namespace PalcoNet.Formularios.ABMUsuario
                         throw new Exception("Operacion cancelada");
                     }
                 }
+
             }
-            catch (Exception exc) {
+            catch (Exception exc)
+            {
                 MessageBox.Show(exc.Message);
-            
+
+            }
+            finally {
+                this.Dispose();
+                this.Close();
             }
         }
 

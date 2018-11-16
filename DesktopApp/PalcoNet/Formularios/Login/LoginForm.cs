@@ -103,7 +103,7 @@ namespace PalcoNet.Login
         {
             AltaUsuarioForm altaUsuarioForm = new AltaUsuarioForm();
             altaUsuarioForm.Show();
-            this.Close();
+            
         }
 
     }

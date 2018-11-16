@@ -15,8 +15,9 @@ CREATE PROCEDURE LOOPP.SP_NuevoCliente
    ,@cod_postal varchar(255)
    ,@user varchar(255)
    ,@pass varchar(255)
-   ,@resultado varchar(255) output
+   
 AS
+	declare @resultado varchar(255)
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
@@ -69,4 +70,5 @@ AS
 	  set @resultado = ERROR_MESSAGE();
 
 	END CATCH;
+	select @resultado
 GO

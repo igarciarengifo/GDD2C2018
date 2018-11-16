@@ -1,4 +1,11 @@
-CREATE PROCEDURE LOOPP.SP_NuevoEmpresa
+USE [GD2C2018]
+GO
+/****** Object:  StoredProcedure [LOOPP].[SP_NuevoEmpresa]    Script Date: 15/11/2018 21:46:08 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [LOOPP].[SP_NuevoEmpresa]
 	@razon varchar(255)
    ,@cuit varchar(255)
    ,@email varchar(50)
@@ -13,8 +20,8 @@ CREATE PROCEDURE LOOPP.SP_NuevoEmpresa
    ,@user varchar(255)
    ,@pass varchar(255)
    ,@fec_creacion datetime
-   ,@resultado varchar(255) output
 AS
+	declare @resultado varchar(255)
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
@@ -65,4 +72,4 @@ AS
 	  set @resultado = ERROR_MESSAGE();
 
 	END CATCH;
-GO
+	SELECT @resultado

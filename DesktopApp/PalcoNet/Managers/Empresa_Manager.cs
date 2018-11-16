@@ -1,6 +1,7 @@
 ﻿using PalcoNet.Entidades;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,8 @@ namespace PalcoNet.Managers
     {
         public string altaEmpresaYUsuario(string user, string pass, Entidades.Empresa nuevaEmpresa)
         {
-        
-           return SQLManager.ejecutarEscalarQuery<string> ("LOOPP.SP_NuevaEmpresa",
+            DateTime fechaCreacion = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+           return SQLManager.ejecutarEscalarQuery<string> ("LOOPP.SP_NuevoEmpresa",
                                                  SQLArgumentosManager.nuevoParametro("@razon",nuevaEmpresa.razon_social)
                                                  .add("@cuit",nuevaEmpresa.cuit)
                                                  .add("@email",nuevaEmpresa.mail)
@@ -26,7 +27,8 @@ namespace PalcoNet.Managers
                                                  .add("@ciudad", nuevaEmpresa.ciudad)
                                                  .add("@codPostal", nuevaEmpresa.cod_postal)
                                                  .add("@user", user)
-                                                 .add("@pass", pass));
+                                                 .add("@pass", pass)
+                                                 .add("@fec_creacion", fechaCreacion));
         }
 
         public List<Empresa> buscarEmpresas(Empresa empresaABuscar)
