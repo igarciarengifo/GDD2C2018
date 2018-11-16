@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.cuitBox = new System.Windows.Forms.TextBox();
-            this.emailBox = new System.Windows.Forms.TextBox();
             this.razonBox = new System.Windows.Forms.TextBox();
+            this.emailBox = new System.Windows.Forms.TextBox();
+            this.cuitBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.filtrarBtn = new System.Windows.Forms.Button();
             this.dataEmpresas = new System.Windows.Forms.DataGridView();
             this.button5 = new System.Windows.Forms.Button();
@@ -60,33 +60,26 @@
             this.panel1.Size = new System.Drawing.Size(711, 128);
             this.panel1.TabIndex = 0;
             // 
-            // label1
+            // razonBox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Calibri", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 17);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Filtrar búsqueda";
+            this.razonBox.Location = new System.Drawing.Point(454, 40);
+            this.razonBox.Name = "razonBox";
+            this.razonBox.Size = new System.Drawing.Size(237, 20);
+            this.razonBox.TabIndex = 6;
             // 
-            // label2
+            // emailBox
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(50, 43);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "CUIT";
+            this.emailBox.Location = new System.Drawing.Point(112, 76);
+            this.emailBox.Name = "emailBox";
+            this.emailBox.Size = new System.Drawing.Size(226, 20);
+            this.emailBox.TabIndex = 5;
             // 
-            // label3
+            // cuitBox
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(380, 43);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(68, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Razón social";
+            this.cuitBox.Location = new System.Drawing.Point(112, 43);
+            this.cuitBox.Name = "cuitBox";
+            this.cuitBox.Size = new System.Drawing.Size(226, 20);
+            this.cuitBox.TabIndex = 4;
             // 
             // label4
             // 
@@ -97,26 +90,33 @@
             this.label4.TabIndex = 3;
             this.label4.Text = "E-mail";
             // 
-            // cuitBox
+            // label3
             // 
-            this.cuitBox.Location = new System.Drawing.Point(112, 43);
-            this.cuitBox.Name = "cuitBox";
-            this.cuitBox.Size = new System.Drawing.Size(226, 20);
-            this.cuitBox.TabIndex = 4;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(380, 43);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(68, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Razón social";
             // 
-            // emailBox
+            // label2
             // 
-            this.emailBox.Location = new System.Drawing.Point(112, 76);
-            this.emailBox.Name = "emailBox";
-            this.emailBox.Size = new System.Drawing.Size(226, 20);
-            this.emailBox.TabIndex = 5;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(50, 43);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "CUIT";
             // 
-            // razonBox
+            // label1
             // 
-            this.razonBox.Location = new System.Drawing.Point(454, 40);
-            this.razonBox.Name = "razonBox";
-            this.razonBox.Size = new System.Drawing.Size(237, 20);
-            this.razonBox.TabIndex = 6;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Calibri", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(105, 17);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Filtrar búsqueda";
             // 
             // filtrarBtn
             // 
@@ -182,6 +182,7 @@
             this.Controls.Add(this.filtrarBtn);
             this.Controls.Add(this.panel1);
             this.Name = "ConsultaEmpresasForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Consultar por empresa";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

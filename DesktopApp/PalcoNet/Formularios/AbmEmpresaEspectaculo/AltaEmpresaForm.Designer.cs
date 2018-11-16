@@ -336,6 +336,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label13);
             this.Name = "AltaEmpresaForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Formulario nueva empresa";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

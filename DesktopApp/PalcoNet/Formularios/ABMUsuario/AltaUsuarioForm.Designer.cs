@@ -36,6 +36,8 @@
             this.tipoComboBox = new System.Windows.Forms.ComboBox();
             this.passBox = new System.Windows.Forms.TextBox();
             this.userBox = new System.Windows.Forms.TextBox();
+            this.confirmPassBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // newUserBtn
@@ -70,7 +72,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(52, 82);
+            this.label2.Location = new System.Drawing.Point(52, 78);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 13);
             this.label2.TabIndex = 3;
@@ -79,7 +81,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(52, 122);
+            this.label3.Location = new System.Drawing.Point(52, 148);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 13);
             this.label3.TabIndex = 4;
@@ -88,14 +90,14 @@
             // tipoComboBox
             // 
             this.tipoComboBox.FormattingEnabled = true;
-            this.tipoComboBox.Location = new System.Drawing.Point(197, 122);
+            this.tipoComboBox.Location = new System.Drawing.Point(197, 148);
             this.tipoComboBox.Name = "tipoComboBox";
             this.tipoComboBox.Size = new System.Drawing.Size(166, 21);
             this.tipoComboBox.TabIndex = 5;
             // 
             // passBox
             // 
-            this.passBox.Location = new System.Drawing.Point(197, 82);
+            this.passBox.Location = new System.Drawing.Point(197, 78);
             this.passBox.Name = "passBox";
             this.passBox.PasswordChar = '*';
             this.passBox.Size = new System.Drawing.Size(166, 20);
@@ -103,16 +105,35 @@
             // 
             // userBox
             // 
-            this.userBox.Location = new System.Drawing.Point(197, 45);
+            this.userBox.Location = new System.Drawing.Point(197, 41);
             this.userBox.Name = "userBox";
             this.userBox.Size = new System.Drawing.Size(166, 20);
             this.userBox.TabIndex = 7;
+            // 
+            // confirmPassBox
+            // 
+            this.confirmPassBox.Location = new System.Drawing.Point(197, 113);
+            this.confirmPassBox.Name = "confirmPassBox";
+            this.confirmPassBox.PasswordChar = '*';
+            this.confirmPassBox.Size = new System.Drawing.Size(166, 20);
+            this.confirmPassBox.TabIndex = 9;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(52, 113);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(111, 13);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Reingrese contraseña";
             // 
             // AltaUsuarioForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(421, 267);
+            this.Controls.Add(this.confirmPassBox);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.userBox);
             this.Controls.Add(this.passBox);
             this.Controls.Add(this.tipoComboBox);
@@ -122,6 +143,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.newUserBtn);
             this.Name = "AltaUsuarioForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Generación de nuevo usuario";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -138,5 +160,7 @@
         private System.Windows.Forms.ComboBox tipoComboBox;
         private System.Windows.Forms.TextBox passBox;
         private System.Windows.Forms.TextBox userBox;
+        private System.Windows.Forms.TextBox confirmPassBox;
+        private System.Windows.Forms.Label label4;
     }
 }

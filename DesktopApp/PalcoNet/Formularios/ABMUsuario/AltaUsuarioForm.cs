@@ -25,6 +25,7 @@ namespace PalcoNet.Formularios.ABMUsuario
 
         private void cargarTiposUsuarios()
         {
+            tipoComboBox.Text = "Seleccione un tipo de usuario";
             tipoComboBox.Items.Add("Cliente");
             tipoComboBox.Items.Add("Empresa");
         }
@@ -41,7 +42,7 @@ namespace PalcoNet.Formularios.ABMUsuario
             {
 
                 this.verificarCamposObligatorios();
-                if (tipoComboBox.SelectedText.Equals("Cliente"))
+                if (tipoComboBox.SelectedItem.Equals("Cliente"))
                 {
                     var nuevaEntidadForm = new AltaClienteForm(userBox.Text, passBox.Text);
 
@@ -84,6 +85,11 @@ namespace PalcoNet.Formularios.ABMUsuario
             if ((String.IsNullOrEmpty(userBox.Text)) || (String.IsNullOrEmpty(passBox.Text)))
             {
                 throw new ArgumentException("Debe completar los datos de usuario y contraseña");
+            }
+
+            if (passBox.Text != confirmPassBox.Text)
+            {
+                throw new Exception("No coinciden las contraseñas. Reingreselo");
             }
         }
     }

@@ -51,6 +51,8 @@ namespace PalcoNet.Formularios.AbmCliente
             InitializeComponent();
             user = username;
             pass = passw;
+            habilitadoBox.Visible = false;
+
         }
 
         public string getResultado()
