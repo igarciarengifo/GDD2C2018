@@ -132,7 +132,7 @@ Print '***Inicio de creacion de tablas***'
 	/*-8- Tabla Grados de Publicacion*/
 	CREATE TABLE LOOPP.Grados_Publicacion(
 		id_grado_publicacion int identity(1,1) NOT NULL,
-		prioridad tinyint NOT NULL,
+		activo bit NOT NULL DEFAULT('True'),
 		comision numeric(10,2) NOT NULL,
 		descripcion nvarchar(20) NOT NULL,
 		primary key ([id_grado_publicacion])
