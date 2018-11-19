@@ -21,4 +21,5 @@ AS
 		on uesp.id_espectaculo=locven.id_espectaculo and uesp.id_ubicacion=locven.id_ubicacion
 	inner join [LOOPP].Espectaculos esp
 		on uesp.id_espectaculo=esp.id_espectaculo
-GO;
+	order by comp.fecha_compra
+GO
