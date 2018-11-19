@@ -3,7 +3,7 @@ IF OBJECT_ID('[LOOPP].[SP_HistorialComprasCliente]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_HistorialComprasCliente]
 GO
 
-CREATE PROCEDURE [LOOPP].[SP_HistorialComprasCliente] @anio int, @trimestre int, @idUsuario int
+CREATE PROCEDURE [LOOPP].[SP_HistorialComprasCliente] @idUsuario int
 AS
 	select comp.fecha_compra
 		  ,esp.descripcion espectaculo
@@ -21,6 +21,4 @@ AS
 		on uesp.id_espectaculo=locven.id_espectaculo and uesp.id_ubicacion=locven.id_ubicacion
 	inner join [LOOPP].Espectaculos esp
 		on uesp.id_espectaculo=esp.id_espectaculo
-	where year(comp.fecha_compra)=@anio
-		  and datepart(quarter, comp.fecha_compra)=@trimestre
 GO;
