@@ -14,7 +14,7 @@ AS
 		END
 	else set @resultado = 'ERROR'
 	select @resultado;
-GO;
+GO
 
 /*Modificacion de un grado de publicacion*/
 IF OBJECT_ID('[LOOPP].[SP_ModificarGrado]') IS NOT NULL
@@ -35,9 +35,10 @@ AS
 			where id_grado_publicacion=@id
 
 			set @resultado='OK';
+		END
 	else set @resultado='ERROR'--EXISTEN PUBLICACIONES CON LA PRIORIDAD QUE SE QUIERE MODIFICAR
 	select @resultado;
-GO;
+GO
 
 /*Baja logica de un grado de publicacion*/
 IF OBJECT_ID('[LOOPP].[SP_BajaLogicaGrado]') IS NOT NULL
@@ -57,6 +58,7 @@ AS
 			where id_grado_publicacion=@id
 
 			set @resultado='OK';
+		END
 	else set @resultado='ERROR'--EXISTEN PUBLICACIONES CON LA PRIORIDAD QUE SE QUIERE INHABILITAR
 	select @resultado;
-GO;
+GO
