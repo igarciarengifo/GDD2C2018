@@ -264,6 +264,7 @@ Print '***Inicio de creacion de tablas***'
 		id_forma_pago_cliente int NOT NULL,
 		puntos  int NOT NULL DEFAULT('0'),
 		id_cliente int NOT NULL,
+		facturado bit not null DEFAULT('False'),
 		primary key ([id_compra]),
 		foreign key ([id_forma_pago_cliente]) references [LOOPP].[Formas_Pago_Cliente]([id_forma_pago_cliente]),
 		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
@@ -275,6 +276,7 @@ Print '***Inicio de creacion de tablas***'
 		nro_factura int NOT NULL,
 		fecha_factura datetime NOT NULL,
 		total_factura numeric(18, 2) NOT NULL,
+		total_comision numeric(18, 2) NOT NULL,
 		id_empresa int NOT NULL,
 		id_espectaculo int NOT NULL,
 		primary key ([nro_factura]),
@@ -286,7 +288,8 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE LOOPP.Item_Factura(
 		nro_item int identity(1,1) NOT NULL,
 		nro_factura int NOT NULL,
-		monto numeric(18, 2) NOT NULL,
+		monto_compra numeric(18, 2) NOT NULL,
+		monto_comision numeric(18, 2) NOT NULL,
 		cantidad numeric(18, 0) NOT NULL,
 		descripcion nvarchar(60) NOT NULL,
 		primary key ([nro_item]),

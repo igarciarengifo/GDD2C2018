@@ -45,10 +45,10 @@ INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Audio Visual');
 -------------------------------------------------------------------------------
 
 /*Grados de Publicacion*/
-INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision,descripcion) VALUES (0,0.00,'No Definido');
-INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision,descripcion) VALUES (1,0.30,'Alta');
-INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision, descripcion) VALUES (2, 0.25, 'Media');
-INSERT INTO LOOPP.Grados_Publicacion (prioridad, comision, descripcion) VALUES (3, 0.10, 'Baja');
+INSERT INTO LOOPP.Grados_Publicacion (comision,descripcion) VALUES (0.00,'No Definido');
+INSERT INTO LOOPP.Grados_Publicacion (comision,descripcion) VALUES (0.30,'Alta');
+INSERT INTO LOOPP.Grados_Publicacion (comision, descripcion) VALUES (0.25, 'Media');
+INSERT INTO LOOPP.Grados_Publicacion (comision, descripcion) VALUES (0.10, 'Baja');
 -------------------------------------------------------------------------------
 
 /*Creacion de Roles*/
@@ -477,7 +477,8 @@ SELECT [Espec_Empresa_Cuit]
 	  ,[Espectaculo_Fecha]
       ,[Factura_Nro]
       ,[Factura_Fecha]
-      ,[Factura_Total]
+      ,[Factura_Total] total_comision
+	  ,SUM([Ubicacion_Precio]) total_facturado
 into #Temp_Factura
 FROM [GD2C2018].[gd_esquema].[Maestra]
 where [Factura_Nro] is not null
@@ -496,11 +497,13 @@ insert into [LOOPP].[Facturas](
 			[nro_factura]
 		   ,[fecha_factura]
 		   ,[total_factura]
+		   ,[total_comision]
 		   ,[id_empresa]
 		   ,[id_espectaculo])
 select t.Factura_Nro
 	  ,t.Factura_Fecha
-	  ,t.Factura_Total
+	  ,t.total_facturado
+	  ,t.total_comision
 	  ,em.id_empresa
 	  ,es.id_espectaculo
 from #Temp_Factura t
@@ -517,10 +520,12 @@ Drop table #Temp_Factura;
 
 insert into [LOOPP].[Item_Factura](
 			[nro_factura]
-			,[monto]
+			,[monto_compra]
+			,[monto_comision]
 			,[cantidad]
 			,[descripcion])
 SELECT [Factura_Nro]
+	  ,[Ubicacion_Precio]
       ,[Item_Factura_Monto]
       ,[Item_Factura_Cantidad]
       ,[Item_Factura_Descripcion]
@@ -537,7 +542,8 @@ INSERT INTO [LOOPP].[Compras] (
 	[cantidad_compra],
 	puntos,
 	id_cliente,
-	id_forma_pago_cliente
+	id_forma_pago_cliente,
+	facturado
 )
 SELECT
 	[Compra_Fecha],
@@ -545,12 +551,17 @@ SELECT
 	[Compra_Cantidad],
 	LOOPP.Fn_CalcularPuntos(Ubicacion_Precio),
 	clie.id_cliente,
-	f.id_forma_pago_cliente
+	f.id_forma_pago_cliente,
+	'True'
 FROM [gd_esquema].[Maestra]
-inner join [LOOPP].[Clientes] clie on clie.nro_documento = Cli_Dni
-left join [LOOPP].[Formas_Pago_Cliente] f on f.id_cliente = clie.id_cliente
-inner join LOOPP.Ubicaciones u on u.fila=Ubicacion_Fila and u.asiento= Ubicacion_Asiento
-inner join LOOPP.Tipo_Ubicacion tu on tu.id_tipo_ubicacion = u.id_tipo_ubicacion and tu.descripcion = Ubicacion_Tipo_Descripcion
+inner join [LOOPP].[Clientes] clie 
+	on clie.nro_documento = Cli_Dni
+left join [LOOPP].[Formas_Pago_Cliente] f 
+	on f.id_cliente = clie.id_cliente
+inner join LOOPP.Ubicaciones u 
+	on u.fila=Ubicacion_Fila and u.asiento= Ubicacion_Asiento
+inner join LOOPP.Tipo_Ubicacion tu 
+	on tu.id_tipo_ubicacion = u.id_tipo_ubicacion and tu.descripcion = Ubicacion_Tipo_Descripcion
 where Compra_Fecha is not null
 group by [Compra_Fecha], Ubicacion_Precio, porcentual ,[Compra_Cantidad], clie.id_cliente, f.id_forma_pago_cliente, Ubicacion_Asiento, Ubicacion_Fila
 order by Compra_Fecha;
@@ -588,11 +599,14 @@ select
 			c.id_compra,
 			uxe.id_ubicacion
 	FROM #Temp_Ubic_Espec_compra t
-inner join [LOOPP].[Ubicaciones] u on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
+inner join [LOOPP].[Ubicaciones] u 
+	on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
 inner join LOOPP.Ubicac_X_Espectaculo uxe 
 	on uxe.id_espectaculo = t.Espectaculo_Cod and uxe.id_ubicacion = u.id_ubicacion
-inner join [LOOPP].[Clientes] clie on clie.nro_documento = t.Cli_Dni
-inner join [LOOPP].[Compras]c on  c.id_cliente = clie.id_cliente  and c.fecha_compra = t.Compra_Fecha
+inner join [LOOPP].[Clientes] clie 
+	on clie.nro_documento = t.Cli_Dni
+inner join [LOOPP].[Compras]c 
+	on  c.id_cliente = clie.id_cliente  and c.fecha_compra = t.Compra_Fecha
 order by c.id_compra 
 
 --130.362
