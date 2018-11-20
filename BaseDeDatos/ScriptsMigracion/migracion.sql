@@ -82,7 +82,7 @@ INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Modificar Compra'); --5
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Publicar Espectaculo'); --6
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Modificar Publicacion'); --7
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Facturar rendiciones'); --8
-INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Historal Cliente');  --9
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Historial Cliente');  --9
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Canjear Puntos'); --10 
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Listado Estadistico');  --11
 INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Grado Publicacion');  --12
@@ -408,7 +408,7 @@ into #TEMP_Espectaculo
 			,t.venc_publicacion
 			,t.descripcion
 			,e.id_estado_publicacion
-			,1--grado de publicacion 'No Definido'
+			,4--grado de publicacion 'Baja'
 	from #TEMP_Espectaculo t
 	inner join [LOOPP].[Usuarios] u
 	on t.usuario=u.username
