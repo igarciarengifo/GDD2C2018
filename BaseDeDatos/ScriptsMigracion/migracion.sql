@@ -4,11 +4,13 @@ GO
 /*Creacion de Estados_Publicacion*/
 
 INSERT INTO LOOPP.Estados_Publicacion (descripcion)
-VALUES ('Borrador');
+VALUES ('Borrador');--id=1
 INSERT INTO LOOPP.Estados_Publicacion (descripcion)
-VALUES ('Publicada');
+VALUES ('Publicada');--id=2
 INSERT INTO LOOPP.Estados_Publicacion (descripcion)
-VALUES ('Finalizada');
+VALUES ('Pausada');--id=3
+INSERT INTO LOOPP.Estados_Publicacion (descripcion)
+VALUES ('Finalizada');--id=4
 GO
 -------------------------------------------------------------------------------
 
