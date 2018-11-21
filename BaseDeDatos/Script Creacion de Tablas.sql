@@ -188,8 +188,9 @@ Print '***Inicio de creacion de tablas***'
 		[id_ubicacion] [int] NOT NULL,
 		[precio] numeric(18,2) NOT null,
 		[fecha_espectaculo] date not null,
-		[fecha_Venc_espectaculo] date not null,
+		[fecha_venc_espectaculo] date not null,
 		[hora_espectaculo] time not null,
+		[disponible] bit not null DEFAULT('True'),
 		PRIMARY KEY ([id_espectaculo], [id_ubicacion]),
 		foreign key ([id_espectaculo]) references [LOOPP].[Espectaculos]([id_espectaculo]),
 		foreign key ([id_ubicacion]) references [LOOPP].[Ubicaciones]([id_ubicacion])

@@ -451,14 +451,15 @@ into #TEMP_Espectaculo
 				,[id_ubicacion]
 				,[precio]
 				,[fecha_espectaculo]
-				,[fecha_Venc_espectaculo]
+				,[fecha_venc_espectaculo]
 				,[hora_espectaculo])
 	select e.id_espectaculo
 		  ,u.id_ubicacion
 		  ,t.Ubicacion_Precio
 		  ,cast(t.Espectaculo_Fecha as date) fecha
-		  ,cast(t.Espectaculo_Fecha_Venc as date) fechaV		  		  		  
+		  ,cast(t.Espectaculo_Fecha_Venc as date) fechaVenc		  		  		  
 		  ,'00:00:00' hora
+		  ,'False' disponible
 	from #Temp_Ubic_Espec t
 	inner join [LOOPP].[Espectaculos] e
 		on t.Espectaculo_Cod=e.id_espectaculo

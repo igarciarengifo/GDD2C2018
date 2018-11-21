@@ -28,7 +28,10 @@ BEGIN
 	if (@idEspectaculo is not null)
 	begin
 
-		select esp.id_espectaculo,esp.descripcion,uesp.fecha_espectaculo,uesp.hora_espectaculo
+		select esp.id_espectaculo
+			  ,esp.descripcion Espectaculo
+			  ,uesp.fecha_espectaculo [Fecha Espectaculo]
+			  ,uesp.hora_espectaculo [Horarios]
 		from [LOOPP].[Espectaculos] esp
 		inner join [LOOPP].[Estados_Publicacion] estado
 			on esp.id_estado_publicacion=estado.id_estado_publicacion and estado.descripcion='Publicada'
@@ -52,7 +55,10 @@ BEGIN
 		insert into #Temp_Rubros ([id_rubro],[descripcion]) 
 		exec [LOOPP].[SP_RetornaCategoriasSegunIdList] @idList;
 
-		select esp.id_espectaculo,esp.descripcion,uesp.fecha_espectaculo,uesp.hora_espectaculo
+		select esp.id_espectaculo
+			  ,esp.descripcion Espectaculo
+			  ,uesp.fecha_espectaculo [Fecha Espectaculo]
+			  ,uesp.hora_espectaculo [Horarios]
 		from [LOOPP].[Espectaculos] esp
 		inner join #Temp_Rubros rubros
 		on esp.id_rubro=rubros.id_rubro

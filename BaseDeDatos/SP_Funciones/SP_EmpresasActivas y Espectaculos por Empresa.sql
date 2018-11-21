@@ -8,6 +8,7 @@ BEGIN
 	select [id_empresa],[razon_social]
 	from [LOOPP].[Empresas]
 	where [baja_logica] = 'False'
+	order by right(razon_social,2)
 
 END
 GO
