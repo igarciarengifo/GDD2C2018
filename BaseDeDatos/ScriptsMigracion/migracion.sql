@@ -446,13 +446,15 @@ into #TEMP_Espectaculo
 	order by [Espectaculo_Cod]
 	--238.143
 
+	/*Inserta las ubicaciones ya reservadas*/
 	insert into [LOOPP].[Ubicac_X_Espectaculo] (
 				[id_espectaculo]
 				,[id_ubicacion]
 				,[precio]
 				,[fecha_espectaculo]
 				,[fecha_venc_espectaculo]
-				,[hora_espectaculo])
+				,[hora_espectaculo]
+				,disponible)
 	select e.id_espectaculo
 		  ,u.id_ubicacion
 		  ,t.Ubicacion_Precio
@@ -467,7 +469,30 @@ into #TEMP_Espectaculo
 		on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
 	inner join [LOOPP].[Tipo_Ubicacion] tu
 		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion and t.Ubicacion_Tipo_Descripcion=tu.descripcion
-	order by e.id_espectaculo,u.id_ubicacion
+	order by e.id_espectaculo,u.id_ubicacion;
+
+	/*Inserta ubicaciones disponibles por espectaculo*/
+	insert into [LOOPP].[Ubicac_X_Espectaculo] (
+				[id_espectaculo]
+				,[id_ubicacion]
+				,[precio]
+				,[fecha_espectaculo]
+				,[fecha_venc_espectaculo]
+				,[hora_espectaculo])
+	select e.id_espectaculo
+		  ,u.id_ubicacion
+		  ,t.Ubicacion_Precio
+		  ,cast(t.Espectaculo_Fecha as date) fecha
+		  ,cast(t.Espectaculo_Fecha_Venc as date) fechaVenc		  		  		  
+		  ,'00:00:00' hora
+	from #Temp_Ubic_Espec t
+	inner join [LOOPP].[Espectaculos] e
+		on t.Espectaculo_Cod=e.id_espectaculo
+	right join [LOOPP].[Ubicaciones] u
+		on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
+	where not exists (select 1 from [LOOPP].[Ubicac_X_Espectaculo] uxe 
+					  where uxe.id_espectaculo=e.id_espectaculo and uxe.id_ubicacion=u.id_ubicacion)
+	order by e.id_espectaculo,u.id_ubicacion;
 
 	Drop table #Temp_Ubic_Espec;
 -------------------------------------------------------------------------------
