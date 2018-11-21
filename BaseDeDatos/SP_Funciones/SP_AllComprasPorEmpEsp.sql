@@ -6,7 +6,10 @@ AS
 BEGIN
 	if (@idEspectaculo is not null)
 		begin
-			select comp.id_compra,esp.descripcion,comp.fecha_compra,comp.importe_total
+			select comp.id_compra
+				  ,esp.descripcion Espectaculo
+				  ,comp.fecha_compra [Fecha Compra]
+				  ,comp.importe_total [Importe Total]
 			from [LOOPP].[Empresas] emp
 			left join [LOOPP].[Usuarios] usu
 				on emp.id_usuario=usu.id_usuario and emp.id_empresa=@idEmpresa
@@ -25,7 +28,10 @@ BEGIN
 
 	else
 		begin
-			select comp.id_compra,esp.descripcion,comp.fecha_compra,comp.importe_total
+			select comp.id_compra
+				  ,esp.descripcion Espectaculo
+				  ,comp.fecha_compra [Fecha Compra]
+				  ,comp.importe_total [Importe Total]
 			from [LOOPP].[Empresas] emp
 			left join [LOOPP].[Usuarios] usu
 				on emp.id_usuario=usu.id_usuario and emp.id_empresa=@idEmpresa

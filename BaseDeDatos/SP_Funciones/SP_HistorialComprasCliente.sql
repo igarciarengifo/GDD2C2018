@@ -5,11 +5,11 @@ GO
 
 CREATE PROCEDURE [LOOPP].[SP_HistorialComprasCliente] @idUsuario int
 AS
-	select comp.fecha_compra
-		  ,esp.descripcion espectaculo
-		  ,uesp.fecha_espectaculo
-		  ,comp.importe_total
-		  ,fp.descripcion forma_pago
+	select comp.fecha_compra [Fecha Compra]
+		  ,esp.descripcion Espectaculo
+		  ,uesp.fecha_espectaculo [Fecha Espectaculo]
+		  ,comp.importe_total [Importe Total]
+		  ,fp.descripcion [Forma de Pago]
 	from [LOOPP].[Compras] comp
 	inner join [LOOPP].[Clientes] cli
 		on comp.id_cliente=cli.id_cliente and cli.id_usuario=@idUsuario
