@@ -52,6 +52,23 @@ namespace PalcoNet.Managers
             return empresasEncontradas;
         }
 
+        public List<Empresa> getAllEmpresasActivas() {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_AllEmpresasActivas");
+            List<Empresa> lista_Empresas = new List<Empresa>();
+
+            if (resultTable != null && resultTable.Rows != null) {
+
+                foreach (DataRow row in resultTable.Rows) {
+                    Empresa empresa = new Empresa();
+                    empresa.id_empresa = int.Parse(row["id_empresa"].ToString());
+                    empresa.razon_social = row["razon_social"].ToString();
+                    lista_Empresas.Add(empresa);
+                }
+            }
+
+            return lista_Empresas;
+        }
+
         private Empresa BuildEmpresa(DataRow row)
         {
             Empresa empresa = new Empresa();
