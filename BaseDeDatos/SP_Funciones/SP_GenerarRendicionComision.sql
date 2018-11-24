@@ -3,10 +3,10 @@ IF OBJECT_ID('[LOOPP].[Fn_CalcularComision]') IS NOT NULL
     DROP Function [LOOPP].[Fn_CalcularComision]
 GO
 CREATE FUNCTION [LOOPP].[Fn_CalcularComision] (@Importe_total numeric (18,0), @idPrioridad int)
-RETURNS numeric(18,0)
+RETURNS numeric(10,2)
 AS 
 	BEGIN
-		declare @comision numeric(18,0)
+		declare @comision numeric(10,2)
 		
 		select @comision=(@Importe_total*comision)
 		from [LOOPP].[Grados_Publicacion]
