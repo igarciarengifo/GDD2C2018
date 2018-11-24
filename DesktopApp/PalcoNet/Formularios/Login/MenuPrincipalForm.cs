@@ -4,6 +4,11 @@ using PalcoNet.Formularios.AbmEmpresaEspectaculo;
 using PalcoNet.Formularios.ABMUsuario;
 using PalcoNet.Formularios.GenerarPublicacion;
 using PalcoNet.Formularios.ListadoEstadistico;
+using PalcoNet.Formularios.HistorialCliente;
+using PalcoNet.Formularios.GenerarRendicionComisiones;
+using PalcoNet.Formularios.AbmGrado;
+using PalcoNet.Formularios.AbmRol;
+//using PalcoNet.Formularios.Comprar;
 using PalcoNet.Login;
 using System;
 using System.Collections.Generic;
@@ -75,7 +80,7 @@ namespace PalcoNet.Formularios
                 flpCentral.Controls.Add(editCompBtn);
             }
 
-            if (f.Any(func => func.nombre.Equals("Historial Cliente")))
+            if (f.Any(func => func.nombre.Equals("Historal Cliente")))
             {
                 historialClienteBtn.Visible = true;
                 flpCentral.Controls.Add(historialClienteBtn);
@@ -178,8 +183,8 @@ namespace PalcoNet.Formularios
 
         private void newPubBtn_Click(object sender, EventArgs e)
         {
-            NuevaPublicacionForm nuevaPublicacionForm = new NuevaPublicacionForm();
-            nuevaPublicacionForm.ShowDialog();
+         /*   NuevaPublicacionForm nuevaPublicacionForm = new NuevaPublicacionForm();
+            nuevaPublicacionForm.ShowDialog();*/
         }
 
         private void estadisticasBtn_Click(object sender, EventArgs e)
@@ -191,6 +196,36 @@ namespace PalcoNet.Formularios
         private void editPubBtn_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void historialClienteBtn_Click(object sender, EventArgs e) {
+            HistorialClienteForm historialClienteForm = new HistorialClienteForm();
+            historialClienteForm.ShowDialog();
+        }
+
+        private void rendConsBtn_Click(object sender, EventArgs e) {
+            RendicionComisionesForm rendicionComisionesForm = new RendicionComisionesForm();
+            rendicionComisionesForm.ShowDialog();
+        }
+
+        private void consultarGradosToolStripMenuItem_Click(object sender, EventArgs e) {
+            ConsultaGradosForm consultaGradoForm = new ConsultaGradosForm();
+            consultaGradoForm.ShowDialog();
+        }
+
+        private void consultarRolesToolStripMenuItem_Click(object sender, EventArgs e) {
+            ConsultaRolesForm consultaRolesForm = new ConsultaRolesForm();
+            consultaRolesForm.ShowDialog();
+        }
+
+        private void nuevoRolToolStripMenuItem_Click(object sender, EventArgs e) {
+            AltaRolForm altaRolForm = new AltaRolForm();
+            altaRolForm.ShowDialog();
+        }
+
+        private void nuevoToolStripMenuItem_Click(object sender, EventArgs e){
+            AltaGradoForm altaGradoForm = new AltaGradoForm();
+            altaGradoForm.ShowDialog();
         }
 
       
