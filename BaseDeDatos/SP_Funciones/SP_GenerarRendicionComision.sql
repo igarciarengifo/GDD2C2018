@@ -16,72 +16,47 @@ AS
 	END
 GO
 
-/*SP que devuelve consulta con compras segun id seleccionadas en la APP*/
-IF OBJECT_ID('[LOOPP].[SP_RetonaComprasSegunIdList]') IS NOT NULL
-    DROP PROCEDURE [LOOPP].[SP_RetonaComprasSegunIdList]
-GO
-CREATE PROCEDURE [LOOPP].[SP_RetonaComprasSegunIdList] @idList varchar(100)
-AS
-BEGIN
-
-	DECLARE @SQL varchar(max)
-
-	SET @SQL = 
-			'select id_compra,fecha_compra,importe_total,cantidad_compra,facturado
-			from [LOOPP].[Compras]
-			where id_compra IN (' + @idList + ')'
-
-	EXEC(@SQL)	
-END
-GO
-
 /*Generar rendicion de comisiones*/
 IF OBJECT_ID('[LOOPP].[SP_GenerarRendicionComision]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_GenerarRendicionComision]
 GO
-CREATE PROCEDURE [LOOPP].[SP_GenerarRendicionComision] @idEmpresa int, @idEspectaculo int, @idList varchar(100)
+CREATE PROCEDURE [LOOPP].[SP_GenerarRendicionComision] @idEmpresa int, @idEspectaculo int, @cantidad int
 AS
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
 
-	/*Genero tabla temporal con los registros obtenidos*/
-	CREATE TABLE #Temp_Compra (	[id_compra] [int] NOT NULL,
-								[fecha_compra] [datetime] NOT NULL,
-								[importe_total] [numeric](18, 0) NOT NULL,
-								[cantidad_compra] [numeric](18, 0) NOT NULL,
-								[facturado] [bit] NOT NULL)
-
-	insert into #Temp_Compra ([id_compra],[fecha_compra],[importe_total],[cantidad_compra],[facturado]) 
-	exec [LOOPP].[SP_RetonaComprasSegunIdList] @idList;
+		select top (@cantidad)
+		           comp.id_compra
+				  ,esp.id_espectaculo
+				  ,emp.id_empresa
+				  ,comp.fecha_compra
+				  ,comp.importe_total
+				  ,comp.cantidad_compra
+				  ,[LOOPP].[Fn_CalcularComision](comp.importe_total,esp.id_grado_publicacion) comision
+			into #Temp_Rendicion
+			from [LOOPP].[Empresas] emp
+			left join [LOOPP].[Usuarios] usu
+				on emp.id_usuario=usu.id_usuario 
+			inner join [LOOPP].[Espectaculos] esp
+				on usu.id_usuario=esp.id_usuario_responsable 
+			inner join [LOOPP].[Ubicac_X_Espectaculo] uesp
+				on esp.id_espectaculo=uesp.id_espectaculo
+			inner join [LOOPP].[Localidades_Vendidas] lv
+				on uesp.id_espectaculo=lv.id_espectaculo
+			inner join [LOOPP].[Compras] comp
+				on lv.id_compra=comp.id_compra
+			where emp.id_empresa=@idEmpresa
+			and esp.id_espectaculo=@idEspectaculo
+			group by comp.id_compra
+					,esp.id_espectaculo
+					,emp.id_empresa
+					,comp.fecha_compra
+					,comp.importe_total
+					,comp.cantidad_compra
+					,[LOOPP].[Fn_CalcularComision](comp.importe_total,esp.id_grado_publicacion)
+			order by comp.fecha_compra asc
 		
-		select esp.id_espectaculo
-			,emp.id_empresa
-			,comp.id_compra
-			,esp.descripcion
-			,comp.fecha_compra
-			,comp.importe_total
-			,comp.cantidad_compra
-			,[LOOPP].[Fn_CalcularComision](comp.importe_total,esp.id_grado_publicacion) comision
-		into #Temp_Rendicion
-		from [LOOPP].[Empresas] emp
-		left join [LOOPP].[Usuarios] usu
-			on emp.id_usuario=usu.id_usuario
-		inner join [LOOPP].[Espectaculos] esp
-			on usu.id_usuario=esp.id_usuario_responsable 
-		inner join [LOOPP].[Ubicac_X_Espectaculo] uesp
-			on esp.id_espectaculo=uesp.id_espectaculo
-		inner join [LOOPP].[Localidades_Vendidas] lv
-			on uesp.id_espectaculo=lv.id_espectaculo
-		inner join #Temp_Compra comp
-			on lv.id_compra=comp.id_compra
-		where comp.facturado = 'False'
-		and emp.id_empresa=@idEmpresa
-		and esp.id_espectaculo=@idEspectaculo
-		group by esp.id_espectaculo,emp.id_empresa,comp.id_compra,esp.descripcion,comp.fecha_compra,comp.importe_total,comp.cantidad_compra
-		,[LOOPP].[Fn_CalcularComision](comp.importe_total,esp.id_grado_publicacion)
-		order by comp.fecha_compra asc
-
 		declare @newId int;
 		select @newId=MAX([nro_factura])+1 from [LOOPP].[Facturas];
 
@@ -96,17 +71,16 @@ AS
 
 		update LOOPP.Compras
 		set facturado = 'True'
-		where id_compra in (select id_compra from #Temp_Compra)
+		where id_compra in (select id_compra from #Temp_Rendicion)
 			
 	COMMIT TRANSACTION [T]
 
-	select ifa.*
-	from [LOOPP].[Item_Factura] ifa
-	inner join [LOOPP].[Facturas] fa
-	on ifa.nro_factura=fa.nro_factura
-	where fa.nro_factura=@newId;
+	select fa.*,emp.razon_social
+	from [LOOPP].[Facturas] fa
+	inner join [LOOPP].[Empresas] emp
+	on fa.id_empresa=emp.id_empresa
+	where nro_factura=@newId;
 
-	drop table #Temp_Compra;
 	drop table #Temp_Rendicion;
 
 	END TRY
@@ -115,7 +89,7 @@ AS
 
       ROLLBACK TRANSACTION [T]
 
-	  print 'No se pudo realizar la facturacion - Error: ' + ERROR_MESSAGE();
+	  print 'Error: ' + ERROR_MESSAGE();
 
 	END CATCH;
 GO
