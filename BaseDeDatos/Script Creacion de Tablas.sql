@@ -77,6 +77,7 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE [LOOPP].[Func_X_Rol](
 		[id_funcionalidad] [int] NOT NULL,
 		[id_rol] [int] NOT NULL,
+		[activo] bit NOT NULL DEFAULT('True'),
 		PRIMARY KEY ( [id_funcionalidad], [id_rol]),
 		foreign key ([id_funcionalidad]) references [LOOPP].[Funcionalidades]([id_funcionalidad]),
 		foreign key ([id_rol]) references [LOOPP].[Roles]([id_rol])
