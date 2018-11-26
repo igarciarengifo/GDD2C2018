@@ -183,8 +183,8 @@ namespace PalcoNet.Formularios
 
         private void newPubBtn_Click(object sender, EventArgs e)
         {
-         /*   NuevaPublicacionForm nuevaPublicacionForm = new NuevaPublicacionForm();
-            nuevaPublicacionForm.ShowDialog();*/
+            AltaEditPublicacionForm nuevaPublicacionForm = new AltaEditPublicacionForm();
+            nuevaPublicacionForm.ShowDialog();
         }
 
         private void estadisticasBtn_Click(object sender, EventArgs e)

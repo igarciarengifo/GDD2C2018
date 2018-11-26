@@ -80,7 +80,26 @@ namespace PalcoNet.Formularios.AbmCliente
                 nuevaPersona.codigo_postal = codPostalBox.Text;
                 
                 resultado = clienteMng.altaClienteYUsuario(user, pass, nuevaPersona);
-                MessageBox.Show(resultado);
+                String[] arrayResultado = resultado.Split('-');
+                if (arrayResultado.ElementAt(2).Equals("OK"))
+                {
+                    Usuario_Manager userMng = new Usuario_Manager();
+                    MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
+                    if (user == null)
+                    {
+                        MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ". El usuario es: " + nuevaPersona.cuil, "Resultado operacion");
+                        String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
+                        userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(resultado,
+                        "No pudo realizarse operacion",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Exclamation,
+                        MessageBoxDefaultButton.Button1);
+                }
             }
             catch (Exception exc) {
                 MessageBox.Show(exc.Message);

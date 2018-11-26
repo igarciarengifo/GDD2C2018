@@ -21,17 +21,25 @@ AS
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
-		/*En el momento de crear usuarios, el campo username tiene una constraint de unicidad, si ya existe uno igual dara error de constraint*/
-		insert into [LOOPP].[Usuarios](
-					[username]
-					,[password])
-		values (@user,@pass);
-		
 		declare @idUsu int;
-		select @idUsu=[id_usuario]
-		from [LOOPP].[Usuarios]
-		where [username]=@user;
+		/*En el momento de crear usuarios, el campo username tiene una constraint de unicidad, si ya existe uno igual dara error de constraint*/
+		if ( @user is null)
+			begin
+				EXEC @idUsu =  LOOPP.SP_AltaUsuario_Autogenerado @cuil, @nombre
+				SET @resultado = @idUsu+'-'+@cuil + '!' + @nombre
+			end
+		else
+			begin
+				insert into [LOOPP].[Usuarios](
+							[username]
+							,[password])
+				values (@user,@pass);
+		
 
+				select @idUsu=[id_usuario]
+				from [LOOPP].[Usuarios]
+				where [username]=@user;
+		end
 		INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
 		VALUES (@idUsu,2);
 
@@ -54,12 +62,13 @@ AS
 					  ,[codigo_postal]
 					  ,[id_usuario] )
 			values (@nombre,@apellido,@tipo_doc,@documento,@cuil,@fecha_nac,@mail,@telefono,@calle,@nroCalle,@piso,@depto,@localidad,@cod_postal,@idUsu)
+			SET @resultado = '-'
 		end
 		else set @resultado = 'El cliente ya existe en el sistema'
 	
 	COMMIT TRANSACTION [T]
 
-	set @resultado = 'OK';
+	set @resultado = @resultado +'-OK';
 
 	END TRY
 

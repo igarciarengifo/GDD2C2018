@@ -1,6 +1,6 @@
 ﻿namespace PalcoNet.Formularios.GenerarPublicacion
 {
-    partial class NuevaPublicacionForm
+    partial class AltaEditPublicacionForm
     {
         /// <summary>
         /// Required designer variable.

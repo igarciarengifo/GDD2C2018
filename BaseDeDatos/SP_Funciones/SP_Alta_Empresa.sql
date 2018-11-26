@@ -1,10 +1,3 @@
-USE [GD2C2018]
-GO
-/****** Object:  StoredProcedure [LOOPP].[SP_NuevoEmpresa]    Script Date: 15/11/2018 21:46:08 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 CREATE PROCEDURE [LOOPP].[SP_NuevoEmpresa]
 	@razon varchar(255)
    ,@cuit varchar(255)
@@ -26,16 +19,24 @@ AS
 
 	BEGIN TRY
 		/*En el momento de crear usuarios, el campo username tiene una constraint de unicidad, si ya existe uno igual dara error de constraint*/
-		insert into [LOOPP].[Usuarios](
-					[username]
-					,[password])
-		values (@user,@pass);
-		
 		declare @idUsu int;
-		select @idUsu=[id_usuario]
-		from [LOOPP].[Usuarios]
-		where [username]=@user;
-
+		if ( @user is null)
+			begin
+				EXEC @idUsu =  LOOPP.SP_AltaUsuario_Autogenerado @cuit, @razon
+				SET @resultado = @idUsu+'-'+@cuit + '!' + @razon
+			end
+		else
+			begin
+				insert into [LOOPP].[Usuarios](
+							[username]
+							,[password])
+				values (@user,@pass);
+		
+		
+				select @idUsu=[id_usuario]
+				from [LOOPP].[Usuarios]
+				where [username]=@user;
+		end
 		INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
 		VALUES (@idUsu,3);
 
@@ -56,12 +57,13 @@ AS
 					  ,[ciudad]
 					  ,[id_usuario] )
 			values (@razon,@cuit,@fec_creacion,@email,@tel,@dir,@dir_nro,@dir_piso,@dir_depto,@localidad,@codPostal,@ciudad,@idUsu)
+			SET @resultado = '-'
 		end
 		else set @resultado = 'La empresa ya existe en el sistema'
 	
 	COMMIT TRANSACTION [T]
 
-	set @resultado = 'OK';
+	set @resultado = @resultado +'-OK';
 
 	END TRY
 

@@ -55,6 +55,7 @@
     <Compile Include="Entidades\Estado_Publicacion.cs" />
     <Compile Include="Entidades\Funcionalidad.cs" />
     <Compile Include="Entidades\Grado_Publicacion.cs" />
+    <Compile Include="Entidades\Publicacion.cs" />
     <Compile Include="Entidades\Rol.cs" />
     <Compile Include="Entidades\Rubro.cs" />
     <Compile Include="Entidades\Ubicacion.cs" />
@@ -119,11 +120,17 @@
     <Compile Include="Formularios\Comprar\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\GenerarPublicacion\NuevaPublicacionForm.cs">
+    <Compile Include="Formularios\EditarPublicacion\EditarPublicacionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\GenerarPublicacion\NuevaPublicacionForm.Designer.cs">
-      <DependentUpon>NuevaPublicacionForm.cs</DependentUpon>
+    <Compile Include="Formularios\EditarPublicacion\EditarPublicacionForm.Designer.cs">
+      <DependentUpon>EditarPublicacionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\GenerarPublicacion\AltaEditPublicacionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\GenerarPublicacion\AltaEditPublicacionForm.Designer.cs">
+      <DependentUpon>AltaEditPublicacionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\GenerarRendicionComisiones\Form1.cs">
       <SubType>Form</SubType>
@@ -195,8 +202,11 @@
     <EmbeddedResource Include="Formularios\ABMUsuario\CambiarPassForm.resx">
       <DependentUpon>CambiarPassForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\GenerarPublicacion\NuevaPublicacionForm.resx">
-      <DependentUpon>NuevaPublicacionForm.cs</DependentUpon>
+    <EmbeddedResource Include="Formularios\EditarPublicacion\EditarPublicacionForm.resx">
+      <DependentUpon>EditarPublicacionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\GenerarPublicacion\AltaEditPublicacionForm.resx">
+      <DependentUpon>AltaEditPublicacionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\ListadoEstadistico\EstadisticasForm.resx">
       <DependentUpon>EstadisticasForm.cs</DependentUpon>
@@ -232,9 +242,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Formularios\EditarPublicacion\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

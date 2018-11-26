@@ -71,5 +71,11 @@ namespace PalcoNet.Managers
             return SQLManager.ejecutarEscalarQuery<bool>("LOOPP.SP_UserHasInvalidInfo",
                         SQLArgumentosManager.nuevoParametro("@id_user", id_usuario));
         }
+
+        internal bool esPrimerLogueo(int id_usuario)
+        {
+            return SQLManager.ejecutarEscalarQuery<bool>("LOOPP.SP_EsPrimerLogueo",
+                        SQLArgumentosManager.nuevoParametro("@id_user", id_usuario));
+        }
     }
 }

@@ -44,5 +44,15 @@ namespace PalcoNet.Managers
             }
             
         }
+
+        internal List<Publicacion> getAllPublicaciones()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal List<Publicacion> getPublicacionConId(int p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

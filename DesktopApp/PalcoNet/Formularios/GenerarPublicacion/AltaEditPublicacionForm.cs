@@ -13,15 +13,16 @@ using System.Windows.Forms;
 
 namespace PalcoNet.Formularios.GenerarPublicacion
 {
-    public partial class NuevaPublicacionForm : Form
+    public partial class AltaEditPublicacionForm : Form
     {
         Grados_Publicacion_Manager gradosPublicacionMng = new Grados_Publicacion_Manager();
         Estado_Publicacion_Manager estadosPublicacionMng = new Estado_Publicacion_Manager();
         Rubro_Manager rubrosMng = new Rubro_Manager();
         List<Ubicacion> ubicaciones = new List<Ubicacion>();
         List<DateTime> fechasSeleccionadas = new List<DateTime>();
+        
 
-        public NuevaPublicacionForm()
+        public AltaEditPublicacionForm()
         {
             InitializeComponent();
             this.cargarRubros();
@@ -30,6 +31,12 @@ namespace PalcoNet.Formularios.GenerarPublicacion
             this.cargarHorarios();
             this.cargarUbicaciones();
             publicacionCalendar.MinDate = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+        }
+
+        public AltaEditPublicacionForm(Publicacion publicacionSeleccionada)
+        {
+            // TODO: Complete member initialization
+            
         }
 
         private void cargarUbicaciones()

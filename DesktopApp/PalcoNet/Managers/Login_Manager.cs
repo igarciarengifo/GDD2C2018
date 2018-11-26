@@ -49,5 +49,10 @@ namespace PalcoNet.Managers
 
             return id_usuario;
         }
+
+        public Boolean esPrimerLogueo(int id_usuario)
+        {
+            return usuario_Mgr.esPrimerLogueo(id_usuario);
+        }
     }
 }

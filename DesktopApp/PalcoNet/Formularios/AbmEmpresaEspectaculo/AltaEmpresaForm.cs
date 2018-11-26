@@ -81,9 +81,16 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
                 nuevaEmpresa.cod_postal = codPostalBox.Text;
 
                 resultado = empresaMng.altaEmpresaYUsuario(user, pass, nuevaEmpresa);
-                if (resultado.Equals("OK"))
+                String[] arrayResultado = resultado.Split('-');
+                if (arrayResultado.ElementAt(2).Equals("OK"))
                 {
+                    Usuario_Manager userMng = new Usuario_Manager();
                     MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
+                    if (user == null) {
+                        MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1)+ ". El usuario es: "+nuevaEmpresa.cuit, "Resultado operacion");
+                        String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
+                        userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0))); 
+                    }
                 }
                 else
                 {
