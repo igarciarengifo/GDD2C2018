@@ -45,25 +45,23 @@ namespace PalcoNet.Formularios.GenerarRendicionComisiones
             cmbEspectaculo.DataSource = espectaculos;
         }
 
-        private void btnFiltrar_Click(object sender, EventArgs e) {
-            this.verificarCamposObligatorios();
-            int idEmpresa = (int)cmbEmpresa.SelectedValue;
-            int idEspectaculo = (int)cmbEspectaculo.SelectedValue;
-            List<Compra> compras = new List<Compra>();
-            compras = mngrCompra.getComprasPorEmpEsp(idEmpresa, idEspectaculo);
-
-            if (compras.Count > 0) {
-                dataGridView1.DataSource = compras;
-            } else {
-                MessageBox.Show("No se encontraron resultados.");
-
+        private void verificarCamposObligatorios() {
+            if ((cmbEmpresa.SelectedValue == null) || (cmbEspectaculo.SelectedValue == null) 
+                                                   || (String.IsNullOrEmpty(txtCantidad.Text))) {
+                throw new ArgumentException("Debe completar los datos requeridos");
             }
         }
 
-        private void verificarCamposObligatorios() {
-            if (cmbEmpresa.SelectedValue == null) {
-                throw new ArgumentException("Debe completar los datos requeridos");
-            }
+        private void btnComision_Click(object sender, EventArgs e) {
+            this.verificarCamposObligatorios();
+            int idEmpresa = (int)cmbEmpresa.SelectedValue;
+            int idEspectaculo = (int)cmbEspectaculo.SelectedValue;
+            int cantidad = Convert.ToInt32(txtCantidad.Text);
+            Factura factura = mngrCompra.generarRendicion(idEmpresa, idEspectaculo, cantidad);
+            FacturaForm facturaForm = new FacturaForm(factura);
+            facturaForm.Show();
+            this.Dispose();
+            this.Close();
         }
     }
 }
