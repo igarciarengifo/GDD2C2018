@@ -11,32 +11,38 @@ using System.Data.SqlClient;
 namespace PalcoNet.Managers {
     class Compra_Manager {
 
-        private Compra buildCompra(DataRow row) {
-            Compra nuevoCompra = new Compra();
-            nuevoCompra.id_compra = Convert.ToInt32(row["id_compra"]);
-            //nuevoCompra.id_cliente = Convert.ToInt32(row["id_rol"]);
-            nuevoCompra.importe_total = Convert.ToInt32(row["Importe Total"]);
-            //nuevoCompra.cantidad_compra = Convert.ToInt32(row["id_rol"]);
-            //nuevoCompra.medio_pago = Convert.ToString(row["nombre"]);
-            nuevoCompra.entrada = Convert.ToString(row["Espectaculo"]);
-            nuevoCompra.fecha_compra = Convert.ToDateTime(row["Fecha Compra"]);
+        private Factura buildCompra(DataRow row) {
+            Factura nuevoFactura = new Factura();
+            nuevoFactura.nro_factura = Convert.ToInt32(row["nro_factura"]);
+            nuevoFactura.importe_total = Convert.ToInt32(row["total_factura"]);
+            nuevoFactura.importe_comision = Convert.ToDecimal(row["total_comision"]);
+            nuevoFactura.empresa = Convert.ToString(row["razon_social"]);
+            nuevoFactura.fecha_factura = Convert.ToDateTime(row["fecha_factura"]);
 
-            return nuevoCompra;
+            return nuevoFactura;
         }
 
-        public List<Compra> getComprasPorEmpEsp(int id_empresa, int id_espectaculo) {
-            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_AllComprasPorEmpresa",
+        public Factura generarRendicion(int id_empresa, int id_espectaculo, int cantidad) {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GenerarRendicionComision",
                                             SQLArgumentosManager.nuevoParametro("@idEmpresa", id_empresa)
-                                            .add("@idEspectaculo", id_espectaculo));
-            List<Compra> lista_compras = new List<Compra>();
+                                            .add("@idEspectaculo", id_espectaculo)
+                                            .add("@cantidad", id_espectaculo));
+            Factura factura = new Factura();
 
             if (resultTable != null && resultTable.Rows != null) {
                 foreach (DataRow row in resultTable.Rows) {
-                    var compra = buildCompra(row);
-                    lista_compras.Add(compra);
+                    Factura item = buildCompra(row);
+                    factura = item;
+                    break;
                 }
             }
-            return lista_compras;
+            return factura;
+        }
+
+        public DataTable getItemsFactura(int nro_factura) {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_DevuelveItemsPorIdFactura",
+                                            SQLArgumentosManager.nuevoParametro("@idFactura", nro_factura));         
+            return resultTable;
         }
     }
 }
