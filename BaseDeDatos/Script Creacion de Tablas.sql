@@ -59,7 +59,7 @@ END
 /*##########################################################################################################*/
 Print '***Inicio de creacion de tablas***'
 	/*-1- Tabla Roles*/
-	CREATE TABLE [LOOPP].[Roles](
+	CREATE TABLE [LOOPP].[Roles](	
 		[id_rol] int IDENTITY(1,1) NOT NULL,
 		[nombre] varchar (50) NOT NULL,
 		[estado] bit NOT NULL DEFAULT('True'),
@@ -77,7 +77,7 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE [LOOPP].[Func_X_Rol](
 		[id_funcionalidad] [int] NOT NULL,
 		[id_rol] [int] NOT NULL,
-		[activo] bit NOT NULL DEFAULT('True'),
+		[baja] bit NOT NULL DEFAULT('True'),
 		PRIMARY KEY ( [id_funcionalidad], [id_rol]),
 		foreign key ([id_funcionalidad]) references [LOOPP].[Funcionalidades]([id_funcionalidad]),
 		foreign key ([id_rol]) references [LOOPP].[Roles]([id_rol])
@@ -97,6 +97,7 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE [LOOPP].[Rol_X_Usuario](
 		[id_usuario] [int] NOT NULL,
 		[id_rol] [int] NOT NULL,
+		[activo] bit NOT NULL DEFAULT('True'),
 		PRIMARY KEY ( [id_usuario], [id_rol]),
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario]),
 		foreign key ([id_rol]) references [LOOPP].[Roles]([id_rol])

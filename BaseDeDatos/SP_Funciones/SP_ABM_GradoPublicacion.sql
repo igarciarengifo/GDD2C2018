@@ -29,10 +29,25 @@ AS
 				   where id_grado_publicacion=@id
 				   and getdate() between e.[fecha_publicacion] and ue.[fecha_espectaculo])
 		BEGIN
-			update [LOOPP].[Grados_Publicacion]
-			set [comision]= @comision,
-				[descripcion]= @descripcion
-			where id_grado_publicacion=@id
+			if @descripcion is null and @comision is not null
+			begin
+				update [LOOPP].[Grados_Publicacion]
+				set [comision]= @comision
+				where id_grado_publicacion=@id
+			end
+			if @descripcion is not null and @comision is null
+			begin
+				update [LOOPP].[Grados_Publicacion]
+				set [descripcion]= @descripcion
+				where id_grado_publicacion=@id
+			end
+			if @descripcion is not null and @comision is not null
+			begin
+				update [LOOPP].[Grados_Publicacion]
+				set [comision]= @comision,
+					[descripcion]= @descripcion
+				where id_grado_publicacion=@id
+			end
 
 			set @resultado='OK';
 		END
