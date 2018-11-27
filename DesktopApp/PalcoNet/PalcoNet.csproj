@@ -218,9 +218,7 @@
     <Compile Include="Managers\Usuario_Manager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DGVPaginado.resx">
-      <DependentUpon>DGVPaginado.cs</DependentUpon>
-    </EmbeddedResource>
+ 
     <EmbeddedResource Include="Formularios\AbmCliente\AltaClienteForm.resx">
       <DependentUpon>AltaClienteForm.cs</DependentUpon>
     </EmbeddedResource>
