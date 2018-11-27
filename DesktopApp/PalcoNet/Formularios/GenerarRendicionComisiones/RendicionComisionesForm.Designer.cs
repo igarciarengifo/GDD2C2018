@@ -28,34 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnFiltrar = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbEspectaculo = new System.Windows.Forms.ComboBox();
             this.cmbEmpresa = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btnComision = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtCantidad = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // btnFiltrar
-            // 
-            this.btnFiltrar.Location = new System.Drawing.Point(767, 150);
-            this.btnFiltrar.Margin = new System.Windows.Forms.Padding(4);
-            this.btnFiltrar.Name = "btnFiltrar";
-            this.btnFiltrar.Size = new System.Drawing.Size(124, 34);
-            this.btnFiltrar.TabIndex = 3;
-            this.btnFiltrar.Text = "Filtrar";
-            this.btnFiltrar.UseVisualStyleBackColor = true;
-            this.btnFiltrar.Click += new System.EventHandler(this.btnFiltrar_Click);
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.txtCantidad);
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.cmbEspectaculo);
             this.panel1.Controls.Add(this.cmbEmpresa);
             this.panel1.Controls.Add(this.label4);
@@ -64,7 +54,7 @@
             this.panel1.Location = new System.Drawing.Point(30, 34);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(861, 108);
+            this.panel1.Size = new System.Drawing.Size(861, 150);
             this.panel1.TabIndex = 2;
             // 
             // cmbEspectaculo
@@ -115,28 +105,20 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Filtros de Búsqueda";
             // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(34, 196);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(856, 241);
-            this.dataGridView1.TabIndex = 4;
-            // 
             // btnComision
             // 
-            this.btnComision.Location = new System.Drawing.Point(767, 462);
+            this.btnComision.Location = new System.Drawing.Point(767, 225);
             this.btnComision.Margin = new System.Windows.Forms.Padding(4);
             this.btnComision.Name = "btnComision";
             this.btnComision.Size = new System.Drawing.Size(124, 34);
             this.btnComision.TabIndex = 5;
             this.btnComision.Text = "Procesar";
             this.btnComision.UseVisualStyleBackColor = true;
+            this.btnComision.Click += new System.EventHandler(this.btnComision_Click);
             // 
             // btnSalir
             // 
-            this.btnSalir.Location = new System.Drawing.Point(620, 462);
+            this.btnSalir.Location = new System.Drawing.Point(635, 225);
             this.btnSalir.Margin = new System.Windows.Forms.Padding(4);
             this.btnSalir.Name = "btnSalir";
             this.btnSalir.Size = new System.Drawing.Size(124, 34);
@@ -145,36 +127,49 @@
             this.btnSalir.UseVisualStyleBackColor = true;
             this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(18, 105);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(64, 17);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Cantidad";
+            // 
+            // txtCantidad
+            // 
+            this.txtCantidad.Location = new System.Drawing.Point(102, 102);
+            this.txtCantidad.Name = "txtCantidad";
+            this.txtCantidad.Size = new System.Drawing.Size(100, 22);
+            this.txtCantidad.TabIndex = 11;
+            // 
             // RendicionComisionesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(931, 530);
+            this.ClientSize = new System.Drawing.Size(931, 302);
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.btnComision);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.btnFiltrar);
             this.Controls.Add(this.panel1);
             this.Name = "RendicionComisionesForm";
             this.Text = "Rendición de Comisiones";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnFiltrar;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cmbEmpresa;
         private System.Windows.Forms.ComboBox cmbEspectaculo;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btnComision;
         private System.Windows.Forms.Button btnSalir;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtCantidad;
     }
 }
