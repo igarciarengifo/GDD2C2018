@@ -7,7 +7,7 @@ using PalcoNet.Formularios.ListadoEstadistico;
 using PalcoNet.Formularios.HistorialCliente;
 using PalcoNet.Formularios.GenerarRendicionComisiones;
 using PalcoNet.Formularios.AbmGrado;
-using PalcoNet.Formularios.AbmRol;
+//using PalcoNet.Formularios.AbmRol;
 //using PalcoNet.Formularios.Comprar;
 using PalcoNet.Login;
 using System;
@@ -214,13 +214,13 @@ namespace PalcoNet.Formularios
         }
 
         private void consultarRolesToolStripMenuItem_Click(object sender, EventArgs e) {
-            ConsultaRolesForm consultaRolesForm = new ConsultaRolesForm();
-            consultaRolesForm.ShowDialog();
+            //ConsultaRolesForm consultaRolesForm = new ConsultaRolesForm();
+            //consultaRolesForm.ShowDialog();
         }
 
         private void nuevoRolToolStripMenuItem_Click(object sender, EventArgs e) {
-            AltaRolForm altaRolForm = new AltaRolForm();
-            altaRolForm.ShowDialog();
+            //AltaRolForm altaRolForm = new AltaRolForm();
+            //altaRolForm.ShowDialog();
         }
 
         private void nuevoToolStripMenuItem_Click(object sender, EventArgs e){
