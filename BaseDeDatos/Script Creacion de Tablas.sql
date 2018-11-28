@@ -62,7 +62,7 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE [LOOPP].[Roles](	
 		[id_rol] int IDENTITY(1,1) NOT NULL,
 		[nombre] varchar (50) NOT NULL,
-		[estado] bit NOT NULL DEFAULT('True'),
+		[baja_logica] bit NOT NULL DEFAULT('False'),
 		primary key ([id_rol])
 	);
 
@@ -77,7 +77,7 @@ Print '***Inicio de creacion de tablas***'
 	CREATE TABLE [LOOPP].[Func_X_Rol](
 		[id_funcionalidad] [int] NOT NULL,
 		[id_rol] [int] NOT NULL,
-		[baja] bit NOT NULL DEFAULT('True'),
+		[baja_logica] bit NOT NULL DEFAULT('False'),
 		PRIMARY KEY ( [id_funcionalidad], [id_rol]),
 		foreign key ([id_funcionalidad]) references [LOOPP].[Funcionalidades]([id_funcionalidad]),
 		foreign key ([id_rol]) references [LOOPP].[Roles]([id_rol])
@@ -120,6 +120,7 @@ Print '***Inicio de creacion de tablas***'
 		ciudad nvarchar(50) NULL DEFAULT ('No definido'),
 		baja_logica bit NOT NULL DEFAULT('False'),
 		id_usuario int not null,
+		UNIQUE (cuit),
 		primary key ([id_empresa]),
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
 	);
@@ -221,6 +222,7 @@ Print '***Inicio de creacion de tablas***'
 		fecha_nacimiento datetime NULL,
 		fecha_creacion datetime NULL,
 		id_usuario int NOT NULL,
+		CONSTRAINT UC_Cliente UNIQUE (tipo_documento,nro_documento),
 		primary key ([id_cliente]),
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
 	);
