@@ -1,3 +1,7 @@
+IF OBJECT_ID('LOOPP.SP_FiltrarClientes') IS NOT NULL
+	DROP PROCEDURE [LOOPP].[SP_FiltrarClientes];
+GO
+
 CREATE PROCEDURE [LOOPP].[SP_FiltrarClientes]
 	@nombre nvarchar(255),
 	@apellido nvarchar(255),

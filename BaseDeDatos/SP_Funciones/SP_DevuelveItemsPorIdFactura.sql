@@ -1,21 +1,7 @@
-/*    ==Scripting Parameters==
-
-    Source Server Version : SQL Server 2016 (13.0.4224)
-    Source Database Engine Edition : Microsoft SQL Server Express Edition
-    Source Database Engine Type : Standalone SQL Server
-
-    Target Server Version : SQL Server 2017
-    Target Database Engine Edition : Microsoft SQL Server Standard Edition
-    Target Database Engine Type : Standalone SQL Server
-*/
-
-USE [GD2C2018]
+IF OBJECT_ID('LOOPP.SP_DevuelveItemsPorIdFactura') IS NOT NULL
+	DROP PROCEDURE [LOOPP].[SP_DevuelveItemsPorIdFactura];
 GO
-/****** Object:  StoredProcedure [LOOPP].[SP_DevuelveItemsPorIdFactura]    Script Date: 24/11/2018 4:40:56 p. m. ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+
 CREATE PROCEDURE [LOOPP].[SP_DevuelveItemsPorIdFactura] @idFactura int
 AS
 	select 		  comp.fecha_compra

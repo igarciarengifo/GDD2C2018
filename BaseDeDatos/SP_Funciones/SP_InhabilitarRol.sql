@@ -10,7 +10,7 @@ AS
 	where [id_rol]=@idRol;
 
 	update [LOOPP].[Roles]
-	set [estado] = 'False'
+	set baja_logica = 'True'
 	where id_rol=@idRol;
 
 GO

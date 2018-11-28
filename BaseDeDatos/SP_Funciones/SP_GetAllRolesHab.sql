@@ -6,7 +6,7 @@ CREATE PROCEDURE [LOOPP].[SP_GetAllRolesHab]
 AS
 BEGIN
 	SELECT * FROM LOOPP.Roles
-	WHERE estado=1
+	WHERE baja_logica='False'
 	ORDER BY nombre
 END
 GO

@@ -1,3 +1,7 @@
+IF OBJECT_ID('LOOPP.SP_GetRolesIDUser') IS NOT NULL
+	DROP PROCEDURE [LOOPP].[SP_GetRolesIDUser];
+GO
+
 CREATE PROCEDURE [LOOPP].[SP_GetRolesIDUser]
 	@id_user int
 AS
