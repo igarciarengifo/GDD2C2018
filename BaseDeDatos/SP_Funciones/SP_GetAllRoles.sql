@@ -1,8 +1,11 @@
-CREATE PROCEDURE [LOOPP].[SP_GetAllRoles]
-AS
-BEGIN
-	select * from [LOOPP].[Roles]
-END
+IF OBJECT_ID('LOOPP.SP_GetAllRoles') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetAllRoles
 GO
 
+CREATE PROCEDURE [LOOPP].[SP_GetAllRoles]
+AS
 
+	SELECT * 
+	FROM [LOOPP].[Roles]
+
+GO
