@@ -9,8 +9,10 @@ AS
 		BEGIN
 			insert into [LOOPP].[Roles] (nombre)
 			values (@nombre)
+			
+			SELECT @resultado = max(id_rol)
+			from [LOOPP].[Roles]
 
-			set @resultado='OK'
 		END
 	else set @resultado = 'ERROR'
 
