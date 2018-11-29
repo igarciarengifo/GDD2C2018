@@ -10,5 +10,6 @@ BEGIN
 	JOIN [LOOPP].[Func_X_Rol] FR ON (FR.ID_Funcionalidad = F.id_funcionalidad)
 	JOIN [LOOPP].[Roles] R ON (R.id_rol=FR.id_rol)
 	WHERE R.id_rol=@id_rol
+	AND R.baja_logica = 'False'
 END
 GO
