@@ -5,5 +5,4 @@ GO
 CREATE PROCEDURE [LOOPP].[SP_GetAllFuncionalidad]
 AS
 	select * from [LOOPP].[Funcionalidades]
-	where id_funcionalidad !=1
 GO
