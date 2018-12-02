@@ -483,7 +483,7 @@ into #TEMP_Espectaculo
 		  ,u.id_ubicacion
 		  ,t.Ubicacion_Precio
 		  ,cast(t.Espectaculo_Fecha as date) fecha
-		  ,cast(t.Espectaculo_Fecha_Venc as date) fechaVenc		  		  		  
+		  ,cast(t.Espectaculo_Fecha_Venc as date) fechaVenc	
 		  ,'00:00:00' hora
 	from #Temp_Ubic_Espec t
 	inner join [LOOPP].[Espectaculos] e

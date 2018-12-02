@@ -8,7 +8,7 @@ AS
 	declare @resultado varchar(255)
 	if not exists (select 1 from [LOOPP].[Func_X_Rol] where id_funcionalidad=@idFuncionalidad and id_rol=@idRol)
 	begin
-		Insert into [LOOPP].[Func_X_Rol](id_funcionalidad,id_rol)
+		Insert into [LOOPP].[Func_X_Rol](id_rol,id_funcionalidad)
 		values (@idRol,@idFuncionalidad)
 
 		set @resultado = 'OK'

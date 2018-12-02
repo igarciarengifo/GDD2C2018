@@ -1,3 +1,7 @@
+IF OBJECT_ID('LOOPP.SP_NuevoEmpresa') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_NuevoEmpresa
+GO
+
 CREATE PROCEDURE [LOOPP].[SP_NuevoEmpresa]
 	@razon varchar(255)
    ,@cuit varchar(255)

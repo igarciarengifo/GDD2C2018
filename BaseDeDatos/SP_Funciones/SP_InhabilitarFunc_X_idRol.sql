@@ -4,9 +4,9 @@ GO
 
 CREATE PROCEDURE [LOOPP].[SP_InhabilitarFunc_X_idRol] @id_rol int
 AS
-BEGIN
-	update [LOOPP].[Roles] 
-	set baja_logica = 'True'
-	WHERE id_rol=@id_rol;
-END
+	BEGIN
+		update [LOOPP].[Func_X_Rol]
+		set baja_logica = 'True'
+		WHERE id_rol=@id_rol;
+	END
 GO
