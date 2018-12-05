@@ -50,9 +50,13 @@ AS
 	select @newId=MAX([id_espectaculo])+1
 	from [LOOPP].[Espectaculos];
 
-	if not exists (select 1 from [LOOPP].[Espectaculos] 
-				   where descripcion=@descripcion 
-				   and fecha_publicacion=@fecha_publicacion
+	if not exists (select 1 from [LOOPP].[Espectaculos] e
+				   inner join [LOOPP].[Ubicac_X_Espectaculo] ue
+				   on e.id_espectaculo=ue.id_espectaculo
+				   where e.descripcion=@descripcion 
+				   and e.fecha_publicacion=@fecha_publicacion
+				   and ue.fecha_espectaculo=@fechaEspec
+				   and ue.hora_espectaculo=@horaEspec
 				   and id_estado_publicacion in (1,2,3))
 	begin
 		insert into [LOOPP].[Espectaculos]([id_espectaculo]
@@ -90,4 +94,3 @@ AS
 	select @resultado;
 
 GO
-
