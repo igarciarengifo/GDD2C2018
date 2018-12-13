@@ -48,8 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-	<Compile Include="Entidades\Rubro.cs" />
-	<Compile Include="Entidades\Ubicacion.cs" />
+    <Compile Include="Entidades\Rubro.cs" />
+    <Compile Include="Entidades\Ubicacion.cs" />
     <Compile Include="Entidades\Cliente.cs" />
     <Compile Include="Entidades\Compra.cs" />
     <Compile Include="Entidades\Espectaculo.cs" />
@@ -58,11 +58,10 @@
     <Compile Include="Entidades\Encriptacion.cs" />
     <Compile Include="Entidades\Factura.cs" />
     <Compile Include="Entidades\Funcionalidad.cs" />
-	<Compile Include="Entidades\Estado_Publicacion.cs" />
+    <Compile Include="Entidades\Estado_Publicacion.cs" />
     <Compile Include="Entidades\Grado_Publicacion.cs" />
-    <Compile Include="Entidades\Publicacion.cs" />
-    <Compile Include="Entidades\Grado.cs" />
     <Compile Include="Entidades\Rol.cs" />
+    <Compile Include="Entidades\Ubicacion_X_Espectaculo.cs" />
     <Compile Include="Entidades\Usuario.cs" />
     <Compile Include="Formularios\AbmCliente\AltaClienteForm.cs">
       <SubType>Form</SubType>
@@ -135,7 +134,7 @@
     </Compile>
     <Compile Include="Formularios\GenerarPublicacion\AltaEditPublicacionForm.Designer.cs">
       <DependentUpon>AltaEditPublicacionForm.cs</DependentUpon>
-	 </Compile>
+    </Compile>
     <Compile Include="Formularios\GenerarRendicionComisiones\FacturaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -182,23 +181,19 @@
     <Compile Include="Managers\Compra_Manager.cs" />
     <Compile Include="Managers\Espectaculo_Manager.cs" />
     <Compile Include="Managers\Empresa_Manager.cs" />
-	<Compile Include="Managers\Ubicaciones_Manager.cs" />
-	<Compile Include="Managers\Grados_Publicacion_Manager.cs" />
-	<Compile Include="Managers\Rol_Manager.cs" />
-	<Compile Include="Managers\Estado_Publicacion_Manager.cs" />
+    <Compile Include="Managers\Ubicaciones_Manager.cs" />
+    <Compile Include="Managers\Grados_Publicacion_Manager.cs" />
+    <Compile Include="Managers\Rol_Manager.cs" />
+    <Compile Include="Managers\Estado_Publicacion_Manager.cs" />
     <Compile Include="Managers\Funcionalidad_Manager.cs" />
-	<Compile Include="Managers\Estadisticas_Manager.cs" />
-    <Compile Include="Managers\Grado_Manager.cs" />
+    <Compile Include="Managers\Estadisticas_Manager.cs" />
     <Compile Include="Managers\Login_Manager.cs" />
     <Compile Include="Managers\SQLArgumentosManager.cs" />
     <Compile Include="Managers\SQLManager.cs" />
-	<Compile Include="Managers\Publicacion_Manager.cs" />
     <Compile Include="Managers\Usuario_Manager.cs" />
-	<Compile Include="Managers\Rubro_Manager.cs" />
-	
+    <Compile Include="Managers\Rubro_Manager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
- 
     <EmbeddedResource Include="Formularios\AbmCliente\AltaClienteForm.resx">
       <DependentUpon>AltaClienteForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -231,7 +226,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\GenerarPublicacion\AltaEditPublicacionForm.resx">
       <DependentUpon>AltaEditPublicacionForm.cs</DependentUpon>
-	 </EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\GenerarRendicionComisiones\FacturaForm.resx">
       <DependentUpon>FacturaForm.cs</DependentUpon>
     </EmbeddedResource>

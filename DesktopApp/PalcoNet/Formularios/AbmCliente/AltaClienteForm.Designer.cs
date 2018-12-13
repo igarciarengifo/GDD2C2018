@@ -371,9 +371,9 @@
             this.habilitadoBox.AutoSize = true;
             this.habilitadoBox.Location = new System.Drawing.Point(363, 449);
             this.habilitadoBox.Name = "habilitadoBox";
-            this.habilitadoBox.Size = new System.Drawing.Size(109, 17);
+            this.habilitadoBox.Size = new System.Drawing.Size(90, 17);
             this.habilitadoBox.TabIndex = 4;
-            this.habilitadoBox.Text = "¿Está Habilitado?";
+            this.habilitadoBox.Text = "Dado de baja";
             this.habilitadoBox.UseVisualStyleBackColor = true;
             // 
             // AltaClienteForm

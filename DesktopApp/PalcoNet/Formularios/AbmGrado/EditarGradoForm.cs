@@ -12,14 +12,14 @@ using PalcoNet.Managers;
 
 namespace PalcoNet.Formularios.AbmGrado {
     public partial class EditarGradoForm : Form {
-        public EditarGradoForm(Grado grado) {
+        public EditarGradoForm(Grado_Publicacion grado) {
             InitializeComponent();
             txtDescripcion.Text = grado.descripcion;
             txtComision.Text = Convert.ToString(grado.comision);
         }
 
         string salida;
-        Grado_Manager gradoMngr = new Grado_Manager();
+        Grados_Publicacion_Manager gradoMngr = new Grados_Publicacion_Manager();
 
         private void btnCancelar_Click(object sender, EventArgs e) {
             this.Dispose();
@@ -29,9 +29,9 @@ namespace PalcoNet.Formularios.AbmGrado {
         private void btnAceptar_Click(object sender, EventArgs e) {
             try {
                 this.verificarCamposObligatorios();
-                Grado nuevoGrado = new Grado();
+                Grado_Publicacion nuevoGrado = new Grado_Publicacion();
                 nuevoGrado.descripcion = txtDescripcion.Text;
-                nuevoGrado.comision = Convert.ToDecimal(txtComision.Text);
+                nuevoGrado.comision = Convert.ToDouble(txtComision.Text);
 
                 salida = gradoMngr.editarGrado(nuevoGrado);
                 if (salida.Equals("OK")) {

@@ -126,7 +126,7 @@
             this.Controls.Add(this.iniciarBtn);
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Inicio sesion - FRBA Espectaculos";
+            this.Text = "Inicio sesion - PalcoNet FRBA";
             this.ResumeLayout(false);
             this.PerformLayout();
 

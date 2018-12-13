@@ -35,9 +35,9 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
             empresaABuscar.cuit = cuitBox.Text;
             empresaABuscar.razon_social = razonBox.Text;
             empresaABuscar.mail = emailBox.Text;
-            List<Empresa> empresasEncontradas = new List<Empresa>();
-            empresasEncontradas = empresaMng.buscarEmpresas(empresaABuscar);
-            if (empresasEncontradas.Count == 0)
+            //List<Empresa> empresasEncontradas = new List<Empresa>();
+            DataTable empresasEncontradas = empresaMng.buscarEmpresas(empresaABuscar);
+            if (empresasEncontradas.Rows.Count == 0)
             {
                 MessageBox.Show("No se encontraron resultados.");
                 newEmpresaBtn.Enabled = true;
@@ -65,7 +65,7 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
             {
                 foreach (DataGridViewRow row in dataEmpresas.SelectedRows)
                 {
-                    Empresa empresaSeleccionada = (Empresa)row.DataBoundItem;
+                    Empresa empresaSeleccionada = empresaMng.getEmpresaPorId(Int32.Parse(row.Cells[0].Value.ToString()));
                     AltaEmpresaForm editForm = new AltaEmpresaForm(empresaSeleccionada);
                     editForm.ShowDialog();
                     this.Dispose();

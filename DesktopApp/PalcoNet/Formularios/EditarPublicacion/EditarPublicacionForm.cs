@@ -15,8 +15,8 @@ namespace PalcoNet.Formularios.EditarPublicacion
 {
     public partial class EditarPublicacionForm : Form
     {
-        List<Publicacion> publicacionesEncontradas = new List<Publicacion>();
-        Publicacion_Manager publicacionMng = new Publicacion_Manager();
+        List<Espectaculo> publicacionesEncontradas = new List<Espectaculo>();
+        Espectaculo_Manager publicacionMng = new Espectaculo_Manager();
         public EditarPublicacionForm()
         {
             InitializeComponent();
@@ -34,7 +34,7 @@ namespace PalcoNet.Formularios.EditarPublicacion
             {
                 if (String.IsNullOrEmpty(codPublicBox.Text))
                 {
-                    publicacionesEncontradas = publicacionMng.getAllPublicaciones();
+                    publicacionesEncontradas = publicacionMng.getEspectaculosPorEmpresa(DatosSesion.id_usuario);
                 }
                 else
                 {
@@ -60,17 +60,33 @@ namespace PalcoNet.Formularios.EditarPublicacion
 
         private void modificarPubli_Click(object sender, EventArgs e)
         {
-            if (publicacionGridView.DataSource != null && publicacionGridView.SelectedRows.Count > 0)
+            try
             {
-                foreach (DataGridViewRow row in publicacionGridView.SelectedRows)
+                if (publicacionGridView.DataSource != null && publicacionGridView.SelectedRows.Count > 0)
                 {
-                    Publicacion publicacionSeleccionada = (Publicacion)row.DataBoundItem;
-                    AltaEditPublicacionForm editForm = new AltaEditPublicacionForm(publicacionSeleccionada);
-                    editForm.ShowDialog();
-                    this.Dispose();
-                    this.Close();
+                    foreach (DataGridViewRow row in publicacionGridView.SelectedRows)
+                    {
+                        Espectaculo publicacionSeleccionada = (Espectaculo)row.DataBoundItem;
+                        if (this.getEstadoDePublicacion(publicacionSeleccionada.id_estado_publicacion) != "Borrador")
+                        {
+                            throw new Exception("La publicacion no se encuentra en un estado correcto. Debe ser BORRADOR ");
+                        }
+                        AltaEditPublicacionForm editForm = new AltaEditPublicacionForm(publicacionSeleccionada);
+                        editForm.ShowDialog();
+                        this.Dispose();
+                        this.Close();
+                    }
                 }
             }
+            catch (Exception exc) {
+                MessageBox.Show(exc.Message);
+            }
+            
+        }
+
+        private string getEstadoDePublicacion(int id_estado_publicacion)
+        {
+            return publicacionMng.getDescEstadoDePublicacion(id_estado_publicacion);
         }
 
         private void cancelarBtn_Click(object sender, EventArgs e)

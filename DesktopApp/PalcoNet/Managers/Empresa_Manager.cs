@@ -31,25 +31,25 @@ namespace PalcoNet.Managers
                                                  .add("@fec_creacion", fechaCreacion));
         }
 
-        public List<Empresa> buscarEmpresas(Empresa empresaABuscar)
+        public DataTable buscarEmpresas(Empresa empresaABuscar)
         {
             DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_FiltrarEmpresas",
                                             SQLArgumentosManager.nuevoParametro("@cuit", empresaABuscar.cuit)
                                             .add("@razon_soc", empresaABuscar.razon_social)
                                             .add("@email", empresaABuscar.mail));
 
-            List<Empresa> empresasEncontradas = new List<Empresa>();
+            //List<Empresa> empresasEncontradas = new List<Empresa>();
 
-            if (resultTable != null && resultTable.Rows != null)
-            {
-                foreach (DataRow row in resultTable.Rows)
-                {
-                    Empresa empresaEncontrada = this.BuildEmpresa(row);
-                    empresasEncontradas.Add(empresaEncontrada);
-                }
-            }
+            //if (resultTable != null && resultTable.Rows != null)
+            //{
+            //    foreach (DataRow row in resultTable.Rows)
+            //    {
+            //        Empresa empresaEncontrada = this.BuildEmpresa(row);
+            //        empresasEncontradas.Add(empresaEncontrada);
+            //    }
+            //}
 
-            return empresasEncontradas;
+            return resultTable;
         }
 
         public List<Empresa> getAllEmpresasActivas() {
@@ -79,13 +79,53 @@ namespace PalcoNet.Managers
             empresa.telefono = row["telefono"].ToString();
             empresa.direccion_calle = row["direccion_calle"].ToString();
             empresa.direccion_nro = int.Parse(row["direccion_nro"].ToString());
-            empresa.direccion_piso = int.Parse(row["direccion_piso"].ToString());
+            if (row["direccion_piso"] != DBNull.Value)
+            {
+                empresa.direccion_piso = int.Parse(row["direccion_piso"].ToString());
+            }
+            
             empresa.direccion_depto = row["direccion_depto"].ToString();
             empresa.direccion_localidad = row["direccion_localidad"].ToString();
             empresa.cod_postal = row["cod_postal"].ToString();
             empresa.ciudad = row["ciudad"].ToString();
             empresa.baja_logica = (Boolean)row["baja_logica"];
             return empresa;
+        }
+
+        internal Empresa getEmpresaPorId(int idEmpresa)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetEmpresaPorId",SQLArgumentosManager.nuevoParametro("@idEmpresa",idEmpresa));
+            List<Empresa> lista_Empresas = new List<Empresa>();
+
+            if (resultTable != null && resultTable.Rows != null)
+            {
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Empresa empresa = BuildEmpresa(row);
+                    lista_Empresas.Add(empresa);
+                }
+            }
+
+            return lista_Empresas.ElementAt(0);
+        }
+
+        internal string modificarEmpresa(Empresa empresaModificacion)
+        {
+            return SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_ModificarEmpresa",
+                                                 SQLArgumentosManager.nuevoParametro("@idEmpresa", empresaModificacion.id_empresa)
+                                                 .add("@razon", empresaModificacion.razon_social)
+                                                 .add("@cuit", empresaModificacion.cuit)
+                                                 .add("@email", empresaModificacion.mail)
+                                                 .add("@tel", empresaModificacion.telefono)
+                                                 .add("@dir", empresaModificacion.direccion_calle)
+                                                 .add("@dir_nro", empresaModificacion.direccion_nro)
+                                                 .add("@dir_piso", empresaModificacion.direccion_piso)
+                                                 .add("@dir_depto", empresaModificacion.direccion_depto)
+                                                 .add("@localidad", empresaModificacion.direccion_localidad)
+                                                 .add("@ciudad", empresaModificacion.ciudad)
+                                                 .add("@codPostal", empresaModificacion.cod_postal)
+                                                 .add("@bajaLogica", empresaModificacion.baja_logica));
         }
     }
 }

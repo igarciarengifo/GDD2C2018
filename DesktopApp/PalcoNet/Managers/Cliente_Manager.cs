@@ -66,7 +66,11 @@ namespace PalcoNet.Managers
             cliente.telefono = row["telefono"].ToString();
             cliente.direccion_calle = row["direccion_calle"].ToString();
             cliente.direccion_nro = int.Parse(row["direccion_nro"].ToString());
-            cliente.direccion_piso = int.Parse(row["direccion_piso"].ToString());
+            if (row["direccion_piso"] != DBNull.Value)
+            {
+                cliente.direccion_piso = int.Parse(row["direccion_piso"].ToString());
+            }
+            
             cliente.direccion_depto = row["direccion_depto"].ToString();
             cliente.direccion_localidad = row["direccion_localidad"].ToString();
             cliente.codigo_postal = row["codigo_postal"].ToString();

@@ -37,5 +37,31 @@ namespace PalcoNet.Managers
             return nuevaUbicacion;
         }
 
+        private Ubicacion_X_Espectaculo BuildUbicacionEspectaculo(DataRow row){
+            Ubicacion_X_Espectaculo ubiXEsp = new Ubicacion_X_Espectaculo();
+            ubiXEsp.id_espectaculo = Convert.ToInt32(row["id_espectaculo"]);
+            ubiXEsp.id_ubicacion = Convert.ToInt32(row["id_ubicacion"]);
+            ubiXEsp.precio = Convert.ToDouble(row["precio"]);
+            ubiXEsp.fecha_espectaculo=Convert.ToDateTime(row["fecha_espectaculo"]);
+            ubiXEsp.hora_espectaculo = row["hora_espectaculo"].ToString();
+            return ubiXEsp;
+        }
+
+        internal List<Ubicacion> getUbicacionesEspectaculo(int id_espectaculo)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetUbicacionesEspectaculo",
+                SQLArgumentosManager.nuevoParametro("@id_espectaculo", id_espectaculo));
+            List<Ubicacion> lista_ubicaciones = new List<Ubicacion>();
+            if (resultTable != null && resultTable.Rows != null)
+            {
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    var ubicacion = BuildUbicacion(row);
+                    lista_ubicaciones.Add(ubicacion);
+                }
+            }
+
+            return lista_ubicaciones;
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
     public partial class AltaEmpresaForm : Form
     {
         string user, pass, resultado;
+        Boolean esModificacion;
+        Empresa empresaModificacion;
         Empresa_Manager empresaMng = new Empresa_Manager();
         public AltaEmpresaForm(Empresa empresa) {
 
@@ -34,10 +36,12 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
                 ciudadBox.Text = empresa.ciudad;
                 codPostalBox.Text = empresa.cod_postal;
                 habilitadoCheck.Checked = empresa.baja_logica;
-
+                esModificacion = true;
+                empresaModificacion = empresa;
             }
             else {
                 habilitadoCheck.Visible = false;
+                esModificacion = false;
             }
             
             
@@ -48,6 +52,7 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
             user = username;
             pass = passw;
             habilitadoCheck.Visible = false;
+            esModificacion = false;
             
         }
 
@@ -67,49 +72,91 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
             try
             {
                 this.verificarCamposObligatorios();
-                Empresa nuevaEmpresa = new Empresa();
-                nuevaEmpresa.razon_social = razonSocialBox.Text;
-                nuevaEmpresa.cuit = cuitBox.Text;
-                nuevaEmpresa.mail = emailBox.Text;
-                nuevaEmpresa.telefono = telBox.Text;
-                nuevaEmpresa.direccion_calle = dirBox.Text;
-                nuevaEmpresa.direccion_nro = Convert.ToInt32(nroCalle.Text);
-                nuevaEmpresa.direccion_piso = this.completarPiso();
-                nuevaEmpresa.direccion_depto = deptoBox.Text;
-                nuevaEmpresa.direccion_localidad = localidadBox.Text;
-                nuevaEmpresa.ciudad = ciudadBox.Text;
-                nuevaEmpresa.cod_postal = codPostalBox.Text;
-
-                resultado = empresaMng.altaEmpresaYUsuario(user, pass, nuevaEmpresa);
-                String[] arrayResultado = resultado.Split('-');
-                if (arrayResultado.ElementAt(2).Equals("OK"))
+                if (!esModificacion)
                 {
-                    Usuario_Manager userMng = new Usuario_Manager();
-                    MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
-                    if (user == null) {
-                        MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1)+ ". El usuario es: "+nuevaEmpresa.cuit, "Resultado operacion");
-                        String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
-                        userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0))); 
-                    }
+                    this.nuevaEmpresa();
                 }
-                else
-                {
-                    MessageBox.Show(resultado,
-                        "No pudo realizarse operacion",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Exclamation,
-                        MessageBoxDefaultButton.Button1);
+                else {
+                    this.modificarEmpresa(empresaModificacion);
                 }
-            }
-            catch (Exception exc)
+            }catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
             }
+        }
 
-            finally {
+        private void modificarEmpresa(Empresa empresaModificacion)
+        {
+            empresaModificacion.razon_social = razonSocialBox.Text;
+            empresaModificacion.cuit = cuitBox.Text;
+            empresaModificacion.mail = emailBox.Text;
+            empresaModificacion.telefono = telBox.Text;
+            empresaModificacion.direccion_calle = dirBox.Text;
+            empresaModificacion.direccion_nro = Convert.ToInt32(nroCalle.Text);
+            empresaModificacion.direccion_piso = this.completarPiso();
+            empresaModificacion.direccion_depto = deptoBox.Text;
+            empresaModificacion.direccion_localidad = localidadBox.Text;
+            empresaModificacion.ciudad = ciudadBox.Text;
+            empresaModificacion.cod_postal = codPostalBox.Text;
+            empresaModificacion.baja_logica = habilitadoCheck.Checked;
+            resultado = empresaMng.modificarEmpresa(empresaModificacion);
+            
+            if (resultado.Equals("OK"))
+            {
+                MessageBox.Show("Se realizaron los cambios correctamente.", "Operacion correcta");
                 this.Dispose();
                 this.Close();
+            
             }
+            else
+            {
+                MessageBox.Show(resultado,
+                    "No pudo realizarse operacion",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button1);
+            }
+        }
+
+        private void nuevaEmpresa()
+        {
+            Empresa nuevaEmpresa = new Empresa();
+            nuevaEmpresa.razon_social = razonSocialBox.Text;
+            nuevaEmpresa.cuit = cuitBox.Text;
+            nuevaEmpresa.mail = emailBox.Text;
+            nuevaEmpresa.telefono = telBox.Text;
+            nuevaEmpresa.direccion_calle = dirBox.Text;
+            nuevaEmpresa.direccion_nro = Convert.ToInt32(nroCalle.Text);
+            nuevaEmpresa.direccion_piso = this.completarPiso();
+            nuevaEmpresa.direccion_depto = deptoBox.Text;
+            nuevaEmpresa.direccion_localidad = localidadBox.Text;
+            nuevaEmpresa.ciudad = ciudadBox.Text;
+            nuevaEmpresa.cod_postal = codPostalBox.Text;
+
+            resultado = empresaMng.altaEmpresaYUsuario(user, pass, nuevaEmpresa);
+            String[] arrayResultado = resultado.Split(';');
+            if (arrayResultado.ElementAt(2).Equals("OK"))
+            {
+                Usuario_Manager userMng = new Usuario_Manager();
+                MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
+                if (user == null) {
+                    MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1)+ ".\n El usuario es: "+nuevaEmpresa.cuit, "Operacion correcta");
+                    String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
+                    userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0))); 
+                }
+                this.Dispose();
+                this.Close();
+            
+            }
+            else
+            {
+                MessageBox.Show(resultado,
+                    "No pudo realizarse operacion",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button1);
+            }
+          
         }
 
         private Nullable<int> completarPiso()

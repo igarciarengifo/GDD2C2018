@@ -17,14 +17,14 @@ namespace PalcoNet.Formularios.AbmGrado {
         }
 
         string salida;
-        Grado_Manager gradoMngr = new Grado_Manager();
+        Grados_Publicacion_Manager gradoMngr = new Grados_Publicacion_Manager();
 
         private void btnAceptar_Click(object sender, EventArgs e) {
             try {
                 this.verificarCamposObligatorios();
-                Grado nuevoGrado = new Grado();
+                Grado_Publicacion nuevoGrado = new Grado_Publicacion();
                 nuevoGrado.descripcion = txtDescripcion.Text;
-                nuevoGrado.comision = Convert.ToDecimal(txtComision.Text);
+                nuevoGrado.comision = Convert.ToDouble(txtComision.Text);
 
                 salida = gradoMngr.nuevoGrado(nuevoGrado);
                 if (salida.Equals("OK")) {

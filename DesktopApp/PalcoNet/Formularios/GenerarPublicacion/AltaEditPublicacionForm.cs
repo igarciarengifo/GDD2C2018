@@ -17,14 +17,22 @@ namespace PalcoNet.Formularios.GenerarPublicacion
     {
         Grados_Publicacion_Manager gradosPublicacionMng = new Grados_Publicacion_Manager();
         Estado_Publicacion_Manager estadosPublicacionMng = new Estado_Publicacion_Manager();
+        Espectaculo_Manager espectaculoMng = new Espectaculo_Manager();
         Rubro_Manager rubrosMng = new Rubro_Manager();
         List<Ubicacion> ubicaciones = new List<Ubicacion>();
         List<DateTime> fechasSeleccionadas = new List<DateTime>();
-        
+        Boolean esModificacion;
+        List<Ubicacion_X_Espectaculo> ubicacionesXEspec = new List<Ubicacion_X_Espectaculo>();
 
         public AltaEditPublicacionForm()
         {
             InitializeComponent();
+            this.cargarOpciones();
+            esModificacion =false;
+        }
+
+        private void cargarOpciones()
+        {
             this.cargarRubros();
             this.cargarEstados();
             this.cargarGradosPublicacion();
@@ -33,9 +41,71 @@ namespace PalcoNet.Formularios.GenerarPublicacion
             publicacionCalendar.MinDate = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
         }
 
-        public AltaEditPublicacionForm(Publicacion publicacionSeleccionada)
+        
+        public AltaEditPublicacionForm(Espectaculo publicacionSeleccionada)
         {
             // TODO: Complete member initialization
+            esModificacion = true;
+            this.cargarOpciones();            
+            descripcionBox.Text = publicacionSeleccionada.descripcion;
+            gradosPublicacionBox.SelectedValue = publicacionSeleccionada.id_grado_publicacion;
+            rubroBox.SelectedValue = publicacionSeleccionada.id_rubro;
+            estadoBox.SelectedValue = publicacionSeleccionada.id_estado_publicacion;
+            direccionBox.Text = publicacionSeleccionada.direccion;
+            priceBox.Text = publicacionSeleccionada.precio_base.ToString();
+            this.checkHorarios(this.getHorariosDeEspectaculo(publicacionSeleccionada.id_espectaculo));
+            this.checkUbicaciones(this.getUbicacionesDeEspectaculo(publicacionSeleccionada.id_espectaculo));
+            this.completarFechas(this.getFechasDeEspectaculo(publicacionSeleccionada.id_espectaculo));
+        }
+
+        private void completarFechas(HashSet<DateTime> fechasDelEspectaculo)
+        {
+            
+            foreach(DateTime fechaEspectaculo in fechasDelEspectaculo){
+                fechasSeleccionadasBox.Items.Add(fechaEspectaculo);
+            }
+        }
+
+        private HashSet<DateTime> getFechasDeEspectaculo(int id_espectaculo)
+        {
+            List<DateTime> listaUbicaciones=ubicacionesXEspec.Select(ubicacion=> ubicacion.fecha_espectaculo).ToList();
+            return new HashSet<DateTime>(listaUbicaciones);
+            
+        }
+
+        private void checkUbicaciones(List<Ubicacion> ubicacionesEspectaculo)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesEspectaculo.Any(ubicacion=> (ubicacion.fila+ubicacion.asiento).Equals(ubicacionesListBox.Items[count].ToString())))
+                {
+                    ubicacionesListBox.SetItemChecked(count, true);
+                }
+            }
+        }
+
+        private List<Ubicacion> getUbicacionesDeEspectaculo(int id_espectaculo)
+        {
+            Ubicaciones_Manager ubicacionMng = new Ubicaciones_Manager();
+            return ubicacionMng.getUbicacionesEspectaculo(id_espectaculo);
+        }
+
+        private void checkHorarios(HashSet<String > horariosEspectaculo)
+        {
+            
+            for (int count = 0; count < horariosListBox.Items.Count; count++)
+            {
+                if (horariosEspectaculo.Contains(horariosListBox.Items[count].ToString()))
+                {
+                    horariosListBox.SetItemChecked(count, true);
+                }
+            }
+        }
+
+        private HashSet<String> getHorariosDeEspectaculo(int id_espectaculo)
+        {
+            List<String> horarios = ubicacionesXEspec.Select(ubicacion => ubicacion.hora_espectaculo).ToList();
+            return new HashSet<String>(horarios);
             
         }
 
@@ -97,8 +167,12 @@ namespace PalcoNet.Formularios.GenerarPublicacion
         {
             DateTime fechaInicio = publicacionCalendar.SelectionStart;
             DateTime fechaFin = publicacionCalendar.SelectionEnd;
-            for (DateTime date = fechaInicio; date <= fechaFin; date = date.AddDays(1))
+            for (DateTime date = fechaInicio; date <= fechaFin; date = date.AddDays(1)) {
                 fechasSeleccionadas.Add(date);
+                fechasSeleccionadasBox.Items.Add(date);
+            }
+            
+            
         }
 
         private void sacarFechaBtn_Click(object sender, EventArgs e)
@@ -111,27 +185,45 @@ namespace PalcoNet.Formularios.GenerarPublicacion
 
         private void aceptarBtn_Click(object sender, EventArgs e)
         {
-            Publicacion_Manager publicacionMng = new Publicacion_Manager();
             try
             {
-                this.validarCamposObligatorios();
-                publicacionMng.nuevaPublicacion(DatosSesion.id_usuario,
-                            Double.Parse(priceBox.Text),
-                            descripcionBox.Text,
-                            direccionBox.Text,
-                            (Grado_Publicacion)gradosPublicacionBox.SelectedValue, 
-                            (Estado_Publicacion)estadoBox.SelectedValue, 
-                            (Rubro)rubroBox.SelectedValue, 
-                            horariosListBox.Items.Cast<String>().ToList(), 
-                            ubicacionesListBox.Items.Cast<Ubicacion>().ToList(), 
-                            fechasSeleccionadasBox.Items.Cast<DateTime>().ToList());
-                MessageBox.Show("Se realizó correctamente la generación de la publicación");
+                if (!esModificacion)
+                {
+                    this.generarNuevaPublicacion();
+
+                }
+                else
+                {
+                    this.modificarPublicacion();
+                }
             }
             catch (Exception exc) {
                 MessageBox.Show(exc.Message);
             }
-            
+        }
 
+        private void modificarPublicacion()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void generarNuevaPublicacion()
+        {
+            Espectaculo_Manager publicacionMng = new Espectaculo_Manager();
+            
+            this.validarCamposObligatorios();
+            publicacionMng.nuevaPublicacion(DatosSesion.id_usuario,
+                        Double.Parse(priceBox.Text),
+                        descripcionBox.Text,
+                        direccionBox.Text,
+                        (Grado_Publicacion)gradosPublicacionBox.SelectedValue,
+                        (Estado_Publicacion)estadoBox.SelectedValue,
+                        (Rubro)rubroBox.SelectedValue,
+                        horariosListBox.Items.Cast<String>().ToList(),
+                        ubicacionesListBox.Items.Cast<Ubicacion>().ToList(),
+                        fechasSeleccionadasBox.Items.Cast<DateTime>().ToList());
+            MessageBox.Show("Se realizó correctamente la generación de la publicación");
+            
         }
 
         private void validarCamposObligatorios()

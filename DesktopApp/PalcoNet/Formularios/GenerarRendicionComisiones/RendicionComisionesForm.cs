@@ -27,7 +27,7 @@ namespace PalcoNet.Formularios.GenerarRendicionComisiones
             empresas = mngrEmpresa.getAllEmpresasActivas();
             cmbEmpresa.DisplayMember = "razon_social";
             cmbEmpresa.ValueMember = "id_empresa";
-            cmbEmpresa.DataSource = empresas;
+            cmbEmpresa.DataSource = mngrEmpresa.getAllEmpresasActivas();
         }
 
         private void btnSalir_Click(object sender, EventArgs e) {

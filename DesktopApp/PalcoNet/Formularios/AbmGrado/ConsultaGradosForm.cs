@@ -20,11 +20,11 @@ namespace PalcoNet.Formularios.AbmGrado {
             this.cargar_datos();
         }
 
-        Grado_Manager gradoMngr = new Grado_Manager();
+        Grados_Publicacion_Manager gradoMngr = new Grados_Publicacion_Manager();
 
         public void cargar_datos() {
-            List<Grado> grados = new List<Grado>();
-            grados = gradoMngr.getAllGrados();
+            List<Grado_Publicacion> grados = new List<Grado_Publicacion>();
+            grados = gradoMngr.getAllGradosPublicacion();
 
             if (grados.Count > 0) {
                 dataGridView1.DataSource = grados;
@@ -53,7 +53,7 @@ namespace PalcoNet.Formularios.AbmGrado {
 
             if (dataGridView1.SelectedRows.Count > 0) {              
                 DataGridViewRow dtv = dataGridView1.SelectedRows[0];
-                Grado gradoSelected = (Grado)dtv.DataBoundItem;
+                Grado_Publicacion gradoSelected = (Grado_Publicacion)dtv.DataBoundItem;
                 EditarGradoForm editarGradoForm = new EditarGradoForm(gradoSelected);
                 editarGradoForm.Show();
                 this.Dispose();
@@ -65,7 +65,7 @@ namespace PalcoNet.Formularios.AbmGrado {
         private void eliminarBtn_Click(object sender, EventArgs e) {
             if (dataGridView1.SelectedRows.Count > 0) {
                 DataGridViewRow dtv = dataGridView1.SelectedRows[0];
-                Grado gradoSelected = (Grado)dtv.DataBoundItem;
+                Grado_Publicacion gradoSelected = (Grado_Publicacion)dtv.DataBoundItem;
                 String salida = gradoMngr.bajaGrado(gradoSelected);
 
                 if (salida.Equals("OK")) {

@@ -27,12 +27,39 @@ namespace PalcoNet.Managers
             return lista_grados;
         }
 
+        public string nuevoGrado(Grado_Publicacion nuevoGrado)
+        {
+
+            return SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_NuevoGrado",
+                                                  SQLArgumentosManager.nuevoParametro("@comision", nuevoGrado.comision)
+                                                  .add("@descripcion", nuevoGrado.descripcion));
+
+        }
+
+         public string editarGrado(Grado_Publicacion gradoModificado)
+         {
+
+            return SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_ModificarGrado",
+                                                  SQLArgumentosManager.nuevoParametro("@id", gradoModificado.id_grado_publicacion)
+                                                  .add("@comision", gradoModificado.comision)
+                                                  .add("@descripcion", gradoModificado.descripcion));
+
+        }
+
+        public string bajaGrado(Grado_Publicacion gradoBaja)
+        {
+
+            return SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_BajaLogicaGrado",
+                                                  SQLArgumentosManager.nuevoParametro("@id", gradoBaja.id_grado_publicacion));
+
+        }
+
         private Grado_Publicacion BuildGradoPublicacion(DataRow row)
         {
             Grado_Publicacion nuevoGrado = new Grado_Publicacion();
-            nuevoGrado.id_grado_publicacion = Convert.ToInt32(row["id_estado_publicacion"]);
-            nuevoGrado.prioridad = Convert.ToInt32(row["prioridad"]);
+            nuevoGrado.id_grado_publicacion = Convert.ToInt32(row["id_grado_publicacion"]);
             nuevoGrado.comision = Convert.ToDouble(row["comision"]);
+            nuevoGrado.activo = Convert.ToBoolean(row["activo"]);
             nuevoGrado.descripcion = Convert.ToString(row["descripcion"]);
             return nuevoGrado;
         }

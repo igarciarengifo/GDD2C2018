@@ -51,7 +51,7 @@ namespace PalcoNet.Login
                         if (seleccionForm.ShowDialog(this) == DialogResult.OK)
                         {
                             id_rol_seleccionado = seleccionForm.get_IdRolSeleccionado();
-                            loginMng.esPrimerLogueo(id_usuario);
+                            Boolean result = loginMng.esPrimerLogueo(id_usuario);
                         }
                         else
                         {

@@ -320,9 +320,9 @@
             this.habilitadoCheck.AutoSize = true;
             this.habilitadoCheck.Location = new System.Drawing.Point(457, 228);
             this.habilitadoCheck.Name = "habilitadoCheck";
-            this.habilitadoCheck.Size = new System.Drawing.Size(109, 17);
+            this.habilitadoCheck.Size = new System.Drawing.Size(90, 17);
             this.habilitadoCheck.TabIndex = 23;
-            this.habilitadoCheck.Text = "¿Está Habilitado?";
+            this.habilitadoCheck.Text = "Dado de baja";
             this.habilitadoCheck.UseVisualStyleBackColor = true;
             // 
             // AltaEmpresaForm
@@ -337,7 +337,7 @@
             this.Controls.Add(this.label13);
             this.Name = "AltaEmpresaForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Formulario nueva empresa";
+            this.Text = "Formulario Empresa - Datos principales";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

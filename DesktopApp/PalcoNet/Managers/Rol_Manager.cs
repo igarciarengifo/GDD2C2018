@@ -33,7 +33,7 @@ namespace PalcoNet.Managers
             Rol nuevoRol = new Rol();
             nuevoRol.id_rol = Convert.ToInt32(row["id_rol"]);
             nuevoRol.nombre = Convert.ToString(row["nombre"]);
-            nuevoRol.estado = Convert.ToBoolean(row["estado"]);
+            nuevoRol.estado = Convert.ToBoolean(row["baja_logica"]);
 
             return nuevoRol;
         }
