@@ -1,8 +1,8 @@
-IF OBJECT_ID('LOOPP.SP_InhabilitarRol') IS NOT NULL
-    DROP PROCEDURE LOOPP.SP_InhabilitarRol
+IF OBJECT_ID('LOOPP.SP_UserHasInvalidInfo') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_UserHasInvalidInfo
 GO
 
-create procedure LOOPP.SP_InhabilitarRol (@id_user int)
+create procedure LOOPP.SP_UserHasInvalidInfo (@id_user int)
 as
 begin
 
