@@ -188,11 +188,14 @@ GROUP BY	 [Nombre]
 DROP TABLE #Temp_Clientes;
 
 /*Se inserta tabla usuarios antes de insertar el cliente, ya que cliente tiene un FK a la tabla usuarios*/
+DECLARE @newMail nvarchar(255)
 insert into [LOOPP].[Usuarios] (
 		[username]
-		,[password])
-select left(email,charindex('@',email,1)-1) userName
+		,[password]
+		,[primerLoginAuto])
+select LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1)) userName
 		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
+		,'True'
 from #Temp_Cli_Incons
 where cantDni=1 and cantEmail=1
 
@@ -226,7 +229,7 @@ select [Nombre]
 		 ,usu.id_usuario
 from #Temp_Cli_Incons tmp
 inner join [LOOPP].[Usuarios] usu
-on left(email,charindex('@',email,1)-1)=usu.username
+on LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1))=usu.username
 where cantDni=1 and cantEmail=1
 order by dni
 
@@ -234,9 +237,11 @@ order by dni
 insert into [LOOPP].[Usuarios] (
 		[username]
 		,[password]
-		,[habilitado])
-select left(email,charindex('@',email,1)-1)+'_duplicado' userName
+		,[habilitado]
+		,[primerLoginAuto])
+select LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1))+'_duplicado' userName
 		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
+		,'True'
 		,'True'
 from #Temp_Cli_Incons
 where cantDni=1 and cantEmail>1
@@ -277,7 +282,7 @@ select [Nombre]
 		 ,usu.id_usuario
 from #Temp_Cli_Incons tmp
 inner join [LOOPP].[Usuarios] usu
-on left(email,charindex('@',email,1)-1)+'_duplicado'=usu.username
+on LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1))+'_duplicado'=usu.username
 where cantDni=1 and cantEmail>1
 order by dni
 
@@ -315,9 +320,11 @@ group by
 
 insert into [LOOPP].[Usuarios] (
 		[username]
-		,[password])
-select left(email,charindex('@',email,1)-1) userName
+		,[password]
+		,[primerLoginAuto])
+select LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1)) userName
 		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
+		,'True'
 from #Temp_Empresas
 
 INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
@@ -350,7 +357,7 @@ select	Espec_Empresa_Razon_Social,
 		usu.id_usuario 
 FROM #Temp_Empresas
 inner join [LOOPP].[Usuarios] usu
-on left(email,charindex('@',email,1)-1)=usu.username
+on LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1))=usu.username
 order by Espec_Empresa_Cuit
 
 DROP TABLE #Temp_Empresas;
@@ -380,7 +387,7 @@ SELECT [Espectaculo_Cod] id
       ,[Espectaculo_Fecha_Venc] venc_publicacion
       ,[Espectaculo_Rubro_Descripcion] rubro
       ,[Espectaculo_Estado] estado
-	  ,left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1) usuario
+	  ,LOOPP.FN_RemoveNonAlphaCharacters(left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1)) usuario
 into #TEMP_Espectaculo
   FROM [GD2C2018].[gd_esquema].[Maestra]
   group by [Espectaculo_Cod]
@@ -389,7 +396,7 @@ into #TEMP_Espectaculo
       ,[Espectaculo_Fecha_Venc]
       ,[Espectaculo_Rubro_Descripcion]
       ,[Espectaculo_Estado]
-	  ,left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1)
+	  ,LOOPP.FN_RemoveNonAlphaCharacters(left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1))
   order by [Espectaculo_Cod]
   --7.803 rows
 

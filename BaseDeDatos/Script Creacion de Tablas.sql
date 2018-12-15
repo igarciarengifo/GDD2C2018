@@ -90,6 +90,7 @@ Print '***Inicio de creacion de tablas***'
 		[password] [varchar](255) NOT NULL,
 		[loginFallidos] int NOT NULL DEFAULT (0),
 		[habilitado] bit NOT NULL DEFAULT('True'),
+		[primerLoginAuto] bit NOT NULL DEFAULT('False'),
 		primary key ([id_usuario])
 	);
 
