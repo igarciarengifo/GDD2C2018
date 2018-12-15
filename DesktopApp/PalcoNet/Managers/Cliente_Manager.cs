@@ -33,7 +33,7 @@ namespace PalcoNet.Managers
 
         }
 
-        public List<Cliente> buscarClientes(Cliente clienteABuscar)
+        public DataTable buscarClientes(Cliente clienteABuscar)
         {
             DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_FiltrarClientes",
                                             SQLArgumentosManager.nuevoParametro("@nombre", clienteABuscar.nombre)
@@ -41,18 +41,18 @@ namespace PalcoNet.Managers
                                             .add("@email", clienteABuscar.mail)
                                             .add("@nroDoc", clienteABuscar.nro_documento));
 
-            List<Cliente> clientesEncontrados = new List<Cliente>();
+            //List<Cliente> clientesEncontrados = new List<Cliente>();
 
-            if (resultTable != null && resultTable.Rows != null)
-            {
-                foreach (DataRow row in resultTable.Rows)
-                {
-                    Cliente clienteEncontrado = this.BuildCliente(row);
-                    clientesEncontrados.Add(clienteEncontrado);
-                }
-            }
+            //if (resultTable != null && resultTable.Rows != null)
+            //{
+            //    foreach (DataRow row in resultTable.Rows)
+            //    {
+            //        Cliente clienteEncontrado = this.BuildCliente(row);
+            //        clientesEncontrados.Add(clienteEncontrado);
+            //    }
+            //}
 
-            return clientesEncontrados;
+            return resultTable;
         }
 
         private Cliente BuildCliente(DataRow row)
@@ -77,6 +77,47 @@ namespace PalcoNet.Managers
             cliente.estado = row["estado"].ToString();
             cliente.baja_logica = (Boolean)row["baja_logica"];
             return cliente;
+        }
+
+        internal string modificarCliente(Cliente clienteModificacion)
+        {
+            return SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_ModificarCliente",
+                                                SQLArgumentosManager.nuevoParametro("@nombre", clienteModificacion.nombre)
+                                                .add("@apellido", clienteModificacion.apellido)
+                                                .add("@tipo_doc", clienteModificacion.tipo_documento)
+                                                .add("@documento", clienteModificacion.nro_documento)
+                                                .add("@cuil", clienteModificacion.cuil)
+                                                .add("@fecha_nac", clienteModificacion.fecha_nacimiento)
+                                                .add("@mail", clienteModificacion.mail)
+                                                .add("@telefono", clienteModificacion.telefono)
+                                                .add("@calle", clienteModificacion.direccion_calle)
+                                                .add("@nroCalle", clienteModificacion.direccion_nro)
+                                                .add("@piso", clienteModificacion.direccion_piso)
+                                                .add("@depto", clienteModificacion.direccion_depto)
+                                                .add("@localidad", clienteModificacion.direccion_localidad)
+                                                .add("@cod_postal", clienteModificacion.codigo_postal)
+                                                .add("@baja_logica", clienteModificacion.baja_logica)
+                                                .add("@idCliente", clienteModificacion.id_cliente));
+                                                
+
+        }
+
+        internal Cliente getClientePorId(int idCliente)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetClientePorId", SQLArgumentosManager.nuevoParametro("@idCliente", idCliente));
+            List<Cliente> lista_clientes = new List<Cliente>();
+
+            if (resultTable != null && resultTable.Rows != null)
+            {
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Cliente cliente = BuildCliente(row);
+                    lista_clientes.Add(cliente);
+                }
+            }
+
+            return lista_clientes.ElementAt(0);
         }
     }
 }

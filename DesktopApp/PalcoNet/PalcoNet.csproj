@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entidades\Rubro.cs" />
+    <Compile Include="Entidades\TiposDocumento.cs" />
     <Compile Include="Entidades\Ubicacion.cs" />
     <Compile Include="Entidades\Cliente.cs" />
     <Compile Include="Entidades\Compra.cs" />

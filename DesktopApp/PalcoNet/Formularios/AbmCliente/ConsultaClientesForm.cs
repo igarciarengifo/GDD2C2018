@@ -29,10 +29,17 @@ namespace PalcoNet.Formularios.AbmCliente
             clienteABuscar.nombre = nameBox.Text;
             clienteABuscar.apellido = lastNameBox.Text;
             clienteABuscar.mail = emailBox.Text;
-            clienteABuscar.nro_documento = int.Parse(nroDocBox.Text);
-            List<Cliente> clientesEncontrados = new List<Cliente>();
-            clientesEncontrados = clienteMng.buscarClientes(clienteABuscar);
-            if (clientesEncontrados.Count == 0)
+            if (string.IsNullOrEmpty(nroDocBox.Text))
+            {
+                clienteABuscar.nro_documento = 0;
+            }
+            else {
+                clienteABuscar.nro_documento = Int32.Parse(nroDocBox.Text);
+            }
+            //List<Cliente> clientesEncontrados = new List<Cliente>();
+
+            DataTable clientesEncontrados = clienteMng.buscarClientes(clienteABuscar);
+            if (clientesEncontrados.Rows.Count == 0)
             {
                 MessageBox.Show("No se encontraron resultados.");
                 newBtn.Enabled = true;
@@ -66,7 +73,7 @@ namespace PalcoNet.Formularios.AbmCliente
             {
                 foreach (DataGridViewRow row in dataClientes.SelectedRows)
                 {
-                    Cliente clienteSeleccionado = (Cliente)row.DataBoundItem;
+                    Cliente clienteSeleccionado = clienteMng.getClientePorId(Int32.Parse(row.Cells[0].Value.ToString()));
                     AltaClienteForm editForm = new AltaClienteForm(clienteSeleccionado);
                     editForm.ShowDialog();
                     this.Dispose();

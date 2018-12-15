@@ -388,7 +388,8 @@
             this.Controls.Add(this.label1);
             this.Name = "AltaClienteForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Formulario de nuevo cliente";
+            this.Text = "Formulario Cliente - Datos principales";
+            this.Load += new System.EventHandler(this.AltaClienteForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

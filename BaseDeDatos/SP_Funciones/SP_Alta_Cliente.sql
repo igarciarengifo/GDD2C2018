@@ -1,3 +1,7 @@
+IF OBJECT_ID('LOOPP.SP_NuevoCliente') IS NOT NULL
+DROP PROCEDURE LOOPP.SP_NuevoCliente
+GO
+
 CREATE PROCEDURE LOOPP.SP_NuevoCliente 
 	@nombre varchar(255)
    ,@apellido varchar(255)
@@ -26,7 +30,7 @@ AS
 		if ( @user is null)
 			begin
 				EXEC @idUsu =  LOOPP.SP_AltaUsuario_Autogenerado @cuil, @nombre
-				SET @resultado = @idUsu+'-'+@cuil + '!' + @nombre
+				SET @resultado = CONVERT(varchar(255), @idUsu)+';'+@cuil + '!' + @nombre
 			end
 		else
 			begin
@@ -68,7 +72,7 @@ AS
 	
 	COMMIT TRANSACTION [T]
 
-	set @resultado = @resultado +'-OK';
+	set @resultado = @resultado +';OK';
 
 	END TRY
 

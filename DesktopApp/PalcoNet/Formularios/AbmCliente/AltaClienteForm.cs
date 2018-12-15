@@ -14,13 +14,15 @@ namespace PalcoNet.Formularios.AbmCliente
 {
     public partial class AltaClienteForm : Form
     {
+        Boolean esModificacion;
         string user, pass, resultado;
         Cliente_Manager clienteMng = new Cliente_Manager();
-
+        Cliente clienteModificacion;
         public AltaClienteForm(Cliente cliente) {
             InitializeComponent();
             if (cliente.id_cliente != 0)
             {
+                clienteModificacion = cliente;
                 habilitadoBox.Visible = true;
                 nameBox.Text = cliente.nombre;
                 lastNameBox.Text = cliente.apellido;
@@ -37,11 +39,11 @@ namespace PalcoNet.Formularios.AbmCliente
                 localidadBox.Text = cliente.direccion_localidad;
                 codPostalBox.Text = cliente.codigo_postal;
                 habilitadoBox.Checked = cliente.baja_logica;
-
+                esModificacion = true;
             }
             else {
                 habilitadoBox.Visible = false;
-           
+                esModificacion = false;
             }
   
         }
@@ -52,7 +54,7 @@ namespace PalcoNet.Formularios.AbmCliente
             user = username;
             pass = passw;
             habilitadoBox.Visible = false;
-
+            esModificacion = false;
         }
 
         public string getResultado()
@@ -64,42 +66,16 @@ namespace PalcoNet.Formularios.AbmCliente
         {
             try {
                 this.verificarCamposObligatorios();
-                Cliente nuevaPersona = new Cliente();
-                nuevaPersona.nombre = nameBox.Text;
-                nuevaPersona.apellido = lastNameBox.Text;
-                nuevaPersona.tipo_documento = (string)comboTipo.SelectedValue;
-                nuevaPersona.nro_documento = Convert.ToInt32(documentoBox.Text);
-                nuevaPersona.cuil = cuilBox.Text;
-                nuevaPersona.fecha_nacimiento = fechaNacBox.Value;
-                nuevaPersona.mail = mailBox.Text;
-                nuevaPersona.telefono = telBox.Text;
-                nuevaPersona.direccion_calle = direccionBox.Text;
-                nuevaPersona.direccion_nro = Convert.ToInt32(nroBox.Text);
-                nuevaPersona.direccion_piso = Convert.ToInt32(pisoBox.Text);
-                nuevaPersona.direccion_depto = deptoBox.Text;
-                nuevaPersona.codigo_postal = codPostalBox.Text;
-                
-                resultado = clienteMng.altaClienteYUsuario(user, pass, nuevaPersona);
-                String[] arrayResultado = resultado.Split('-');
-                if (arrayResultado.ElementAt(2).Equals("OK"))
+                if (!esModificacion)
                 {
-                    Usuario_Manager userMng = new Usuario_Manager();
-                    MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
-                    if (user == null)
-                    {
-                        MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ". El usuario es: " + nuevaPersona.cuil, "Resultado operacion");
-                        String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
-                        userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
-                    }
+                    this.nuevoCliente();
                 }
-                else
-                {
-                    MessageBox.Show(resultado,
-                        "No pudo realizarse operacion",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Exclamation,
-                        MessageBoxDefaultButton.Button1);
+                else {
+                    this.modificarCliente();
                 }
+                this.Dispose();
+                this.Close();
+               
             }
             catch (Exception exc) {
                 MessageBox.Show(exc.Message);
@@ -107,11 +83,98 @@ namespace PalcoNet.Formularios.AbmCliente
             
         }
 
+        private void modificarCliente( )
+        {
+            clienteModificacion.nombre = nameBox.Text;
+            clienteModificacion.apellido = lastNameBox.Text;
+            clienteModificacion.tipo_documento = comboTipo.SelectedValue.ToString();
+            clienteModificacion.cuil = cuilBox.Text;
+            clienteModificacion.mail = mailBox.Text;
+            clienteModificacion.fecha_nacimiento = fechaNacBox.Value;
+            clienteModificacion.telefono = telBox.Text;
+            clienteModificacion.direccion_calle = direccionBox.Text;
+            clienteModificacion.direccion_nro = Convert.ToInt32(nroBox.Text);
+            clienteModificacion.direccion_piso = this.completarPiso();
+            clienteModificacion.direccion_depto = deptoBox.Text;
+            clienteModificacion.direccion_localidad = localidadBox.Text;
+            clienteModificacion.codigo_postal = codPostalBox.Text;
+            clienteModificacion.baja_logica = habilitadoBox.Checked;
+            resultado = clienteMng.modificarCliente(clienteModificacion);
+
+            if (resultado.Equals("OK"))
+            {
+                MessageBox.Show("Se realizaron los cambios correctamente.", "Operacion correcta");
+                this.Dispose();
+                this.Close();
+
+            }
+            else
+            {
+                MessageBox.Show(resultado,
+                    "No pudo realizarse operacion",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button1);
+            }
+        }
+
+        private Nullable<int> completarPiso()
+        {
+            if (String.IsNullOrEmpty(pisoBox.Text))
+            {
+                return null;
+            }
+            else
+            {
+                return Convert.ToInt32(pisoBox.Text);
+            }
+        }
+
+        private void nuevoCliente()
+        {
+            Cliente nuevaPersona = new Cliente();
+            nuevaPersona.nombre = nameBox.Text;
+            nuevaPersona.apellido = lastNameBox.Text;
+            nuevaPersona.tipo_documento = (string)comboTipo.SelectedValue;
+            nuevaPersona.nro_documento = Convert.ToInt32(documentoBox.Text);
+            nuevaPersona.cuil = cuilBox.Text;
+            nuevaPersona.fecha_nacimiento = fechaNacBox.Value;
+            nuevaPersona.mail = mailBox.Text;
+            nuevaPersona.telefono = telBox.Text;
+            nuevaPersona.direccion_calle = direccionBox.Text;
+            nuevaPersona.direccion_nro = Convert.ToInt32(nroBox.Text);
+            nuevaPersona.direccion_piso = Convert.ToInt32(pisoBox.Text);
+            nuevaPersona.direccion_depto = deptoBox.Text;
+            nuevaPersona.codigo_postal = codPostalBox.Text;
+
+            resultado = clienteMng.altaClienteYUsuario(user, pass, nuevaPersona);
+            String[] arrayResultado = resultado.Split(';');
+            if (arrayResultado.ElementAt(2).Equals("OK"))
+            {
+                Usuario_Manager userMng = new Usuario_Manager();
+                MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
+                if (user == null)
+                {
+                    MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ".\n El usuario es: " + nuevaPersona.cuil, "Operacion correcta");
+                    String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
+                    userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
+                }
+            }
+            else
+            {
+                MessageBox.Show(resultado,
+                    "No pudo realizarse operacion",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button1);
+            }
+        }
+
         private void verificarCamposObligatorios()
         {
             if ((String.IsNullOrEmpty(nroBox.Text)) || (String.IsNullOrEmpty(comboTipo.SelectedText)) || (String.IsNullOrEmpty(cuilBox.Text)) || String.IsNullOrEmpty(mailBox.Text) || String.IsNullOrEmpty(nameBox.Text) || String.IsNullOrEmpty(lastNameBox.Text))
             {
-                throw new ArgumentException("Debe completar los datos de usuario y contraseña");
+                throw new ArgumentException("Debe completar los datos obligatorios indicados");
             }
             this.validarFormatoCUIL();
 
@@ -139,6 +202,11 @@ namespace PalcoNet.Formularios.AbmCliente
         {
             this.Dispose();
             this.Close();
+        }
+
+        private void AltaClienteForm_Load(object sender, EventArgs e)
+        {
+            comboTipo.DataSource = new TiposDocumento().getAll();
         }
     }
 }

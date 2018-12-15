@@ -10,7 +10,7 @@ CREATE PROCEDURE [LOOPP].[SP_FiltrarClientes]
 
 AS
 BEGIN
-	SELECT C.apellido, C.nombre, C.mail, C.tipo_documento, C.nro_documento, C.fecha_nacimiento, C.direccion_calle, C.direccion_nro, C.direccion_localidad, C.estado
+	SELECT C.id_cliente, C.apellido, C.nombre, C.mail, C.tipo_documento, C.nro_documento, C.fecha_nacimiento, C.direccion_calle, C.direccion_nro, C.direccion_localidad, C.estado, C.baja_logica
 	FROM [LOOPP].Clientes as C
 	WHERE (C.nombre=@nombre OR @nombre IS NULL OR @nombre = '')
 	AND (C.apellido = @apellido OR @apellido IS NULL OR @apellido = '')

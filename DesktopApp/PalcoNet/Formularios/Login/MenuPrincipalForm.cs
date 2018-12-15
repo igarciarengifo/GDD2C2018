@@ -166,9 +166,10 @@ namespace PalcoNet.Formularios
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DatosSesion.cerrar_sesion();
+            iniciar_sesion();
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
-            iniciar_sesion();
+            
         }
 
         private void historialPuntosToolStripMenuItem_Click(object sender, EventArgs e)

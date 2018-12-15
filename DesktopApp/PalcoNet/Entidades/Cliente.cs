@@ -8,11 +8,17 @@ namespace PalcoNet.Entidades
 {
     public class Cliente
     {
-        public int id_cliente, puntos, nro_documento, id_usuario, direccion_nro, direccion_piso ;
+        public int id_cliente, puntos, nro_documento, id_usuario, direccion_nro ;
+        public Nullable<int> direccion_piso;
         public string estado;
         public Boolean baja_logica;
         public string nombre, apellido, tipo_documento, cuil, mail, telefono, direccion_calle, direccion_depto, direccion_localidad, codigo_postal;
         public DateTime fecha_nacimiento, fecha_creacion;
 
+
+        internal string modificarCliente()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
