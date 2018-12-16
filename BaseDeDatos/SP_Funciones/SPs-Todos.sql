@@ -379,7 +379,6 @@ BEGIN TRY
 		end
 	else
 		begin
-			SET @resultado = ';'
 			insert into [LOOPP].[Usuarios](
 						[username]
 						,[password])
@@ -389,6 +388,7 @@ BEGIN TRY
 			select @idUsu=[id_usuario]
 			from [LOOPP].[Usuarios]
 			where [username]=@user;
+			SET @resultado = CONVERT(varchar(255), @idUsu)+';'
 	end
 	INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
 	VALUES (@idUsu,3);
