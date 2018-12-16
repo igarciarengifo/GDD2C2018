@@ -377,6 +377,7 @@ BEGIN TRY
 		end
 	else
 		begin
+			SET @resultado = ';'
 			insert into [LOOPP].[Usuarios](
 						[username]
 						,[password])
@@ -408,7 +409,8 @@ BEGIN TRY
 					,[id_usuario] )
 		values (@razon,@cuit,@fec_creacion,@email,@tel,@dir,@dir_nro,@dir_piso,@dir_depto,@localidad,@codPostal,@ciudad,@idUsu)
 	end
-	else set @resultado = 'La empresa ya existe en el sistema'
+	else
+		RAISERROR('La empresa ya existe en el sistema',16,1)
 	
 COMMIT TRANSACTION [T]
 
@@ -420,7 +422,7 @@ BEGIN CATCH
 
     ROLLBACK TRANSACTION [T]
 
-	set @resultado = ERROR_MESSAGE();
+	set @resultado = ERROR_MESSAGE()+';;ERROR';
 
 END CATCH;
 SELECT @resultado
