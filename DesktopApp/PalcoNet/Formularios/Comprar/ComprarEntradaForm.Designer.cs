@@ -82,7 +82,6 @@
             // 
             // dateTimePicker2
             // 
-            this.dateTimePicker2.Enabled = false;
             this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker2.Location = new System.Drawing.Point(582, 136);
             this.dateTimePicker2.Name = "dateTimePicker2";
@@ -91,7 +90,6 @@
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Enabled = false;
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker1.Location = new System.Drawing.Point(582, 87);
             this.dateTimePicker1.Name = "dateTimePicker1";
@@ -263,6 +261,7 @@
             this.dgv_vista.Name = "dgv_vista";
             this.dgv_vista.ReadOnly = true;
             this.dgv_vista.RowTemplate.Height = 24;
+            this.dgv_vista.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_vista.Size = new System.Drawing.Size(932, 322);
             this.dgv_vista.TabIndex = 15;
             // 
@@ -274,6 +273,7 @@
             this.button1.TabIndex = 24;
             this.button1.Text = "Elegir Ubicación";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // ComprarEntradaForm
             // 

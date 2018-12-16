@@ -59,10 +59,23 @@ namespace PalcoNet.Formularios.Comprar {
                     idCadena += id_Rubro + ",";
                 }
                 idCadena = idCadena.Substring(0, idCadena.Length - 1);
-                int idEspectaculo = (int)cmbEspectaculo.SelectedValue;
+                int idEspectaculo = 0;
+                
+                
                 DateTime desde = dateTimePicker1.Value;
                 DateTime hasta = dateTimePicker2.Value;
-                DataTable datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, desde, hasta);
+                string feDesde = desde.ToString("dd-MM-yyyy");
+                string feHasta = hasta.ToString("dd-MM-yyyy");
+
+                DataTable datos = new DataTable();
+
+                if (cmbEspectaculo.SelectedValue != null) {
+                    idEspectaculo = (int)cmbEspectaculo.SelectedValue;
+                    datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
+                } else {
+
+                    datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
+                }
                 if (datos.Rows.Count > 0) {
                     this.cargar_datos(datos);
                 } else {
@@ -73,10 +86,10 @@ namespace PalcoNet.Formularios.Comprar {
         }
 
         private bool verificarCamposObligatorios() {           
-            if (cmbEspectaculo.SelectedValue == null) {
+          /*  if (cmbEspectaculo.SelectedValue == null) {
                 MessageBox.Show("Debe elegir un espectáculo.");
                 return false;
-            }
+            }*/
             if (!(checkedListBox1.CheckedItems.Count > 0)){
                 MessageBox.Show("Debe seleccionar por lo menos una categoría.");
                 return false;
@@ -134,6 +147,22 @@ namespace PalcoNet.Formularios.Comprar {
         private void btnUltima_Click(object sender, EventArgs e) {
             pagina = maximo_paginas - 1;
             dgv_vista.DataSource = split(total_los_datos);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (dgv_vista.SelectedRows.Count > 0)
+            {
+                DataGridViewRow dtv = dgv_vista.SelectedRows[0];
+                //int id_esp = Convert.ToInt32(dtv["ID"]);
+                int id_esp = Convert.ToInt32(dtv.Cells["id_espectaculo"].Value);
+                MessageBox.Show(id_esp.ToString());
+               // Grado_Publicacion gradoSelected = (Grado_Publicacion)dtv.DataBoundItem;
+               // EditarGradoForm editarGradoForm = new EditarGradoForm(gradoSelected);
+               // editarGradoForm.Show();
+                this.Dispose();
+                this.Close();
+            }
         }
 
     }
