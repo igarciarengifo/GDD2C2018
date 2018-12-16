@@ -135,22 +135,29 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
 
             resultado = empresaMng.altaEmpresaYUsuario(user, pass, nuevaEmpresa);
             String[] arrayResultado = resultado.Split(';');
+            string passToHash;
             if (arrayResultado.ElementAt(2).Equals("OK"))
             {
                 Usuario_Manager userMng = new Usuario_Manager();
                 MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
-                if (user == null) {
-                    MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1)+ ".\n El usuario es: "+nuevaEmpresa.cuit, "Operacion correcta");
-                    String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
-                    userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0))); 
+                if (user == null)
+                {
+                    MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ".\n El usuario es: " + nuevaEmpresa.cuit, "Operacion correcta");
+                    passToHash = arrayResultado.ElementAt(1);
+                    this.DialogResult = DialogResult.OK;
                 }
+                else {
+                    passToHash = pass;
+                }
+                String passHash = Encriptacion.getHashSha256(passToHash);
+                userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0))); 
                 this.Dispose();
                 this.Close();
             
             }
             else
             {
-                MessageBox.Show(resultado,
+                MessageBox.Show(arrayResultado.ElementAt(0),
                     "No pudo realizarse operacion",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation,

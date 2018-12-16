@@ -127,10 +127,27 @@ ORDER BY Ubicacion_Tipo_Codigo, Ubicacion_Fila, Ubicacion_Asiento
 
 /*Creacion catalogo de Canje*/
 
-INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES (10, 'Entrada gratis', 1000);
-INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %30 en entradas', 800);
-INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %20 en entradas', 500);
-INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %10 en entradas', 300);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES (10, '2 Entradas gratis', 1000);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, '1 Entrada gratis', 800);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Una remera del espectaculo', 500);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Una consumición gratis', 300);
+-------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.FN_RemoveNonAlphaCharacters') IS NOT NULL
+    DROP FUNCTION LOOPP.FN_RemoveNonAlphaCharacters
+GO
+Create Function [LOOPP].[FN_RemoveNonAlphaCharacters](@Temp VarChar(255))
+Returns VarChar(255)
+AS
+Begin
+
+    Declare @KeepValues as varchar(255)
+    Set @KeepValues = '%[^a-z0-9]%'
+    While PatIndex(@KeepValues, @Temp) > 0
+        Set @Temp = Stuff(@Temp, PatIndex(@KeepValues, @Temp), 1, '')
+
+    Return Lower( replace(@Temp, 'nº', ''))
+End
+GO
 -------------------------------------------------------------------------------
 
 /*Migracion de clientes*/
@@ -383,7 +400,7 @@ group by Forma_Pago_Desc, clie.id_cliente
 /*Se genera una tabla temporal con los datos unicos sin repetidos*/
 SELECT [Espectaculo_Cod] id
       ,[Espectaculo_Descripcion] descripcion
-      --,[Espectaculo_Fecha] se agrega en tabla Ubicac_X_Espectaculo
+      ,[Espectaculo_Fecha] espec_fecha
       ,[Espectaculo_Fecha_Venc] venc_publicacion
       ,[Espectaculo_Rubro_Descripcion] rubro
       ,[Espectaculo_Estado] estado
@@ -392,7 +409,7 @@ into #TEMP_Espectaculo
   FROM [GD2C2018].[gd_esquema].[Maestra]
   group by [Espectaculo_Cod]
       ,[Espectaculo_Descripcion]
-      --,[Espectaculo_Fecha]
+      ,[Espectaculo_Fecha]
       ,[Espectaculo_Fecha_Venc]
       ,[Espectaculo_Rubro_Descripcion]
       ,[Espectaculo_Estado]
@@ -410,6 +427,9 @@ into #TEMP_Espectaculo
 			,[descripcion]
 			,[id_estado_publicacion]
 			,[id_grado_publicacion]
+			,[fecha_espectaculo]
+			,[fecha_venc_espectaculo]
+			,[hora_espectaculo]
 			)
 	select t.id
 			,u.id_usuario
@@ -418,6 +438,9 @@ into #TEMP_Espectaculo
 			,t.descripcion
 			,e.id_estado_publicacion
 			,4--grado de publicacion 'Baja'
+			,cast(espec_fecha as date) 
+			,cast(venc_publicacion as date) 
+			,'00:00:00'
 	from #TEMP_Espectaculo t
 	inner join [LOOPP].[Usuarios] u
 	on t.usuario=u.username
@@ -458,16 +481,10 @@ into #TEMP_Espectaculo
 				[id_espectaculo]
 				,[id_ubicacion]
 				,[precio]
-				,[fecha_espectaculo]
-				,[fecha_venc_espectaculo]
-				,[hora_espectaculo]
 				,disponible)
 	select e.id_espectaculo
 		  ,u.id_ubicacion
 		  ,t.Ubicacion_Precio
-		  ,cast(t.Espectaculo_Fecha as date) fecha
-		  ,cast(t.Espectaculo_Fecha_Venc as date) fechaVenc		  		  		  
-		  ,'00:00:00' hora
 		  ,'False' disponible
 	from #Temp_Ubic_Espec t
 	inner join [LOOPP].[Espectaculos] e
@@ -482,16 +499,10 @@ into #TEMP_Espectaculo
 	insert into [LOOPP].[Ubicac_X_Espectaculo] (
 				[id_espectaculo]
 				,[id_ubicacion]
-				,[precio]
-				,[fecha_espectaculo]
-				,[fecha_venc_espectaculo]
-				,[hora_espectaculo])
+				,[precio])
 	select e.id_espectaculo
 		  ,u.id_ubicacion
 		  ,t.Ubicacion_Precio
-		  ,cast(t.Espectaculo_Fecha as date) fecha
-		  ,cast(t.Espectaculo_Fecha_Venc as date) fechaVenc	
-		  ,'00:00:00' hora
 	from #Temp_Ubic_Espec t
 	inner join [LOOPP].[Espectaculos] e
 		on t.Espectaculo_Cod=e.id_espectaculo

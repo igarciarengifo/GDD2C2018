@@ -33,6 +33,7 @@ namespace PalcoNet.Managers
             nuevaUbicacion.fila = Convert.ToString(row["fila"]);
             nuevaUbicacion.asiento = Convert.ToString(row["asiento"]);
             nuevaUbicacion.sin_numerar = Convert.ToBoolean(row["sin_numerar"]);
+            nuevaUbicacion.descripcion = Convert.ToString(row["descripcion"]);
             nuevaUbicacion.id_tipo_ubicacion = Convert.ToInt32(row["id_tipo_ubicacion"]);
             return nuevaUbicacion;
         }

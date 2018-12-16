@@ -8,7 +8,7 @@ namespace PalcoNet.Entidades
 {
     public class Estado_Publicacion
     {
-        public int id_estado_publicacion;
-        public string descripcion;
+        public int id_estado_publicacion { get; set; }
+        public string descripcion { get; set; }
     }
 }

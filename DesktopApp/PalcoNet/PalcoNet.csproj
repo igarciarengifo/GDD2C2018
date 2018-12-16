@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Entidades\Rubro.cs" />
     <Compile Include="Entidades\TiposDocumento.cs" />
+    <Compile Include="Entidades\Tipo_Ubicacion.cs" />
     <Compile Include="Entidades\Ubicacion.cs" />
     <Compile Include="Entidades\Cliente.cs" />
     <Compile Include="Entidades\Compra.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Managers\Compra_Manager.cs" />
     <Compile Include="Managers\Espectaculo_Manager.cs" />
     <Compile Include="Managers\Empresa_Manager.cs" />
+    <Compile Include="Managers\Tipo_Ubicacion_Manager.cs" />
     <Compile Include="Managers\Ubicaciones_Manager.cs" />
     <Compile Include="Managers\Grados_Publicacion_Manager.cs" />
     <Compile Include="Managers\Rol_Manager.cs" />

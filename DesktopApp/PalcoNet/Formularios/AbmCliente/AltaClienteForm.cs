@@ -149,6 +149,7 @@ namespace PalcoNet.Formularios.AbmCliente
 
             resultado = clienteMng.altaClienteYUsuario(user, pass, nuevaPersona);
             String[] arrayResultado = resultado.Split(';');
+            string passToHash;
             if (arrayResultado.ElementAt(2).Equals("OK"))
             {
                 Usuario_Manager userMng = new Usuario_Manager();
@@ -156,13 +157,19 @@ namespace PalcoNet.Formularios.AbmCliente
                 if (user == null)
                 {
                     MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ".\n El usuario es: " + nuevaPersona.cuil, "Operacion correcta");
-                    String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
-                    userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
+                    passToHash = arrayResultado.ElementAt(1);
+                    this.DialogResult = DialogResult.OK;
                 }
+                else
+                {
+                    passToHash = pass;
+                }
+                String passHash = Encriptacion.getHashSha256(passToHash);
+                userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
             }
             else
             {
-                MessageBox.Show(resultado,
+                MessageBox.Show(arrayResultado.ElementAt(0),
                     "No pudo realizarse operacion",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation,
@@ -172,7 +179,7 @@ namespace PalcoNet.Formularios.AbmCliente
 
         private void verificarCamposObligatorios()
         {
-            if ((String.IsNullOrEmpty(nroBox.Text)) || (String.IsNullOrEmpty(comboTipo.SelectedText)) || (String.IsNullOrEmpty(cuilBox.Text)) || String.IsNullOrEmpty(mailBox.Text) || String.IsNullOrEmpty(nameBox.Text) || String.IsNullOrEmpty(lastNameBox.Text))
+            if ((String.IsNullOrEmpty(nroBox.Text)) || (String.IsNullOrEmpty(comboTipo.SelectedItem.ToString())) || (String.IsNullOrEmpty(cuilBox.Text)) || String.IsNullOrEmpty(mailBox.Text) || String.IsNullOrEmpty(nameBox.Text) || String.IsNullOrEmpty(lastNameBox.Text))
             {
                 throw new ArgumentException("Debe completar los datos obligatorios indicados");
             }

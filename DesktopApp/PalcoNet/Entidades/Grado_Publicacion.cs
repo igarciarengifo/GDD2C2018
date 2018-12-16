@@ -8,9 +8,9 @@ namespace PalcoNet.Entidades
 {
     public class Grado_Publicacion
     {
-        public int id_grado_publicacion;
-        public double comision;
-        public string descripcion;
-        public bool activo;
+        public int id_grado_publicacion  { get; set; }
+        public double comision  { get; set; }
+        public string descripcion  { get; set; }
+        public bool activo  { get; set; }
     }
 }
