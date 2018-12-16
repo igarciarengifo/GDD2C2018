@@ -82,9 +82,46 @@ namespace PalcoNet.Managers {
                     espectaculos.Add(especItem);
                 }
             }
+            return espectaculos;
+        }
+
+        public List<Espectaculo> getEspectaculosActivos() {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetAllEspectaculos");
+            List<Espectaculo> espectaculos = new List<Espectaculo>();
+
+            if (resultTable != null && resultTable.Rows != null) {
+
+                foreach (DataRow row in resultTable.Rows) {
+                    Espectaculo especItem = new Espectaculo();
+                    especItem.id_espectaculo = int.Parse(row["id_espectaculo"].ToString());
+                    especItem.descripcion = row["descripcion"].ToString();
+                    espectaculos.Add(especItem);
+                }
+            }
 
             return espectaculos;
         }
+
+      /*  public List<Espectaculo> getEspectaculosActivos(int idEspec, string idList, DateTime fecDesde, DateTime fecHasta) {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_FiltrarEspectaculos",
+                                            SQLArgumentosManager.nuevoParametro("@idEspectaculo", idEspec)
+                                                    .add("@idList", idList)
+                                                    .add("@desde", fecDesde)
+                                                    .add("@hasta", fecHasta));
+            List<Espectaculo> espectaculos = new List<Espectaculo>();
+
+            if (resultTable != null && resultTable.Rows != null) {
+
+                foreach (DataRow row in resultTable.Rows) {
+                    Espectaculo especItem = BuildEspecatculo(row);
+
+                    espectaculos.Add(especItem);
+                }
+            }
+
+            return espectaculos;
+
+        }*/
 
         private Espectaculo BuildEspectaculo(DataRow row)
         {
@@ -127,6 +164,18 @@ namespace PalcoNet.Managers {
             }
 
             return horarios;
+
         }
+
+        public DataTable getEspectaculosFiltro(int idEspec, string idList, DateTime fecDesde, DateTime fecHasta)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_FiltrarEspectaculos",
+                                            SQLArgumentosManager.nuevoParametro("@idEspectaculo", idEspec)
+                                                    .add("@idList", idList)
+                                                    .add("@desde", fecDesde)
+                                                    .add("@hasta", fecHasta));
+            return resultTable;
+        }
+
     }
 }

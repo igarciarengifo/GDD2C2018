@@ -9,7 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 
 namespace PalcoNet.Managers {
-    class Compra_Manager {
+    public class Compra_Manager {
 
         private Factura buildCompra(DataRow row) {
             Factura nuevoFactura = new Factura();
@@ -43,6 +43,22 @@ namespace PalcoNet.Managers {
             DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_DevuelveItemsPorIdFactura",
                                             SQLArgumentosManager.nuevoParametro("@idFactura", nro_factura));         
             return resultTable;
+        }
+
+        public List<Grado_Publicacion> getAllGrados()
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetAllGradosPublicacion");
+            var lista_grados = new List<Grado_Publicacion>();
+            if (resultTable != null && resultTable.Rows != null)
+            {
+                foreach (DataRow row in resultTable.Rows)
+                {
+                   // var grado = BuildGrado(row);
+                    //lista_grados.Add(grado);
+                }
+            }
+
+            return lista_grados;
         }
     }
 }

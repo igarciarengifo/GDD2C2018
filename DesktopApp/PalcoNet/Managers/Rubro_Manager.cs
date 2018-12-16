@@ -14,11 +14,9 @@ namespace PalcoNet.Managers
         {
             DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetAllRubros");
             List<Rubro> lista_rubros = new List<Rubro>();
-            if (resultTable != null && resultTable.Rows != null)
-            {
-                foreach (DataRow row in resultTable.Rows)
-                {
-                    var rubro = BuildRubro(row);
+            if (resultTable != null && resultTable.Rows != null) {
+                foreach (DataRow row in resultTable.Rows) {
+                    Rubro rubro = BuildRubro(row);
                     lista_rubros.Add(rubro);
                 }
             }

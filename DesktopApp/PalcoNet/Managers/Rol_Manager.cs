@@ -72,5 +72,21 @@ namespace PalcoNet.Managers
            
             return rolesEncontrados;
         }
+
+        public int habilitarRol(int id_rol) {
+            return (SQLManager.ejecutarNonQuery("LOOPP.SP_HabilitarRol",
+                                        SQLArgumentosManager.nuevoParametro("@idRol", id_rol)));
+        }
+
+        public int deshabilitarRol(int id_rol) {
+            return (SQLManager.ejecutarNonQuery("LOOPP.SP_InhabilitarRol",
+                                        SQLArgumentosManager.nuevoParametro("@idRol", id_rol)));
+        }
+
+        public string nuevoRol(Rol nuevoRol) {
+            return SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_AltaNuevoRol",
+                                                  SQLArgumentosManager.nuevoParametro("@nombre", nuevoRol.nombre));
+
+        }
     }
 }

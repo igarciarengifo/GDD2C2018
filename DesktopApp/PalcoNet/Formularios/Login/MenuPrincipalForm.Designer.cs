@@ -323,6 +323,7 @@
             this.comprarBtn.TabIndex = 0;
             this.comprarBtn.Text = "Comprar";
             this.comprarBtn.UseVisualStyleBackColor = true;
+            this.comprarBtn.Click += new System.EventHandler(this.comprarBtn_Click);
             // 
             // flpCentral
             // 
