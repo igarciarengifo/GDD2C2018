@@ -9,9 +9,9 @@ namespace PalcoNet.Entidades
     public class Usuario
     {
         public int id_usuario;
-        public String username;
+        public String username { get; set; }
         public String password;
         public int loginFallidos;
-        public bool habilitado;
+        public bool habilitado  { get; set; }
     }
 }

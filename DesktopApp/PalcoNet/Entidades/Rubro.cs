@@ -8,7 +8,7 @@ namespace PalcoNet.Entidades
 {
     public class Rubro
     {
-        public int id_rubro;
-        public string descripcion;
+        public int id_rubro  { get; set; }
+        public string descripcion  { get; set; }
     }
 }

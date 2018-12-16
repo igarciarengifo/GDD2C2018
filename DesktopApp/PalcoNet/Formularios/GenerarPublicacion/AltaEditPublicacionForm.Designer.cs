@@ -39,8 +39,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.estadoBox = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.horariosListBox = new System.Windows.Forms.CheckedListBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.ubicacionesListBox = new System.Windows.Forms.CheckedListBox();
             this.label8 = new System.Windows.Forms.Label();
             this.publicacionCalendar = new System.Windows.Forms.MonthCalendar();
@@ -54,6 +52,17 @@
             this.label10 = new System.Windows.Forms.Label();
             this.priceBox = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.horariosListBox = new System.Windows.Forms.CheckedListBox();
+            this.plateaAltaBtn = new System.Windows.Forms.Button();
+            this.plateaBajaBtn = new System.Windows.Forms.Button();
+            this.vipBtn = new System.Windows.Forms.Button();
+            this.campoVipBtn = new System.Windows.Forms.Button();
+            this.pullmanBtn = new System.Windows.Forms.Button();
+            this.superPullBtn = new System.Windows.Forms.Button();
+            this.campoBtn = new System.Windows.Forms.Button();
+            this.cabeceraBtn = new System.Windows.Forms.Button();
+            this.todasUbiBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -143,36 +152,19 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(44, 197);
+            this.label6.Location = new System.Drawing.Point(43, 173);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(134, 13);
+            this.label6.Size = new System.Drawing.Size(136, 13);
             this.label6.TabIndex = 10;
-            this.label6.Text = "Seleccione el/los horario/s";
-            // 
-            // horariosListBox
-            // 
-            this.horariosListBox.FormattingEnabled = true;
-            this.horariosListBox.Location = new System.Drawing.Point(253, 185);
-            this.horariosListBox.Name = "horariosListBox";
-            this.horariosListBox.Size = new System.Drawing.Size(285, 94);
-            this.horariosListBox.TabIndex = 11;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(570, 197);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(136, 13);
-            this.label7.TabIndex = 12;
-            this.label7.Text = "Selecciona las ubicaciones";
+            this.label6.Text = "Seleccione las ubicaciones";
             // 
             // ubicacionesListBox
             // 
             this.ubicacionesListBox.FormattingEnabled = true;
-            this.ubicacionesListBox.Location = new System.Drawing.Point(732, 180);
+            this.ubicacionesListBox.Location = new System.Drawing.Point(392, 173);
             this.ubicacionesListBox.Name = "ubicacionesListBox";
             this.ubicacionesListBox.Size = new System.Drawing.Size(285, 94);
-            this.ubicacionesListBox.TabIndex = 13;
+            this.ubicacionesListBox.TabIndex = 11;
             // 
             // label8
             // 
@@ -191,7 +183,7 @@
             // 
             // aceptarBtn
             // 
-            this.aceptarBtn.Location = new System.Drawing.Point(478, 513);
+            this.aceptarBtn.Location = new System.Drawing.Point(478, 626);
             this.aceptarBtn.Name = "aceptarBtn";
             this.aceptarBtn.Size = new System.Drawing.Size(75, 23);
             this.aceptarBtn.TabIndex = 18;
@@ -201,7 +193,7 @@
             // 
             // cancelarBtn
             // 
-            this.cancelarBtn.Location = new System.Drawing.Point(653, 513);
+            this.cancelarBtn.Location = new System.Drawing.Point(653, 626);
             this.cancelarBtn.Name = "cancelarBtn";
             this.cancelarBtn.Size = new System.Drawing.Size(75, 23);
             this.cancelarBtn.TabIndex = 19;
@@ -222,7 +214,7 @@
             // fechasSeleccionadasBox
             // 
             this.fechasSeleccionadasBox.FormattingEnabled = true;
-            this.fechasSeleccionadasBox.Location = new System.Drawing.Point(704, 22);
+            this.fechasSeleccionadasBox.Location = new System.Drawing.Point(796, 22);
             this.fechasSeleccionadasBox.Name = "fechasSeleccionadasBox";
             this.fechasSeleccionadasBox.Size = new System.Drawing.Size(285, 95);
             this.fechasSeleccionadasBox.TabIndex = 21;
@@ -236,14 +228,14 @@
             this.panel1.Controls.Add(this.fechasSeleccionadasBox);
             this.panel1.Controls.Add(this.publicacionCalendar);
             this.panel1.Controls.Add(this.agregarFechaBtn);
-            this.panel1.Location = new System.Drawing.Point(28, 299);
+            this.panel1.Location = new System.Drawing.Point(30, 336);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1032, 199);
+            this.panel1.Size = new System.Drawing.Size(1156, 199);
             this.panel1.TabIndex = 22;
             // 
             // sacarFechaBtn
             // 
-            this.sacarFechaBtn.Location = new System.Drawing.Point(805, 123);
+            this.sacarFechaBtn.Location = new System.Drawing.Point(897, 123);
             this.sacarFechaBtn.Name = "sacarFechaBtn";
             this.sacarFechaBtn.Size = new System.Drawing.Size(93, 23);
             this.sacarFechaBtn.TabIndex = 23;
@@ -254,7 +246,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(542, 22);
+            this.label9.Location = new System.Drawing.Point(634, 22);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(113, 13);
             this.label9.TabIndex = 22;
@@ -265,9 +257,9 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(573, 127);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(140, 13);
+            this.label10.Size = new System.Drawing.Size(106, 13);
             this.label10.TabIndex = 23;
-            this.label10.Text = "Precio base (en pesos ARS)";
+            this.label10.Text = "Precio base (XXX,xx)";
             // 
             // priceBox
             // 
@@ -285,21 +277,137 @@
             this.label11.TabIndex = 25;
             this.label11.Text = "$";
             // 
-            // NuevaPublicacionForm
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(710, 173);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(134, 13);
+            this.label7.TabIndex = 26;
+            this.label7.Text = "Seleccione el/los horario/s";
+            // 
+            // horariosListBox
+            // 
+            this.horariosListBox.FormattingEnabled = true;
+            this.horariosListBox.Location = new System.Drawing.Point(869, 173);
+            this.horariosListBox.Name = "horariosListBox";
+            this.horariosListBox.Size = new System.Drawing.Size(285, 94);
+            this.horariosListBox.TabIndex = 27;
+            // 
+            // plateaAltaBtn
+            // 
+            this.plateaAltaBtn.Location = new System.Drawing.Point(46, 200);
+            this.plateaAltaBtn.Name = "plateaAltaBtn";
+            this.plateaAltaBtn.Size = new System.Drawing.Size(133, 23);
+            this.plateaAltaBtn.TabIndex = 28;
+            this.plateaAltaBtn.Text = "Platea Alta";
+            this.plateaAltaBtn.UseVisualStyleBackColor = true;
+            this.plateaAltaBtn.Click += new System.EventHandler(this.plateaAltaBtn_Click);
+            // 
+            // plateaBajaBtn
+            // 
+            this.plateaBajaBtn.Location = new System.Drawing.Point(46, 229);
+            this.plateaBajaBtn.Name = "plateaBajaBtn";
+            this.plateaBajaBtn.Size = new System.Drawing.Size(133, 23);
+            this.plateaBajaBtn.TabIndex = 29;
+            this.plateaBajaBtn.Text = "Platea Baja";
+            this.plateaBajaBtn.UseVisualStyleBackColor = true;
+            this.plateaBajaBtn.Click += new System.EventHandler(this.plateaBajaBtn_Click);
+            // 
+            // vipBtn
+            // 
+            this.vipBtn.Location = new System.Drawing.Point(46, 258);
+            this.vipBtn.Name = "vipBtn";
+            this.vipBtn.Size = new System.Drawing.Size(133, 23);
+            this.vipBtn.TabIndex = 30;
+            this.vipBtn.Text = "Vip";
+            this.vipBtn.UseVisualStyleBackColor = true;
+            this.vipBtn.Click += new System.EventHandler(this.vipBtn_Click);
+            // 
+            // campoVipBtn
+            // 
+            this.campoVipBtn.Location = new System.Drawing.Point(211, 200);
+            this.campoVipBtn.Name = "campoVipBtn";
+            this.campoVipBtn.Size = new System.Drawing.Size(133, 23);
+            this.campoVipBtn.TabIndex = 31;
+            this.campoVipBtn.Text = "Campo Vip";
+            this.campoVipBtn.UseVisualStyleBackColor = true;
+            this.campoVipBtn.Click += new System.EventHandler(this.campoVipBtn_Click);
+            // 
+            // pullmanBtn
+            // 
+            this.pullmanBtn.Location = new System.Drawing.Point(211, 229);
+            this.pullmanBtn.Name = "pullmanBtn";
+            this.pullmanBtn.Size = new System.Drawing.Size(133, 23);
+            this.pullmanBtn.TabIndex = 32;
+            this.pullmanBtn.Text = "PullMan";
+            this.pullmanBtn.UseVisualStyleBackColor = true;
+            this.pullmanBtn.Click += new System.EventHandler(this.pullmanBtn_Click);
+            // 
+            // superPullBtn
+            // 
+            this.superPullBtn.Location = new System.Drawing.Point(211, 258);
+            this.superPullBtn.Name = "superPullBtn";
+            this.superPullBtn.Size = new System.Drawing.Size(133, 23);
+            this.superPullBtn.TabIndex = 33;
+            this.superPullBtn.Text = "Super PullMan";
+            this.superPullBtn.UseVisualStyleBackColor = true;
+            this.superPullBtn.Click += new System.EventHandler(this.superPullBtn_Click);
+            // 
+            // campoBtn
+            // 
+            this.campoBtn.Location = new System.Drawing.Point(47, 287);
+            this.campoBtn.Name = "campoBtn";
+            this.campoBtn.Size = new System.Drawing.Size(133, 23);
+            this.campoBtn.TabIndex = 34;
+            this.campoBtn.Text = "Campo";
+            this.campoBtn.UseVisualStyleBackColor = true;
+            this.campoBtn.Click += new System.EventHandler(this.campoBtn_Click);
+            // 
+            // cabeceraBtn
+            // 
+            this.cabeceraBtn.Location = new System.Drawing.Point(211, 287);
+            this.cabeceraBtn.Name = "cabeceraBtn";
+            this.cabeceraBtn.Size = new System.Drawing.Size(133, 23);
+            this.cabeceraBtn.TabIndex = 35;
+            this.cabeceraBtn.Text = "Cabecera";
+            this.cabeceraBtn.UseVisualStyleBackColor = true;
+            this.cabeceraBtn.Click += new System.EventHandler(this.cabeceraBtn_Click);
+            // 
+            // todasUbiBtn
+            // 
+            this.todasUbiBtn.Location = new System.Drawing.Point(477, 287);
+            this.todasUbiBtn.Name = "todasUbiBtn";
+            this.todasUbiBtn.Size = new System.Drawing.Size(133, 23);
+            this.todasUbiBtn.TabIndex = 36;
+            this.todasUbiBtn.Text = "Todas las ubicaciones";
+            this.todasUbiBtn.UseVisualStyleBackColor = true;
+            this.todasUbiBtn.Click += new System.EventHandler(this.todasUbiBtn_Click);
+            // 
+            // AltaEditPublicacionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1096, 548);
+            this.ClientSize = new System.Drawing.Size(1241, 690);
+            this.Controls.Add(this.todasUbiBtn);
+            this.Controls.Add(this.cabeceraBtn);
+            this.Controls.Add(this.campoBtn);
+            this.Controls.Add(this.superPullBtn);
+            this.Controls.Add(this.pullmanBtn);
+            this.Controls.Add(this.campoVipBtn);
+            this.Controls.Add(this.vipBtn);
+            this.Controls.Add(this.plateaBajaBtn);
+            this.Controls.Add(this.plateaAltaBtn);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.horariosListBox);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.priceBox);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.ubicacionesListBox);
             this.Controls.Add(this.cancelarBtn);
             this.Controls.Add(this.aceptarBtn);
-            this.Controls.Add(this.ubicacionesListBox);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.horariosListBox);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.estadoBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.gradosPublicacionBox);
@@ -311,7 +419,8 @@
             this.Controls.Add(this.descripcionBox);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "NuevaPublicacionForm";
+            this.Name = "AltaEditPublicacionForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = " Publicacion de Espectaculo - PalcoNet";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -333,8 +442,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox estadoBox;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.CheckedListBox horariosListBox;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.CheckedListBox ubicacionesListBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.MonthCalendar publicacionCalendar;
@@ -348,5 +455,16 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox priceBox;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckedListBox horariosListBox;
+        private System.Windows.Forms.Button plateaAltaBtn;
+        private System.Windows.Forms.Button plateaBajaBtn;
+        private System.Windows.Forms.Button vipBtn;
+        private System.Windows.Forms.Button campoVipBtn;
+        private System.Windows.Forms.Button pullmanBtn;
+        private System.Windows.Forms.Button superPullBtn;
+        private System.Windows.Forms.Button campoBtn;
+        private System.Windows.Forms.Button cabeceraBtn;
+        private System.Windows.Forms.Button todasUbiBtn;
     }
 }

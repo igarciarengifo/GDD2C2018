@@ -15,12 +15,11 @@ namespace PalcoNet.Formularios.GenerarPublicacion
 {
     public partial class AltaEditPublicacionForm : Form
     {
+        Ubicaciones_Manager ubicacionMng = new Ubicaciones_Manager();
         Grados_Publicacion_Manager gradosPublicacionMng = new Grados_Publicacion_Manager();
         Estado_Publicacion_Manager estadosPublicacionMng = new Estado_Publicacion_Manager();
         Espectaculo_Manager espectaculoMng = new Espectaculo_Manager();
         Rubro_Manager rubrosMng = new Rubro_Manager();
-        List<Ubicacion> ubicaciones = new List<Ubicacion>();
-        List<DateTime> fechasSeleccionadas = new List<DateTime>();
         Boolean esModificacion;
         List<Ubicacion_X_Espectaculo> ubicacionesXEspec = new List<Ubicacion_X_Espectaculo>();
 
@@ -58,6 +57,17 @@ namespace PalcoNet.Formularios.GenerarPublicacion
             this.completarFechas(this.getFechasDeEspectaculo(publicacionSeleccionada.id_espectaculo));
         }
 
+        private void checkUbicaciones(List<Ubicacion> ubicacionesEspectaculo)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesEspectaculo.Any(ubicacion => (ubicacion.fila + ubicacion.asiento).Equals(ubicacionesListBox.Items[count].ToString())))
+                {
+                    ubicacionesListBox.SetItemChecked(count, true);
+                }
+            }
+        }
+
         private void completarFechas(HashSet<DateTime> fechasDelEspectaculo)
         {
             
@@ -73,17 +83,6 @@ namespace PalcoNet.Formularios.GenerarPublicacion
             
         }
 
-        private void checkUbicaciones(List<Ubicacion> ubicacionesEspectaculo)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesEspectaculo.Any(ubicacion=> (ubicacion.fila+ubicacion.asiento).Equals(ubicacionesListBox.Items[count].ToString())))
-                {
-                    ubicacionesListBox.SetItemChecked(count, true);
-                }
-            }
-        }
-
         private List<Ubicacion> getUbicacionesDeEspectaculo(int id_espectaculo)
         {
             Ubicaciones_Manager ubicacionMng = new Ubicaciones_Manager();
@@ -93,7 +92,7 @@ namespace PalcoNet.Formularios.GenerarPublicacion
         private void checkHorarios(HashSet<String > horariosEspectaculo)
         {
             
-            for (int count = 0; count < horariosListBox.Items.Count; count++)
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
             {
                 if (horariosEspectaculo.Contains(horariosListBox.Items[count].ToString()))
                 {
@@ -112,10 +111,12 @@ namespace PalcoNet.Formularios.GenerarPublicacion
         private void cargarUbicaciones()
         {
             Ubicaciones_Manager ubicacionMng = new Ubicaciones_Manager();
-            ubicaciones = ubicacionMng.getAllUbicaciones();
+            List<Ubicacion> ubicaciones = ubicacionMng.getAllUbicaciones();
+            
             foreach (Ubicacion ubicacion in ubicaciones)
             {
-                ubicacionesListBox.Items.Add(ubicacion.fila+ubicacion.asiento);
+                string descripcion = (ubicacion.id_ubicacion).ToString() + '-' + ubicacion.descripcion;
+                ubicacionesListBox.Items.Add(descripcion);
             }
         }
 
@@ -165,6 +166,7 @@ namespace PalcoNet.Formularios.GenerarPublicacion
 
         private void agregarFechaBtn_Click(object sender, EventArgs e)
         {
+            List<DateTime> fechasSeleccionadas = new List<DateTime>();
             DateTime fechaInicio = publicacionCalendar.SelectionStart;
             DateTime fechaFin = publicacionCalendar.SelectionEnd;
             for (DateTime date = fechaInicio; date <= fechaFin; date = date.AddDays(1)) {
@@ -187,6 +189,7 @@ namespace PalcoNet.Formularios.GenerarPublicacion
         {
             try
             {
+                this.validarCamposObligatorios();
                 if (!esModificacion)
                 {
                     this.generarNuevaPublicacion();
@@ -196,6 +199,8 @@ namespace PalcoNet.Formularios.GenerarPublicacion
                 {
                     this.modificarPublicacion();
                 }
+                this.Dispose();
+                this.Close();
             }
             catch (Exception exc) {
                 MessageBox.Show(exc.Message);
@@ -210,25 +215,29 @@ namespace PalcoNet.Formularios.GenerarPublicacion
         private void generarNuevaPublicacion()
         {
             Espectaculo_Manager publicacionMng = new Espectaculo_Manager();
+            try {
+                
+                publicacionMng.nuevaPublicacion(DatosSesion.id_usuario,
+                            Double.Parse(priceBox.Text),
+                            descripcionBox.Text,
+                            direccionBox.Text,
+                            (int)gradosPublicacionBox.SelectedValue,
+                            (int)estadoBox.SelectedValue,
+                            (int)rubroBox.SelectedValue,
+                            horariosListBox.CheckedItems.Cast<String>().ToList(),
+                            ubicacionesListBox.CheckedItems.Cast<String>().ToList(),
+                            fechasSeleccionadasBox.Items.Cast<DateTime>().ToList());
+                MessageBox.Show("Se realizó correctamente la generación de la publicación");
+            } catch (Exception exc ){
+                MessageBox.Show(exc.Message);
+            }
             
-            this.validarCamposObligatorios();
-            publicacionMng.nuevaPublicacion(DatosSesion.id_usuario,
-                        Double.Parse(priceBox.Text),
-                        descripcionBox.Text,
-                        direccionBox.Text,
-                        (Grado_Publicacion)gradosPublicacionBox.SelectedValue,
-                        (Estado_Publicacion)estadoBox.SelectedValue,
-                        (Rubro)rubroBox.SelectedValue,
-                        horariosListBox.Items.Cast<String>().ToList(),
-                        ubicacionesListBox.Items.Cast<Ubicacion>().ToList(),
-                        fechasSeleccionadasBox.Items.Cast<DateTime>().ToList());
-            MessageBox.Show("Se realizó correctamente la generación de la publicación");
             
         }
 
         private void validarCamposObligatorios()
         {
-            if ((horariosListBox.Items.Count == 0) || (ubicacionesListBox.Items.Count == 0) || (fechasSeleccionadasBox.Items.Count == 0))
+            if ((ubicacionesListBox.Items.Count == 0) || (horariosListBox.Items.Count == 0) || (fechasSeleccionadasBox.Items.Count == 0))
             {
                 throw new Exception("Debe ingresarse horarios, ubicaciones y fechas del espectaculo");
             }
@@ -242,6 +251,10 @@ namespace PalcoNet.Formularios.GenerarPublicacion
                 throw new Exception("Debe ingresarse una direccion");
             }
 
+            if (gradosPublicacionBox.SelectedItem == "No Definido")
+            {
+                throw new Exception("Debe indicar un grado de publicacion válido");
+            }
             this.validarCampoPrecio();
         }
 
@@ -253,6 +266,181 @@ namespace PalcoNet.Formularios.GenerarPublicacion
             }
             if (!(substrings.All(subString => subString.All(character => Char.IsDigit(character))))){
                 throw new Exception("El formato del precio no es el correcto. Solo debe contener numeros");
+            }
+        }
+
+        private void plateaAltaBtn_Click(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Platea Alta"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+                    
+                }
+            }
+        }
+
+        private void plateaBajaBtn_Click(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Platea Baja"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void vipBtn_Click(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("-Vip-"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void campoBtn_Click(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("-Campo-"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void campoVipBtn_Click(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Campo Vip"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void pullmanBtn_Click(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("-PullMan-"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void superPullBtn_Click(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Super PullMan"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void cabeceraBtn_Click(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Cabecera"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void todasUbiBtn_Click(object sender, EventArgs e)
+        {
+
+            foreach (int i in ubicacionesListBox.CheckedIndices)
+            {
+                ubicacionesListBox.SetItemCheckState(i, CheckState.Unchecked);
+            }
+
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                
+                if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                {
+                    ubicacionesListBox.SetItemChecked(count, false);
+                }
+                else
+                {
+                    ubicacionesListBox.SetItemChecked(count, true);
+                }
+
+                
             }
         }
     }

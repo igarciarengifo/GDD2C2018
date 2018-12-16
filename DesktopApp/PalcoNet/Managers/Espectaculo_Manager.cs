@@ -30,40 +30,48 @@ namespace PalcoNet.Managers {
             return espectaculos;
         }
 
-        public void nuevaPublicacion(int usuarioEmpresa, Double precioBase, string descripcion, string direccion, Grado_Publicacion gradoPublicacion, Estado_Publicacion estadoPublicacion, Rubro rubro, List<String> horariosSeleccionados, List<Ubicacion> ubicaciones, List<DateTime> fechasSeleccionadas)
+        public void nuevaPublicacion(int usuarioEmpresa, Double precioBase, string descripcion, string direccion, int id_grado_publicacion, int id_estadoPublicacion, int id_rubro, List<String> horariosSeleccionados, List<String> descripcionesUbicaciones, List<DateTime> fechasSeleccionadas)
         {
-            string resultadoEspectaculo = SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_NuevaPublicacion",
+            DateTime fecha_publicacion = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            DateTime fecha_vencimiento = fecha_publicacion.AddDays(7);
+            foreach (DateTime fechaSeleccionada in fechasSeleccionadas)
+            {
+                foreach (String horarioSeleccionado in horariosSeleccionados)
+                {
+                    string resultadoEspectaculo = SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_NuevaPublicacion",
                         SQLArgumentosManager.nuevoParametro("@descripcion", descripcion).
                         add("@direccion", direccion)
-                        .add("@id_grado_publicacion", gradoPublicacion.id_grado_publicacion)
-                        .add("@id_estado", estadoPublicacion.id_estado_publicacion)
-                        .add("@rubro", rubro.id_rubro)
+                        .add("@id_grado_publicacion", id_grado_publicacion)
+                        .add("@id_estado", id_estadoPublicacion)
+                        .add("@rubro", id_rubro)
                         .add("@id_usuario", usuarioEmpresa)
-                        .add("@fecha_publicacion", Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]))
-                        .add("@precio_base", precioBase));
-            if (resultadoEspectaculo != "error")
-            {
-                int idNuevoEspectaculo = Convert.ToInt32(resultadoEspectaculo);
-                foreach (DateTime fechaSeleccionada in fechasSeleccionadas)
-                {
-                    foreach (String horarioSeleccionado in horariosSeleccionados)
+                        .add("@fecha_publicacion", fecha_publicacion)
+                        .add("@precio_base", precioBase)
+                        .add("@fechaEspec", fechaSeleccionada)
+                        .add("@horaEspec", horarioSeleccionado)
+                        .add("@fechaVenc", fecha_vencimiento));
+
+                    int idNuevoEspectaculo = Int32.Parse(resultadoEspectaculo);
+                    if (idNuevoEspectaculo != -1)
                     {
-                        foreach (Ubicacion ubicacion in ubicaciones)
+                        
+                        foreach (String descripcionUbicacionConID in descripcionesUbicaciones)
                         {
+
+                            int id_ubicacion = Int32.Parse((descripcionUbicacionConID.Split('-').ElementAt(0)));
                             SQLManager.ejecutarNonQuery("LOOPP.SP_NuevaUbicac_X_Espectaculo",
                                 SQLArgumentosManager.nuevoParametro("@id_espectaculo", idNuevoEspectaculo)
-                                .add("@id_ubicacion", ubicacion.id_ubicacion)
-                                .add("@fecha_espectaculo", fechaSeleccionada)
-                                .add("@hora_espectaculo", horarioSeleccionado));
+                                .add("@id_ubicacion", id_ubicacion)
+                                .add("@id_grado_publicacion", id_grado_publicacion)
+                                .add("@precio_base", precioBase));
                         }
                     }
+                    else {
+                        throw new Exception("Error al crear la publicacion. Intente nuevamente.");
+                    }
+                    
                 }
             }
-            else
-            {
-                throw new Exception("Error al generarse la publicacion del espectaculo");
-            }
-
         }
 
         public List<Espectaculo> getPublicacionConId(int id_usuario)

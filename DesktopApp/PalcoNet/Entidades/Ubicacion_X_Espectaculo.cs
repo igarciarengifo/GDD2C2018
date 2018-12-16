@@ -9,9 +9,10 @@ namespace PalcoNet.Entidades
     public class Ubicacion_X_Espectaculo
     {
         public int id_espectaculo, id_ubicacion;
-        public Double precio;
-        public DateTime fecha_espectaculo, fecha_venc_espectaculo;
-        public String hora_espectaculo;
-        public Boolean disponible;
+        public Double precio  { get; set; }
+        public DateTime fecha_espectaculo  { get; set; }
+        public DateTime fecha_venc_espectaculo  { get; set; }
+        public String hora_espectaculo { get; set; }
+        public Boolean disponible { get; set; }
     }
 }
