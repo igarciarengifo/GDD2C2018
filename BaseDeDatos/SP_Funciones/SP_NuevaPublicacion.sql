@@ -3,7 +3,7 @@ IF OBJECT_ID('LOOPP.Fn_PrecioXUbicacion') IS NOT NULL
     DROP FUNCTION LOOPP.Fn_PrecioXUbicacion
 GO
 
-create function LOOPP.Fn_PrecioXUbicacion (@gradoPub int, @tipoUbicacion int,@precioBase numeric(18,2))
+create function LOOPP.Fn_PrecioXUbicacion (@gradoPub int, @id_ubicacion int,@precioBase numeric(18,2))
 RETURNS numeric(18,2)
 AS 
 	BEGIN
@@ -11,11 +11,11 @@ AS
 		declare @porcXUbic numeric (10,2);
 		declare @comision numeric (10,2);
 
-		select @porcXUbic = [porcentual]
-		from [LOOPP].[Ubicaciones] u
+		select @porcXUbic = porcentual
+		from LOOPP.Ubicaciones u
 		inner join [LOOPP].[Tipo_Ubicacion] tu
 		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
-		where tu.id_tipo_ubicacion=@tipoUbicacion;
+		where id_ubicacion = @id_ubicacion
 
 		select @comision=comision
 		from [LOOPP].[Grados_Publicacion]
@@ -41,12 +41,13 @@ create procedure LOOPP.SP_NuevaPublicacion @descripcion nvarchar(255)
 										  ,@fecha_publicacion datetime
 										  ,@precio_base numeric(18,2)
 										  ,@fechaEspec date
-										  ,@horaEspec time
+										  ,@horaEspec nvarchar(50)
 										  ,@fechaVenc date
 AS
 	declare @resultado int;
 	declare @newId int;
-
+	declare @timeEspec time;
+	set @timeEspec = CONVERT( TIME, @horaEspec )
 	select @newId=MAX([id_espectaculo])+1
 	from [LOOPP].[Espectaculos];
 
@@ -55,8 +56,8 @@ AS
 				   on e.id_espectaculo=ue.id_espectaculo
 				   where e.descripcion=@descripcion 
 				   and e.fecha_publicacion=@fecha_publicacion
-				   and ue.fecha_espectaculo=@fechaEspec
-				   and ue.hora_espectaculo=@horaEspec
+				   and e.fecha_espectaculo=@fechaEspec
+				   and e.hora_espectaculo=@timeEspec
 				   and id_estado_publicacion in (1,2,3))
 	begin
 		insert into [LOOPP].[Espectaculos]([id_espectaculo]
@@ -67,26 +68,13 @@ AS
 											,[direccion]
 											,[id_estado_publicacion]
 											,[id_grado_publicacion]
-											,[precio_base])
-		values (@newId,@id_usuario,@rubro,@fecha_publicacion,@descripcion,@direccion,@id_estado,@id_grado_publicacion,@precio_base)
+											,[precio_base]
+											,[fecha_espectaculo]
+											,[fecha_venc_espectaculo]
+											,[hora_espectaculo])
+		values (@newId,@id_usuario,@rubro,@fecha_publicacion,@descripcion,@direccion,@id_estado,@id_grado_publicacion,@precio_base,@fechaEspec, @fechaVenc, @timeEspec)
 
-		insert into [LOOPP].[Ubicac_X_Espectaculo] ([id_espectaculo]
-													,[id_ubicacion]
-													,[precio]
-													,[fecha_espectaculo]
-													,[fecha_venc_espectaculo]
-													,[hora_espectaculo]
-													)
-		select @newId
-			  ,id_ubicacion
-			  ,LOOPP.Fn_PrecioXUbicacion(@id_grado_publicacion,id_tipo_ubicacion,@precio_base) precio
-			  ,@fechaEspec
-			  ,@fechaVenc
-			  ,@horaEspec
-		from [LOOPP].[Ubicaciones];
-		
-		select @resultado=MAX([id_espectaculo])
-		from [LOOPP].[Espectaculos]
+		set @resultado = @newId
 
 	end
 	else set @resultado = -1;
