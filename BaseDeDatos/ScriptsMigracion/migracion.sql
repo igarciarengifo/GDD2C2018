@@ -127,10 +127,27 @@ ORDER BY Ubicacion_Tipo_Codigo, Ubicacion_Fila, Ubicacion_Asiento
 
 /*Creacion catalogo de Canje*/
 
-INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES (10, 'Entrada gratis', 1000);
-INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %30 en entradas', 800);
-INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %20 en entradas', 500);
-INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Descuento %10 en entradas', 300);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES (10, '2 Entradas gratis', 1000);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, '1 Entrada gratis', 800);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Una remera del espectaculo', 500);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Una consumición gratis', 300);
+-------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.FN_RemoveNonAlphaCharacters') IS NOT NULL
+    DROP FUNCTION LOOPP.FN_RemoveNonAlphaCharacters
+GO
+Create Function [LOOPP].[FN_RemoveNonAlphaCharacters](@Temp VarChar(255))
+Returns VarChar(255)
+AS
+Begin
+
+    Declare @KeepValues as varchar(255)
+    Set @KeepValues = '%[^a-z0-9]%'
+    While PatIndex(@KeepValues, @Temp) > 0
+        Set @Temp = Stuff(@Temp, PatIndex(@KeepValues, @Temp), 1, '')
+
+    Return Lower( replace(@Temp, 'nº', ''))
+End
+GO
 -------------------------------------------------------------------------------
 
 /*Migracion de clientes*/
