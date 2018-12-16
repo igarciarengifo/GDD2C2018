@@ -101,7 +101,7 @@ namespace PalcoNet.Managers {
             return resultTable;
         }
 
-        public DataTable getEspectaculosFiltro(int idEspec, string idList, DateTime fecDesde, DateTime fecHasta)
+        public DataTable getEspectaculosFiltro(int idEspec, string idList, string fecDesde, string fecHasta)
         {
             DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_FiltrarEspectaculos",
                                             SQLArgumentosManager.nuevoParametro("@idEspectaculo", idEspec)
