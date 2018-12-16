@@ -118,6 +118,7 @@ namespace PalcoNet.Managers {
             nuevoEspectaculo.id_espectaculo = Convert.ToInt32(row["id_espectaculo"]);
             nuevoEspectaculo.descripcion = Convert.ToString(row["descripcion"]);
             nuevoEspectaculo.direccion = Convert.ToString(row["direccion"]);
+            nuevoEspectaculo.hora_espectaculo = row["hora_espectaculo"].ToString();
             nuevoEspectaculo.fecha_publicacion = Convert.ToDateTime(row["fecha_publicacion"]);
             nuevoEspectaculo.id_estado_publicacion = Convert.ToInt32(row["id_estado_publicacion"]);
             nuevoEspectaculo.id_grado_publicacion = Convert.ToInt32(row["id_grado_publicacion"]);
