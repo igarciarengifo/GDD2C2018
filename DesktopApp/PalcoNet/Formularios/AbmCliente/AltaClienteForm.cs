@@ -149,6 +149,7 @@ namespace PalcoNet.Formularios.AbmCliente
 
             resultado = clienteMng.altaClienteYUsuario(user, pass, nuevaPersona);
             String[] arrayResultado = resultado.Split(';');
+            string passToHash;
             if (arrayResultado.ElementAt(2).Equals("OK"))
             {
                 Usuario_Manager userMng = new Usuario_Manager();
@@ -156,8 +157,14 @@ namespace PalcoNet.Formularios.AbmCliente
                 if (user == null)
                 {
                     MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ".\n El usuario es: " + nuevaPersona.cuil, "Operacion correcta");
+                    passToHash = arrayResultado.ElementAt(1);
+                    this.DialogResult = DialogResult.OK;
                 }
-                String passHash = Encriptacion.getHashSha256(arrayResultado.ElementAt(1));
+                else
+                {
+                    passToHash = pass;
+                }
+                String passHash = Encriptacion.getHashSha256(passToHash);
                 userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
             }
             else
