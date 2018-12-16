@@ -43,8 +43,6 @@ namespace PalcoNet.Managers
             ubiXEsp.id_espectaculo = Convert.ToInt32(row["id_espectaculo"]);
             ubiXEsp.id_ubicacion = Convert.ToInt32(row["id_ubicacion"]);
             ubiXEsp.precio = Convert.ToDouble(row["precio"]);
-            ubiXEsp.fecha_espectaculo=Convert.ToDateTime(row["fecha_espectaculo"]);
-            ubiXEsp.hora_espectaculo = row["hora_espectaculo"].ToString();
             return ubiXEsp;
         }
 

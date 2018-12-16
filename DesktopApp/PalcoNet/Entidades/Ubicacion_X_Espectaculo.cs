@@ -10,9 +10,6 @@ namespace PalcoNet.Entidades
     {
         public int id_espectaculo, id_ubicacion;
         public Double precio  { get; set; }
-        public DateTime fecha_espectaculo  { get; set; }
-        public DateTime fecha_venc_espectaculo  { get; set; }
-        public String hora_espectaculo { get; set; }
         public Boolean disponible { get; set; }
     }
 }

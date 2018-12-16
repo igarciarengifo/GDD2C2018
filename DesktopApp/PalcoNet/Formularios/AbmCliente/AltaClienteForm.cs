@@ -73,8 +73,7 @@ namespace PalcoNet.Formularios.AbmCliente
                 else {
                     this.modificarCliente();
                 }
-                this.Dispose();
-                this.Close();
+                
                
             }
             catch (Exception exc) {

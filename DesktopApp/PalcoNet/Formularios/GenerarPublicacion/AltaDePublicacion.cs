@@ -13,21 +13,18 @@ using System.Windows.Forms;
 
 namespace PalcoNet.Formularios.GenerarPublicacion
 {
-    public partial class AltaEditPublicacionForm : Form
+    public partial class AltaDePublicacion : Form
     {
         Ubicaciones_Manager ubicacionMng = new Ubicaciones_Manager();
         Grados_Publicacion_Manager gradosPublicacionMng = new Grados_Publicacion_Manager();
         Estado_Publicacion_Manager estadosPublicacionMng = new Estado_Publicacion_Manager();
         Espectaculo_Manager espectaculoMng = new Espectaculo_Manager();
         Rubro_Manager rubrosMng = new Rubro_Manager();
-        Boolean esModificacion;
-        List<Ubicacion_X_Espectaculo> ubicacionesXEspec = new List<Ubicacion_X_Espectaculo>();
 
-        public AltaEditPublicacionForm()
+        public AltaDePublicacion()
         {
             InitializeComponent();
             this.cargarOpciones();
-            esModificacion =false;
         }
 
         private void cargarOpciones()
@@ -38,74 +35,6 @@ namespace PalcoNet.Formularios.GenerarPublicacion
             this.cargarHorarios();
             this.cargarUbicaciones();
             publicacionCalendar.MinDate = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
-        }
-
-        
-        public AltaEditPublicacionForm(Espectaculo publicacionSeleccionada)
-        {
-            // TODO: Complete member initialization
-            esModificacion = true;
-            this.cargarOpciones();            
-            descripcionBox.Text = publicacionSeleccionada.descripcion;
-            gradosPublicacionBox.SelectedValue = publicacionSeleccionada.id_grado_publicacion;
-            rubroBox.SelectedValue = publicacionSeleccionada.id_rubro;
-            estadoBox.SelectedValue = publicacionSeleccionada.id_estado_publicacion;
-            direccionBox.Text = publicacionSeleccionada.direccion;
-            priceBox.Text = publicacionSeleccionada.precio_base.ToString();
-            this.checkHorarios(this.getHorariosDeEspectaculo(publicacionSeleccionada.id_espectaculo));
-            this.checkUbicaciones(this.getUbicacionesDeEspectaculo(publicacionSeleccionada.id_espectaculo));
-            this.completarFechas(this.getFechasDeEspectaculo(publicacionSeleccionada.id_espectaculo));
-        }
-
-        private void checkUbicaciones(List<Ubicacion> ubicacionesEspectaculo)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesEspectaculo.Any(ubicacion => (ubicacion.fila + ubicacion.asiento).Equals(ubicacionesListBox.Items[count].ToString())))
-                {
-                    ubicacionesListBox.SetItemChecked(count, true);
-                }
-            }
-        }
-
-        private void completarFechas(HashSet<DateTime> fechasDelEspectaculo)
-        {
-            
-            foreach(DateTime fechaEspectaculo in fechasDelEspectaculo){
-                fechasSeleccionadasBox.Items.Add(fechaEspectaculo);
-            }
-        }
-
-        private HashSet<DateTime> getFechasDeEspectaculo(int id_espectaculo)
-        {
-            List<DateTime> listaUbicaciones=ubicacionesXEspec.Select(ubicacion=> ubicacion.fecha_espectaculo).ToList();
-            return new HashSet<DateTime>(listaUbicaciones);
-            
-        }
-
-        private List<Ubicacion> getUbicacionesDeEspectaculo(int id_espectaculo)
-        {
-            Ubicaciones_Manager ubicacionMng = new Ubicaciones_Manager();
-            return ubicacionMng.getUbicacionesEspectaculo(id_espectaculo);
-        }
-
-        private void checkHorarios(HashSet<String > horariosEspectaculo)
-        {
-            
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (horariosEspectaculo.Contains(horariosListBox.Items[count].ToString()))
-                {
-                    horariosListBox.SetItemChecked(count, true);
-                }
-            }
-        }
-
-        private HashSet<String> getHorariosDeEspectaculo(int id_espectaculo)
-        {
-            List<String> horarios = ubicacionesXEspec.Select(ubicacion => ubicacion.hora_espectaculo).ToList();
-            return new HashSet<String>(horarios);
-            
         }
 
         private void cargarUbicaciones()
@@ -190,26 +119,15 @@ namespace PalcoNet.Formularios.GenerarPublicacion
             try
             {
                 this.validarCamposObligatorios();
-                if (!esModificacion)
-                {
-                    this.generarNuevaPublicacion();
+             
+                this.generarNuevaPublicacion();
 
-                }
-                else
-                {
-                    this.modificarPublicacion();
-                }
                 this.Dispose();
                 this.Close();
             }
             catch (Exception exc) {
                 MessageBox.Show(exc.Message);
             }
-        }
-
-        private void modificarPublicacion()
-        {
-            throw new NotImplementedException();
         }
 
         private void generarNuevaPublicacion()
@@ -237,7 +155,7 @@ namespace PalcoNet.Formularios.GenerarPublicacion
 
         private void validarCamposObligatorios()
         {
-            if ((ubicacionesListBox.Items.Count == 0) || (horariosListBox.Items.Count == 0) || (fechasSeleccionadasBox.Items.Count == 0))
+            if ((ubicacionesListBox.CheckedItems.Count == 0) || (horariosListBox.CheckedItems.Count == 0) || (fechasSeleccionadasBox.Items.Count == 0))
             {
                 throw new Exception("Debe ingresarse horarios, ubicaciones y fechas del espectaculo");
             }

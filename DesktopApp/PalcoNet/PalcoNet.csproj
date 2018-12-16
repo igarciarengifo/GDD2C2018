@@ -155,17 +155,23 @@
     <Compile Include="Formularios\Comprar\SeleccionUbicacionForm.Designer.cs">
       <DependentUpon>SeleccionUbicacionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\EditarPublicacion\BuscarPublicEditar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\EditarPublicacion\BuscarPublicEditar.Designer.cs">
+      <DependentUpon>BuscarPublicEditar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\EditarPublicacion\EditarPublicacionForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Formularios\EditarPublicacion\EditarPublicacionForm.Designer.cs">
       <DependentUpon>EditarPublicacionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\GenerarPublicacion\AltaEditPublicacionForm.cs">
+    <Compile Include="Formularios\GenerarPublicacion\AltaDePublicacion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\GenerarPublicacion\AltaEditPublicacionForm.Designer.cs">
-      <DependentUpon>AltaEditPublicacionForm.cs</DependentUpon>
+    <Compile Include="Formularios\GenerarPublicacion\AltaDePublicacion.Designer.cs">
+      <DependentUpon>AltaDePublicacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\GenerarRendicionComisiones\FacturaForm.cs">
       <SubType>Form</SubType>
@@ -269,11 +275,14 @@
     <EmbeddedResource Include="Formularios\Comprar\SeleccionUbicacionForm.resx">
       <DependentUpon>SeleccionUbicacionForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\EditarPublicacion\BuscarPublicEditar.resx">
+      <DependentUpon>BuscarPublicEditar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\EditarPublicacion\EditarPublicacionForm.resx">
       <DependentUpon>EditarPublicacionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\GenerarPublicacion\AltaEditPublicacionForm.resx">
-      <DependentUpon>AltaEditPublicacionForm.cs</DependentUpon>
+    <EmbeddedResource Include="Formularios\GenerarPublicacion\AltaDePublicacion.resx">
+      <DependentUpon>AltaDePublicacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\GenerarRendicionComisiones\FacturaForm.resx">
       <DependentUpon>FacturaForm.cs</DependentUpon>

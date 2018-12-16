@@ -21,10 +21,10 @@ namespace PalcoNet.Managers
             {
                 if (!(usuarioLogin.habilitado))
                 {
-                    throw new System.ArgumentException("Usuario bloqueado. Contacte con su Administrador para desbloquear la cuenta");
+                    throw new System.ArgumentException("Usuario inhabilitado. Contacte con su Administrador para desbloquear la cuenta");
                 }
                 
-                if (usuarioLogin.password == passHash)
+                if (usuarioLogin.password.Equals(passHash))
                 {
                     id_usuario = usuarioLogin.id_usuario;
                     if (usuario_Mgr.hasInvalidData(id_usuario)) {

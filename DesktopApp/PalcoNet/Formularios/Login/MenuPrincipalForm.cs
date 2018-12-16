@@ -190,7 +190,7 @@ namespace PalcoNet.Formularios
 
         private void newPubBtn_Click(object sender, EventArgs e)
         {
-            AltaEditPublicacionForm nuevaPublicacionForm = new AltaEditPublicacionForm();
+            AltaDePublicacion nuevaPublicacionForm = new AltaDePublicacion();
             nuevaPublicacionForm.ShowDialog();
         }
 
@@ -202,7 +202,7 @@ namespace PalcoNet.Formularios
 
         private void editPubBtn_Click(object sender, EventArgs e)
         {
-            EditarPublicacionForm editarPublicacionForm = new EditarPublicacionForm();
+            BuscarPublicEditar editarPublicacionForm = new BuscarPublicEditar();
             editarPublicacionForm.ShowDialog();
         }
 

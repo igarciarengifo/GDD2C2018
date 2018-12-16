@@ -91,9 +91,9 @@ namespace PalcoNet.Managers {
             return espectaculos;
         }
 
-        public DataTable getPublicacionConId(int id_publicacion)
+        public DataTable getPublicacionFiltradaConId(int id_publicacion)
         {
-            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetEspectaculoPorId",
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetEspectaculoFiltradoPorId",
                                         SQLArgumentosManager.nuevoParametro("@idEspectaculo", id_publicacion));
 
 
@@ -161,6 +161,60 @@ namespace PalcoNet.Managers {
                                             SQLArgumentosManager.nuevoParametro("@idUsuario", idUsuario));
                                             
             return resultTable;
+        }
+
+        internal Espectaculo getEspectaculoPorID(int idEspectaculo)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetEspectaculoPorId", 
+                                        SQLArgumentosManager.nuevoParametro("@idEspectaculo", idEspectaculo));
+            List<Espectaculo> espectaculos = new List<Espectaculo>();
+            if (resultTable != null && resultTable.Rows != null)
+            {
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Espectaculo espectaculo = BuildEspectaculo(row);
+                    espectaculos.Add(espectaculo);
+                }
+            }
+            return espectaculos.ElementAt(0);
+        }
+
+        internal void modificarEspectaculo(Espectaculo publicacionModificada, Espectaculo publicacionSeleccionada, List<Ubicacion> ubicacionesActuales, List<string> descripcionUbicaciones)
+        {
+            string resultadoEspectaculo = SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_ModificarPublicacion",
+                SQLArgumentosManager.nuevoParametro("@descripcion", publicacionModificada.descripcion).
+                add("@direccion", publicacionModificada.direccion)
+                .add("@id_grado_publicacion", publicacionModificada.id_grado_publicacion)
+                .add("@id_estado", publicacionModificada.id_estado_publicacion)
+                .add("@rubro", publicacionModificada.id_rubro)
+                .add("@precio_base", publicacionModificada.precio_base)
+                .add("@fechaEspec", publicacionModificada.fecha_espectaculo)
+                .add("@horaEspec", publicacionModificada.hora_espectaculo)
+                .add("@id_espectaculo", publicacionModificada.id_espectaculo));
+            if (resultadoEspectaculo.Equals("OK")) {
+                foreach (String descripcionUbicacionConID in descripcionUbicaciones)
+                {
+
+                    int id_ubicacion_nuevo = Int32.Parse((descripcionUbicacionConID.Split('-').ElementAt(0)));
+                    if (!(ubicacionesActuales.Any(ubicacion => ubicacion.id_ubicacion == id_ubicacion_nuevo))) {
+                        SQLManager.ejecutarNonQuery("LOOPP.SP_NuevaUbicac_X_Espectaculo",
+                        SQLArgumentosManager.nuevoParametro("@id_espectaculo", publicacionModificada.id_espectaculo)
+                        .add("@id_ubicacion", id_ubicacion_nuevo)
+                        .add("@id_grado_publicacion", publicacionModificada.id_grado_publicacion)
+                        .add("@precio_base", publicacionModificada.precio_base));
+                    }
+                    
+                }
+                foreach (Ubicacion ubicacionActual in ubicacionesActuales)
+                {
+                    if (!(descripcionUbicaciones.Any(descripcionUbi => ubicacionActual.id_ubicacion == Int32.Parse((descripcionUbi.Split('-').ElementAt(0))))))
+                    {
+                        SQLManager.ejecutarNonQuery("LOOPP.SP_EliminarUbicacion_X_Esp",
+                        SQLArgumentosManager.nuevoParametro("@id_espectaculo", publicacionModificada.id_espectaculo)
+                        .add("@id_ubicacion", ubicacionActual.id_ubicacion));
+                    }
+                }
+            }
         }
     }
 }
