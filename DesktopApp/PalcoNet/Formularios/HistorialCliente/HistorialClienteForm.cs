@@ -17,8 +17,8 @@ namespace PalcoNet.Formularios.HistorialCliente
         public HistorialClienteForm() {
             InitializeComponent();
             this.cargar_datos(SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_HistorialComprasCliente",
-                                        SQLArgumentosManager.nuevoParametro("@idUsuario", 2)));
-                                        //SQLArgumentosManager.nuevoParametro("@idUsuario", DatosSesion.id_usuario)));
+                                        //SQLArgumentosManager.nuevoParametro("@idUsuario", 2)));
+                                        SQLArgumentosManager.nuevoParametro("@idUsuario", DatosSesion.id_usuario)));
         }
 
       /*  private void Form1_Load(object sender, EventArgs e) {
