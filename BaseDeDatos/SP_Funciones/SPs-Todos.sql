@@ -793,7 +793,7 @@ CREATE PROCEDURE [LOOPP].[SP_FiltrarEmpresas]
 	@email nvarchar(50)
 AS
 BEGIN
-	SELECT E.razon_social, E.cuit, E.mail, E.telefono, E.direccion_calle, E.direccion_nro, E.ciudad, E.baja_logica
+	SELECT E.id_empresa, E.razon_social, E.cuit, E.mail, E.telefono, E.direccion_calle, E.direccion_nro, E.ciudad, E.baja_logica
 	FROM [LOOPP].Empresas as E
 	WHERE (E.cuit = @cuit OR @cuit IS NULL OR @cuit = '')
 	AND (E.razon_social LIKE '%'+@razon_soc+'%' OR @razon_soc IS NULL OR @razon_soc = '')
