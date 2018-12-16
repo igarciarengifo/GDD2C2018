@@ -439,25 +439,18 @@ GO
 CREATE PROCEDURE LOOPP.SP_EsPrimerLogueo (@id_user int)
 as
 begin
-DECLARE @cuitCuil nvarchar(15), @nombre nvarchar(255), @pass varchar(255), @result bit
-	SELECT @pass=password
+DECLARE @result bit, @esPrimerLogin bit
+	
+	SELECT @esPrimerLogin=primerLoginAuto
 	FROM LOOPP.Usuarios
 	WHERE id_usuario=@id_user
 
-	SELECT @cuitCuil=cuil, @nombre=nombre
-	FROM LOOPP.Clientes
-	WHERE id_usuario=@id_user
-
-	SELECT @cuitCuil=cuit, @nombre=razon_social
-	FROM LOOPP.Empresas
-	WHERE id_usuario=@id_user
+	if ( @esPrimerLogin='True')
 	
-	if ( (@cuitCuil + '!' + @nombre) = @pass)
-	
-		set @result='true'
+		set @result='True'
 	
 	else
-		set @result='false'
+		set @result='False'
 	select @result
 End
 GO
@@ -1352,9 +1345,23 @@ CREATE PROCEDURE LOOPP.SP_CambiarPassword
 	
 AS
 BEGIN
-	UPDATE LOOPP.Usuarios
-	SET password=@newPass
-	WHERE id_usuario=@id_usuario
+	declare @esPrimerLogueo bit
+	SELECT @esPrimerLogueo=primerLoginAuto
+	FROM LOOPP.Usuarios
+	WHERE id_usuario = @id_usuario
+	if (@esPrimerLogueo='True')
+		begin
+			UPDATE LOOPP.Usuarios 
+				SET password=@newPass,
+					primerLoginAuto='False'
+				WHERE id_usuario=@id_usuario
+		end
+	else
+		begin
+			UPDATE LOOPP.Usuarios
+			SET password=@newPass
+			WHERE id_usuario=@id_usuario
+	end
 END
 GO
 

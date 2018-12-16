@@ -47,7 +47,12 @@ namespace PalcoNet.Formularios
             if (DatosSesion.sesion_iniciada)
             {
                 menuStrip1.Visible = true;
+                this.actualizarStatusLabel();
                 this.habilitar_func_x_rol();
+            }
+            else { 
+                this.Dispose();
+                this.Close();
             }
         }
 
@@ -118,6 +123,7 @@ namespace PalcoNet.Formularios
             ToolStripItem menu_historial_puntos = menuStrip1.Items.Find("puntosToolStripMenuItem", true)[0];
             menu_historial_puntos.Visible = f.Any(func => func.nombre.Equals("Canjear Puntos"));
 
+            this.Visible = true;
         }
 
         private void MenuPrincipalForm_Load(object sender, EventArgs e)
@@ -166,10 +172,9 @@ namespace PalcoNet.Formularios
         private void cerrarSesionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DatosSesion.cerrar_sesion();
+            this.Visible = false;
             iniciar_sesion();
-            this.WindowState = FormWindowState.Minimized;
-            this.ShowInTaskbar = false;
-            
+           
         }
 
         private void historialPuntosToolStripMenuItem_Click(object sender, EventArgs e)
