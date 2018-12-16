@@ -144,6 +144,7 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
                 {
                     MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ".\n El usuario es: " + nuevaEmpresa.cuit, "Operacion correcta");
                     passToHash = arrayResultado.ElementAt(1);
+                    this.DialogResult = DialogResult.OK;
                 }
                 else {
                     passToHash = pass;
