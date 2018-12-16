@@ -28,16 +28,7 @@ namespace PalcoNet.Formularios.EditarPublicacion
         public EditarPublicacionForm()
         {
             InitializeComponent();
-            this.cargarOpciones();
-            descripcionBox.Text = publicacionSeleccionada.descripcion;
-            gradosPublicacionBox.SelectedValue = publicacionSeleccionada.id_grado_publicacion;
-            rubroBox.SelectedValue = publicacionSeleccionada.id_rubro;
-            estadoBox.SelectedValue = publicacionSeleccionada.id_estado_publicacion;
-            direccionBox.Text = publicacionSeleccionada.direccion;
-            priceBox.Text = publicacionSeleccionada.precio_base.ToString();
-            horariosListBox.SelectedItem = publicacionSeleccionada.hora_espectaculo;
-            this.checkUbicaciones(this.getUbicacionesDeEspectaculo(publicacionSeleccionada.id_espectaculo));
-            fechaEspectaculoPicker.Value = publicacionModificada.fecha_espectaculo;
+           
         }
 
 
@@ -73,6 +64,16 @@ namespace PalcoNet.Formularios.EditarPublicacion
         {
             InitializeComponent();
             this.publicacionSeleccionada = publicacionSeleccionada;
+            this.cargarOpciones();
+            descripcionBox.Text = publicacionSeleccionada.descripcion;
+            gradosPublicacionBox.SelectedValue = publicacionSeleccionada.id_grado_publicacion;
+            rubroBox.SelectedValue = publicacionSeleccionada.id_rubro;
+            estadoBox.SelectedValue = publicacionSeleccionada.id_estado_publicacion;
+            direccionBox.Text = publicacionSeleccionada.direccion;
+            priceBox.Text = publicacionSeleccionada.precio_base.ToString();
+            horariosListBox.SelectedItem = publicacionSeleccionada.hora_espectaculo;
+            this.checkUbicaciones(this.getUbicacionesDeEspectaculo(publicacionSeleccionada.id_espectaculo));
+            fechaEspectaculoPicker.Value = publicacionModificada.fecha_espectaculo;
         }
 
         private void cancelarBtn_Click(object sender, EventArgs e)

@@ -366,6 +366,7 @@
             this.Controls.Add(this.descripcionBox);
             this.Controls.Add(this.label1);
             this.Name = "EditarPublicacionForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Edición de Espectáculo - PalcoNet";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

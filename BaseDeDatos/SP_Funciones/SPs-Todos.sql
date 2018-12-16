@@ -16,7 +16,7 @@ AS
 Begin
 	DECLARE @id int, @nuevoUser varchar(255), @pass varchar(255)
 	SET @nuevoUser = @cuitCuil
-	SET @pass = @cuitCuil + '!' + @nombre
+	SET @pass = '1234'
 	INSERT INTO LOOPP.Usuarios (username, password,primerLoginAuto)
 	VALUES (@nuevoUser,@pass, 'True')
 	SELECT @id=SCOPE_IDENTITY() 
@@ -1530,3 +1530,4 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarPublicacion]
 
 	END CATCH;
 	SELECT @resultado
+GO
