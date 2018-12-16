@@ -156,7 +156,7 @@ Print '***Inicio de creacion de tablas***'
 		id_rubro int not null,
 		fecha_publicacion datetime NOT NULL,
 		descripcion nvarchar(255) NOT NULL,
-		direccion nvarchar(50) NULL,
+		direccion nvarchar(50) NULL DEFAULT ('No definido'),
 		id_estado_publicacion int not null,
 		id_grado_publicacion int not null,
 		precio_base numeric(18,2) NOT null DEFAULT(0.00),
