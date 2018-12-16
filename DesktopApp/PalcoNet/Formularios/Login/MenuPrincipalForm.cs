@@ -7,8 +7,8 @@ using PalcoNet.Formularios.ListadoEstadistico;
 using PalcoNet.Formularios.HistorialCliente;
 using PalcoNet.Formularios.GenerarRendicionComisiones;
 using PalcoNet.Formularios.AbmGrado;
-//using PalcoNet.Formularios.AbmRol;
-//using PalcoNet.Formularios.Comprar;
+using PalcoNet.Formularios.AbmRol;
+using PalcoNet.Formularios.Comprar;
 using PalcoNet.Login;
 using System;
 using System.Collections.Generic;
@@ -86,7 +86,7 @@ namespace PalcoNet.Formularios
                 flpCentral.Controls.Add(editCompBtn);
             }
 
-            if (f.Any(func => func.nombre.Equals("Historal Cliente")))
+            if (f.Any(func => func.nombre.Equals("Historial Cliente")))
             {
                 historialClienteBtn.Visible = true;
                 flpCentral.Controls.Add(historialClienteBtn);
@@ -222,18 +222,23 @@ namespace PalcoNet.Formularios
         }
 
         private void consultarRolesToolStripMenuItem_Click(object sender, EventArgs e) {
-            //ConsultaRolesForm consultaRolesForm = new ConsultaRolesForm();
-            //consultaRolesForm.ShowDialog();
+            ConsultaRolesForm consultaRolesForm = new ConsultaRolesForm();
+            consultaRolesForm.ShowDialog();
         }
 
         private void nuevoRolToolStripMenuItem_Click(object sender, EventArgs e) {
-            //AltaRolForm altaRolForm = new AltaRolForm();
-            //altaRolForm.ShowDialog();
+            AltaRolForm altaRolForm = new AltaRolForm();
+            altaRolForm.ShowDialog();
         }
 
         private void nuevoToolStripMenuItem_Click(object sender, EventArgs e){
             AltaGradoForm altaGradoForm = new AltaGradoForm();
             altaGradoForm.ShowDialog();
+        }
+
+        private void comprarBtn_Click(object sender, EventArgs e) {
+            ComprarEntradaForm comprarForm = new ComprarEntradaForm();
+            comprarForm.ShowDialog();
         }
 
       

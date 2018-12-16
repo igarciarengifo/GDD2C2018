@@ -107,6 +107,24 @@
     <Compile Include="Formularios\AbmGrado\EditarGradoForm.Designer.cs">
       <DependentUpon>EditarGradoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\AbmRol\AltaRolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\AbmRol\AltaRolForm.Designer.cs">
+      <DependentUpon>AltaRolForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\AbmRol\ConsultaRolesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\AbmRol\ConsultaRolesForm.Designer.cs">
+      <DependentUpon>ConsultaRolesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\AbmRol\EditarRolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\AbmRol\EditarRolForm.Designer.cs">
+      <DependentUpon>EditarRolForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\ABMUsuario\AltaUsuarioForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -124,6 +142,18 @@
     </Compile>
     <Compile Include="Formularios\CanjePuntos\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Comprar\ComprarEntradaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Comprar\ComprarEntradaForm.Designer.cs">
+      <DependentUpon>ComprarEntradaForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Comprar\SeleccionUbicacionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Comprar\SeleccionUbicacionForm.Designer.cs">
+      <DependentUpon>SeleccionUbicacionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\EditarPublicacion\EditarPublicacionForm.cs">
       <SubType>Form</SubType>
@@ -218,11 +248,26 @@
     <EmbeddedResource Include="Formularios\AbmGrado\EditarGradoForm.resx">
       <DependentUpon>EditarGradoForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\AbmRol\AltaRolForm.resx">
+      <DependentUpon>AltaRolForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\AbmRol\ConsultaRolesForm.resx">
+      <DependentUpon>ConsultaRolesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\AbmRol\EditarRolForm.resx">
+      <DependentUpon>EditarRolForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\ABMUsuario\AltaUsuarioForm.resx">
       <DependentUpon>AltaUsuarioForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\ABMUsuario\CambiarPassForm.resx">
       <DependentUpon>CambiarPassForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Comprar\ComprarEntradaForm.resx">
+      <DependentUpon>ComprarEntradaForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Comprar\SeleccionUbicacionForm.resx">
+      <DependentUpon>SeleccionUbicacionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\EditarPublicacion\EditarPublicacionForm.resx">
       <DependentUpon>EditarPublicacionForm.cs</DependentUpon>

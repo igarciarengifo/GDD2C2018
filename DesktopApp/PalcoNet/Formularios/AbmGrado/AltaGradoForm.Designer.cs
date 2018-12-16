@@ -41,18 +41,18 @@
             this.lblDescripcion.AutoSize = true;
             this.lblDescripcion.Location = new System.Drawing.Point(47, 44);
             this.lblDescripcion.Name = "lblDescripcion";
-            this.lblDescripcion.Size = new System.Drawing.Size(146, 17);
+            this.lblDescripcion.Size = new System.Drawing.Size(151, 17);
             this.lblDescripcion.TabIndex = 0;
-            this.lblDescripcion.Text = "Descripción de Grado";
+            this.lblDescripcion.Text = "Descripción de Grado*";
             // 
             // lblComision
             // 
             this.lblComision.AutoSize = true;
             this.lblComision.Location = new System.Drawing.Point(47, 102);
             this.lblComision.Name = "lblComision";
-            this.lblComision.Size = new System.Drawing.Size(65, 17);
+            this.lblComision.Size = new System.Drawing.Size(70, 17);
             this.lblComision.TabIndex = 1;
-            this.lblComision.Text = "Comisión";
+            this.lblComision.Text = "Comisión*";
             // 
             // txtDescripcion
             // 
