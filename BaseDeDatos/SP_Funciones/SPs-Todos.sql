@@ -133,9 +133,9 @@ AS
 BEGIN
 	SELECT C.id_cliente, C.apellido, C.nombre, C.mail, C.tipo_documento, C.nro_documento, C.fecha_nacimiento, C.direccion_calle, C.direccion_nro, C.direccion_localidad, C.estado, C.baja_logica
 	FROM [LOOPP].Clientes as C
-	WHERE (C.nombre=@nombre OR @nombre IS NULL OR @nombre = '')
-	AND (C.apellido = @apellido OR @apellido IS NULL OR @apellido = '')
-	AND (C.mail = @email OR @email IS NULL OR @email = '')
+	WHERE (C.nombre LIKE '%'+@nombre+'%' OR @nombre IS NULL OR @nombre = '')
+	AND (C.apellido LIKE '%'+@apellido+'%' OR @apellido IS NULL OR @apellido = '')
+	AND (C.mail LIKE '%'+@email+'%' OR @email IS NULL OR @email = '')
 	AND (C.nro_documento = @nroDoc OR @nroDoc IS NULL OR @nroDoc=0)
 END
 GO
@@ -181,7 +181,7 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
    ,@idCliente int
   
   AS
-	declare @resultado varchar(255)
+	declare @resultado varchar(255), @iduser int
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
@@ -193,6 +193,9 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
 		BEGIN
 			RAISERROR('Ya se encuentra registrado un cliente con el mismo email',16,1)
 		END
+		select @iduser= id_usuario
+		from LOOPP.Clientes
+		where id_cliente=@idCliente
 
 		UPDATE LOOPP.Clientes
 		SET
@@ -214,6 +217,19 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
 			baja_logica=@baja_logica
 
 		WHERE id_cliente=@idCliente
+
+		if (@baja_logica ='True')
+			begin
+				UPDATE LOOPP.Usuarios
+					SET habilitado='False'
+					WHERE id_usuario= @idCliente
+			end
+		else
+			begin
+				UPDATE LOOPP.Usuarios
+						SET habilitado='True'
+						WHERE id_usuario= @idCliente
+			end
 
 	
 	COMMIT TRANSACTION [T]
@@ -780,8 +796,8 @@ BEGIN
 	SELECT E.razon_social, E.cuit, E.mail, E.telefono, E.direccion_calle, E.direccion_nro, E.ciudad, E.baja_logica
 	FROM [LOOPP].Empresas as E
 	WHERE (E.cuit = @cuit OR @cuit IS NULL OR @cuit = '')
-	AND (E.razon_social = @razon_soc OR @razon_soc IS NULL OR @razon_soc = '')
-	AND (E.mail = @email OR @email IS NULL OR @email = '')
+	AND (E.razon_social LIKE '%'+@razon_soc+'%' OR @razon_soc IS NULL OR @razon_soc = '')
+	AND (E.mail LIKE '%'+@email+'%' OR @email IS NULL OR @email = '')
 	
 END
 GO
@@ -1314,7 +1330,7 @@ CREATE PROCEDURE LOOPP.SP_NuevoIntentoFallido
 AS
 BEGIN
 	UPDATE LOOPP.Usuarios
-	SET loginFallidos= (loginFallidos + 1 )
+	SET loginFallidos= loginFallidos + 1 
 	WHERE id_usuario=@id_user
 END
 GO
@@ -1429,4 +1445,74 @@ END
 GO
 
 ---------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_GetUbicacionesEspectaculo') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetUbicacionesEspectaculo
+GO
 
+CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesEspectaculo] @id_espectaculo int
+AS
+BEGIN
+	select * from LOOPP.Ubicaciones u
+	inner join Ubicac_X_Espectaculo uxe on uxe.id_espectaculo=@id_espectaculo and uxe.id_ubicacion=u.id_ubicacion
+
+END
+
+GO
+
+-----------------------------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_ModificarPublicacion') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_ModificarPublicacion
+GO
+USE [GD2C2018]
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_ModificarPublicacion]
+	@descripcion nvarchar(255),
+	@direccion nvarchar(255)
+   ,@id_grado_publicacion int
+   ,@id_estado int
+   ,@rubro int
+   ,@precio_base numeric(18,0)
+   ,@fechaEspec date
+   ,@horaEspec varchar(255)
+   ,@id_espectaculo int
+  AS
+	declare @resultado varchar(255)
+	BEGIN TRANSACTION [T]
+
+	BEGIN TRY
+		IF EXISTS (
+			SELECT 1 
+			FROM LOOPP.Espectaculos  
+			WHERE descripcion=@descripcion and direccion=@direccion and id_espectaculo= @id_espectaculo and hora_espectaculo= CONVERT(time,@horaEspec) and fecha_espectaculo = @fechaEspec)
+		BEGIN
+			RAISERROR('Existe un mismo espectaculo con la misma fecha y hora. Ingrese otro horario y/o fecha ',16,1)
+		END
+
+		UPDATE LOOPP.Espectaculos
+		SET 
+			descripcion=@descripcion,
+			direccion=@direccion,
+			id_grado_publicacion=@id_grado_publicacion,
+			id_estado_publicacion=@id_estado,
+			id_rubro=@rubro,
+			precio_base=@precio_base,
+			fecha_espectaculo=@fechaEspec,
+			hora_espectaculo=@horaEspec
+		WHERE id_espectaculo=@id_espectaculo
+
+	
+	COMMIT TRANSACTION [T]
+
+	set @resultado = 'OK';
+
+	END TRY
+
+	BEGIN CATCH
+
+      ROLLBACK TRANSACTION [T]
+
+	  set @resultado = ERROR_MESSAGE();
+
+	END CATCH;
+	SELECT @resultado
