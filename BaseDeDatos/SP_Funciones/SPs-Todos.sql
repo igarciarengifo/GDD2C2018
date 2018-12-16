@@ -17,8 +17,8 @@ Begin
 	DECLARE @id int, @nuevoUser varchar(255), @pass varchar(255)
 	SET @nuevoUser = @cuitCuil
 	SET @pass = @cuitCuil + '!' + @nombre
-	INSERT INTO LOOPP.Usuarios (username, password)
-	VALUES (@nuevoUser,@pass)
+	INSERT INTO LOOPP.Usuarios (username, password,primerLoginAuto)
+	VALUES (@nuevoUser,@pass, 'True')
 	SELECT @id=SCOPE_IDENTITY() 
 	FROM [LOOPP].[Usuarios]	 
 	RETURN @id
@@ -76,7 +76,7 @@ AS
 		INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
 		VALUES (@idUsu,2);
 
-		if not exists (select 1 from [LOOPP].[Clientes] where tipo_documento=@tipo_doc and nro_documento=@documento and mail=@mail)
+		if not exists (select 1 from [LOOPP].[Clientes] where (tipo_documento=@tipo_doc and nro_documento=@documento) or mail=@mail)
 		begin
 			insert into [LOOPP].[Clientes] (
 					   [nombre]
@@ -414,7 +414,7 @@ BEGIN TRY
 	INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
 	VALUES (@idUsu,3);
 
-	if not exists (select 1 from [LOOPP].[Empresas] where cuit=@cuit and [mail]=@email and [razon_social]=@razon)
+	if not exists (select 1 from [LOOPP].[Empresas] where cuit=@cuit or [mail]=@email or [razon_social]=@razon)
 	begin
 		insert into [LOOPP].[Empresas](
 					[razon_social]
@@ -555,6 +555,10 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarEmpresa]
 		ELSE IF EXISTS (SELECT 1 FROM LOOPP.Empresas  WHERE mail = @email and id_empresa != @idEmpresa)
 		BEGIN
 			RAISERROR('Ya se encuentra registrado una empresa con el mismo email',16,1)
+		END
+		IF EXISTS (SELECT 1 FROM LOOPP.Empresas  WHERE razon_social=@razon and id_empresa != @idEmpresa)
+		BEGIN
+			RAISERROR('Ya se encuentra registrado una empresa con la misma razon social',16,1)
 		END
 
 		UPDATE LOOPP.Empresas
@@ -1395,11 +1399,11 @@ END
 
 
 ---------------------------------------------------------------------------------------
-IF OBJECT_ID('LOOPP.[SP_GetEspectaculoPorId]') IS NOT NULL
-    DROP PROCEDURE LOOPP.[SP_GetEspectaculoPorId]
+IF OBJECT_ID('LOOPP.[SP_GetEspectaculoFiltradoPorId]') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetEspectaculoFiltradoPorId
 GO
 
-CREATE PROCEDURE [LOOPP].[SP_GetEspectaculoPorId] @idEspectaculo int
+CREATE PROCEDURE [LOOPP].[SP_GetEspectaculoFiltradoPorId] @idEspectaculo int
 AS
 BEGIN
 	select [id_espectaculo],esp.[descripcion] as 'Descripcion' ,fecha_publicacion as 'Fecha de publicacion', direccion as 'Direccion', estP.descripcion as 'Estado Publicacion'
@@ -1408,3 +1412,18 @@ BEGIN
 	where id_espectaculo = @idEspectaculo
 	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion
 END
+
+-------------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.[SP_GetEspectaculoPorId]') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetEspectaculoPorId
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_GetEspectaculoPorId] @idEspectaculo int
+AS
+BEGIN
+	select * from LOOPP.Espectaculos
+	where id_espectaculo = @idEspectaculo
+END
+
+---------------------------------------------------------------------
+
