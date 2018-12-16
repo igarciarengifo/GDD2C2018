@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entidades\ListItem.cs" />
     <Compile Include="Entidades\Rubro.cs" />
     <Compile Include="Entidades\TiposDocumento.cs" />
     <Compile Include="Entidades\Tipo_Ubicacion.cs" />
