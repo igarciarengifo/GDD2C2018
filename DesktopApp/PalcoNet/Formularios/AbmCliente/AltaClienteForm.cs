@@ -28,7 +28,7 @@ namespace PalcoNet.Formularios.AbmCliente
                 lastNameBox.Text = cliente.apellido;
                 comboTipo.SelectedValue = cliente.tipo_documento;
                 documentoBox.Text = cliente.nro_documento.ToString();
-                cuilBox.Text = cuilBox.Text;
+                cuilBox.Text = cliente.cuil;
                 fechaNacBox.Value = cliente.fecha_nacimiento;
                 mailBox.Text = cliente.mail;
                 telBox.Text = cliente.telefono;
@@ -87,6 +87,7 @@ namespace PalcoNet.Formularios.AbmCliente
             clienteModificacion.nombre = nameBox.Text;
             clienteModificacion.apellido = lastNameBox.Text;
             clienteModificacion.tipo_documento = comboTipo.SelectedValue.ToString();
+            clienteModificacion.nro_documento = Int32.Parse(documentoBox.Text);
             clienteModificacion.cuil = cuilBox.Text;
             clienteModificacion.mail = mailBox.Text;
             clienteModificacion.fecha_nacimiento = fechaNacBox.Value;

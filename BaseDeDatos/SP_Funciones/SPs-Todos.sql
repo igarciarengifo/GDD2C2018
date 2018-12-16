@@ -222,13 +222,13 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
 			begin
 				UPDATE LOOPP.Usuarios
 					SET habilitado='False'
-					WHERE id_usuario= @idCliente
+					WHERE id_usuario= @iduser
 			end
 		else
 			begin
 				UPDATE LOOPP.Usuarios
 						SET habilitado='True'
-						WHERE id_usuario= @idCliente
+						WHERE id_usuario= @iduser
 			end
 
 	
@@ -560,7 +560,7 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarEmpresa]
    ,@codPostal varchar(50)
    ,@bajaLogica bit
   AS
-	declare @resultado varchar(255)
+	declare @resultado varchar(255), @idUser int
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
@@ -576,7 +576,9 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarEmpresa]
 		BEGIN
 			RAISERROR('Ya se encuentra registrado una empresa con la misma razon social',16,1)
 		END
-
+		select @iduser= id_usuario
+			from LOOPP.Empresas
+			where id_empresa=@idEmpresa
 		UPDATE LOOPP.Empresas
 		SET 
 			razon_social=@razon,
@@ -593,6 +595,18 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarEmpresa]
 			baja_logica=@bajaLogica
 		WHERE id_empresa=@idEmpresa
 
+		if (@bajaLogica ='True')
+			begin
+				UPDATE LOOPP.Usuarios
+					SET habilitado='False'
+					WHERE id_usuario= @idUser
+			end
+		else
+			begin
+				UPDATE LOOPP.Usuarios
+						SET habilitado='True'
+						WHERE id_usuario= @idUser
+			end
 	
 	COMMIT TRANSACTION [T]
 

@@ -12,7 +12,6 @@ namespace PalcoNet.Entidades
 
         public TiposDocumento()
         {
-            listTiposDocumentos.Add("");
             listTiposDocumentos.Add("DNI");
             listTiposDocumentos.Add("LE");
             listTiposDocumentos.Add("Pasaporte");

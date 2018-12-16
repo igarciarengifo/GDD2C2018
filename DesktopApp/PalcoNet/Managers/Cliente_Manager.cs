@@ -60,6 +60,10 @@ namespace PalcoNet.Managers
             Cliente cliente = new Cliente();
             cliente.id_cliente = int.Parse(row["id_cliente"].ToString());
             cliente.nombre = row["nombre"].ToString();
+            cliente.apellido = row["apellido"].ToString();
+            cliente.id_usuario = Int32.Parse(row["id_usuario"].ToString());
+            cliente.tipo_documento = row["tipo_documento"].ToString();
+            cliente.nro_documento = Int32.Parse(row["nro_documento"].ToString());
             cliente.mail = row["mail"].ToString();
             cliente.cuil = row["cuil"].ToString();
             cliente.fecha_nacimiento = (DateTime)row["fecha_nacimiento"];
