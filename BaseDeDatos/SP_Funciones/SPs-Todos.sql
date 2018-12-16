@@ -39,6 +39,7 @@ AS
 				SET @resultado = CONVERT(varchar(255), @idUsu)+';'+@cuil + '!' + @nombre
 			end
 		else
+			SET @resultado = ';'
 			begin
 				insert into [LOOPP].[Usuarios](
 							[username]
@@ -74,7 +75,8 @@ AS
 			values (@nombre,@apellido,@tipo_doc,@documento,@cuil,@fecha_nac,@mail,@telefono,@calle,@nroCalle,@piso,@depto,@localidad,@cod_postal,@idUsu)
 			SET @resultado = '-'
 		end
-		else set @resultado = 'El cliente ya existe en el sistema'
+		else 
+			RAISERROR('El cliente ya existe en el sistema',16,1)
 	
 	COMMIT TRANSACTION [T]
 
@@ -86,7 +88,7 @@ AS
 
       ROLLBACK TRANSACTION [T]
 
-	  set @resultado = ERROR_MESSAGE();
+	  set @resultado = ERROR_MESSAGE()+';;ERROR';
 
 	END CATCH;
 	select @resultado
