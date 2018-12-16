@@ -104,6 +104,7 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
             if (resultado.Equals("OK"))
             {
                 MessageBox.Show("Se realizaron los cambios correctamente.", "Operacion correcta");
+                this.DialogResult = DialogResult.OK;
                 this.Dispose();
                 this.Close();
             

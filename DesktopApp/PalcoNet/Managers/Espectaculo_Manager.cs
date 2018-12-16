@@ -74,24 +74,14 @@ namespace PalcoNet.Managers {
             }
         }
 
-        public List<Espectaculo> getPublicacionConId(int id_usuario)
+        public DataTable getPublicacionConId(int id_publicacion)
         {
-            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_AllEspectaculosPorIdUsuario",
-                                        SQLArgumentosManager.nuevoParametro("@idUsuario", id_usuario));
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetEspectaculoPorId",
+                                        SQLArgumentosManager.nuevoParametro("@idEspectaculo", id_publicacion));
 
-            List<Espectaculo> espectaculos = new List<Espectaculo>();
 
-            if (resultTable != null && resultTable.Rows != null)
-            {
 
-                foreach (DataRow row in resultTable.Rows)
-                {
-                    Espectaculo especItem = this.BuildEspectaculo(row);
-                    espectaculos.Add(especItem);
-                }
-            }
-
-            return espectaculos;
+            return resultTable;
         }
 
         private Espectaculo BuildEspectaculo(DataRow row)
@@ -135,6 +125,14 @@ namespace PalcoNet.Managers {
             }
 
             return horarios;
+        }
+
+        internal DataTable getEspectaculosPorUsuario(int idUsuario)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_AllEspectaculosPorIdUsuario",
+                                            SQLArgumentosManager.nuevoParametro("@idUsuario", idUsuario));
+                                            
+            return resultTable;
         }
     }
 }

@@ -19,6 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PalcoNet.Formularios.EditarPublicacion;
 
 namespace PalcoNet.Formularios
 {
@@ -201,7 +202,8 @@ namespace PalcoNet.Formularios
 
         private void editPubBtn_Click(object sender, EventArgs e)
         {
-
+            EditarPublicacionForm editarPublicacionForm = new EditarPublicacionForm();
+            editarPublicacionForm.ShowDialog();
         }
 
         private void historialClienteBtn_Click(object sender, EventArgs e) {

@@ -15,17 +15,12 @@ namespace PalcoNet.Formularios.EditarPublicacion
 {
     public partial class EditarPublicacionForm : Form
     {
-        List<Espectaculo> publicacionesEncontradas = new List<Espectaculo>();
+        DataTable publicacionesEncontradas;
         Espectaculo_Manager publicacionMng = new Espectaculo_Manager();
         public EditarPublicacionForm()
         {
             InitializeComponent();
             modificarPubli.Enabled = false;
-        }
-
-        private void EditarPublicacion_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -34,22 +29,22 @@ namespace PalcoNet.Formularios.EditarPublicacion
             {
                 if (String.IsNullOrEmpty(codPublicBox.Text))
                 {
-                    publicacionesEncontradas = publicacionMng.getEspectaculosPorEmpresa(DatosSesion.id_usuario);
+                    publicacionesEncontradas = publicacionMng.getEspectaculosPorUsuario(DatosSesion.id_usuario);
                 }
                 else
                 {
                     publicacionesEncontradas = publicacionMng.getPublicacionConId(Convert.ToInt32(codPublicBox.Text));
                 }
 
-                if (publicacionesEncontradas.Count == 0)
+                if (publicacionesEncontradas.Rows.Count == 0)
                 {
                     modificarPubli.Enabled = false;
                     throw new Exception("No existe espectaculo solicitado");
                 }
-
-                publicacionGridView.DataSource = publicacionesEncontradas;
-                modificarPubli.Enabled = true;
-               
+                else {
+                    publicacionGridView.DataSource = publicacionesEncontradas;
+                    modificarPubli.Enabled = true;
+                }
             }
             catch (Exception exc) {
                 MessageBox.Show(exc.Message);

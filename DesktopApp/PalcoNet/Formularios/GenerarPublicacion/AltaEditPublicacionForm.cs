@@ -251,7 +251,7 @@ namespace PalcoNet.Formularios.GenerarPublicacion
                 throw new Exception("Debe ingresarse una direccion");
             }
 
-            if (gradosPublicacionBox.SelectedItem == "No Definido")
+            if (gradosPublicacionBox.SelectedItem.Equals("No Definido"))
             {
                 throw new Exception("Debe indicar un grado de publicacion válido");
             }

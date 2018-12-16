@@ -166,6 +166,7 @@ namespace PalcoNet.Formularios.AbmCliente
                 }
                 String passHash = Encriptacion.getHashSha256(passToHash);
                 userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
+                this.DialogResult = DialogResult.OK;
             }
             else
             {
