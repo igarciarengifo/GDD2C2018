@@ -39,7 +39,6 @@ AS
 				SET @resultado = CONVERT(varchar(255), @idUsu)+';'+@cuil + '!' + @nombre
 			end
 		else
-			SET @resultado = ';'
 			begin
 				insert into [LOOPP].[Usuarios](
 							[username]
@@ -50,6 +49,7 @@ AS
 				select @idUsu=[id_usuario]
 				from [LOOPP].[Usuarios]
 				where [username]=@user;
+				SET @resultado = CONVERT(varchar(255), @idUsu)+';'
 		end
 		INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
 		VALUES (@idUsu,2);
