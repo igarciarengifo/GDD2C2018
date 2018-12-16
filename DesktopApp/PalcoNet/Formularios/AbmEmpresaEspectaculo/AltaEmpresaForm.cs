@@ -151,10 +151,8 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
                     passToHash = pass;
                 }
                 String passHash = Encriptacion.getHashSha256(passToHash);
-                userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0))); 
-                this.Dispose();
+                userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
                 this.Close();
-            
             }
             else
             {

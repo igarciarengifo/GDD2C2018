@@ -2,6 +2,28 @@
 /*										CREACION DE SPs y FN												*/
 /*##########################################################################################################*/
 
+
+-------------------------------------------------------------------
+
+/*LOOPP.SP_AltaUsuario_Autogenerado*/
+
+IF OBJECT_ID('LOOPP.SP_AltaUsuario_Autogenerado') IS NOT NULL
+	DROP PROCEDURE [LOOPP].[SP_AltaUsuario_Autogenerado];
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_AltaUsuario_Autogenerado] ( @cuitCuil nvarchar(15), @nombre nvarchar(255))
+AS
+Begin
+	DECLARE @id int, @nuevoUser varchar(255), @pass varchar(255)
+	SET @nuevoUser = @cuitCuil
+	SET @pass = @cuitCuil + '!' + @nombre
+	INSERT INTO LOOPP.Usuarios (username, password)
+	VALUES (@nuevoUser,@pass)
+	SELECT @id=SCOPE_IDENTITY() 
+	FROM [LOOPP].[Usuarios]	 
+	RETURN @id
+End
+GO
 /* LOOPP.SP_NuevoCliente */
 
 IF OBJECT_ID('LOOPP.SP_NuevoCliente') IS NOT NULL
@@ -73,7 +95,6 @@ AS
 					  ,[codigo_postal]
 					  ,[id_usuario] )
 			values (@nombre,@apellido,@tipo_doc,@documento,@cuil,@fecha_nac,@mail,@telefono,@calle,@nroCalle,@piso,@depto,@localidad,@cod_postal,@idUsu)
-			SET @resultado = '-'
 		end
 		else 
 			RAISERROR('El cliente ya existe en el sistema',16,1)
@@ -704,27 +725,7 @@ AS
 	select @resultado;
 
 GO
--------------------------------------------------------------------
 
-/*LOOPP.SP_AltaUsuario_Autogenerado*/
-
-IF OBJECT_ID('LOOPP.SP_AltaUsuario_Autogenerado') IS NOT NULL
-	DROP PROCEDURE [LOOPP].[SP_AltaUsuario_Autogenerado];
-GO
-
-CREATE PROCEDURE [LOOPP].[SP_AltaUsuario_Autogenerado] ( @cuitCuil nvarchar(15), @nombre nvarchar(255))
-AS
-Begin
-	DECLARE @id int, @nuevoUser varchar(255), @pass varchar(255)
-	SET @nuevoUser = @cuitCuil
-	SET @pass = @cuitCuil + '!' + @nombre
-	INSERT INTO LOOPP.Usuarios (username, password)
-	VALUES (@nuevoUser,@pass)
-	SELECT @id=SCOPE_IDENTITY() 
-	FROM [LOOPP].[Usuarios]	 
-	RETURN @id
-End
-GO
 -----------------------------------------------------------------------
 /*LOOPP.SP_DevuelveItemsPorIdFactura*/
 
@@ -1376,3 +1377,17 @@ AS
 	SELECT *
 	 from LOOPP.Tipo_Ubicacion
 GO
+--------------------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.[SP_AllEspectaculosPorIdUsuario]') IS NOT NULL
+    DROP PROCEDURE LOOPP.[SP_AllEspectaculosPorIdUsuario]
+GO
+CREATE PROCEDURE [LOOPP].[SP_AllEspectaculosPorIdUsuario] @idUsuario int
+AS
+BEGIN
+	select [id_espectaculo],esp.[descripcion] as 'Descripcion' ,fecha_publicacion as 'Fecha de publicacion', direccion as 'Direccion', estP.descripcion as 'Estado Publicacion'
+	from Espectaculos esp
+	inner join LOOPP.Estados_Publicacion estP on estP.id_estado_publicacion=esp.id_estado_publicacion
+	where esp.id_usuario_responsable=@idUsuario
+	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion
+	
+END
