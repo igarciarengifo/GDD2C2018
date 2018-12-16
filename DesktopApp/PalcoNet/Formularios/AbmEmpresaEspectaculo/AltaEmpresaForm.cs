@@ -145,13 +145,13 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
                 {
                     MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ".\n El usuario es: " + nuevaEmpresa.cuit, "Operacion correcta");
                     passToHash = arrayResultado.ElementAt(1);
-                    this.DialogResult = DialogResult.OK;
                 }
                 else {
                     passToHash = pass;
                 }
                 String passHash = Encriptacion.getHashSha256(passToHash);
                 userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else

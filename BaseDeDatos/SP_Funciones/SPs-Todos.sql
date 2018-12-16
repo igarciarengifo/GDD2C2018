@@ -1391,3 +1391,20 @@ BEGIN
 	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion
 	
 END
+
+
+
+---------------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.[SP_GetEspectaculoPorId]') IS NOT NULL
+    DROP PROCEDURE LOOPP.[SP_GetEspectaculoPorId]
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_GetEspectaculoPorId] @idEspectaculo int
+AS
+BEGIN
+	select [id_espectaculo],esp.[descripcion] as 'Descripcion' ,fecha_publicacion as 'Fecha de publicacion', direccion as 'Direccion', estP.descripcion as 'Estado Publicacion'
+	from Espectaculos esp
+	inner join LOOPP.Estados_Publicacion estP on estP.id_estado_publicacion=esp.id_estado_publicacion
+	where id_espectaculo = @idEspectaculo
+	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion
+END

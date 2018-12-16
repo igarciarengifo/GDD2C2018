@@ -46,37 +46,28 @@ namespace PalcoNet.Formularios.ABMUsuario
                 {
                     var nuevaEntidadForm = new AltaClienteForm(userBox.Text, passBox.Text);
 
-                    if (nuevaEntidadForm.ShowDialog(this) == DialogResult.OK)
-                    {
-                        MessageBox.Show(nuevaEntidadForm.getResultado());
-                    }
-                    else
-                    {
-                        throw new Exception("Operacion cancelada");
-                    }
+                    if (nuevaEntidadForm.ShowDialog(this) != DialogResult.OK)
+                   
+                        {
+                            throw new Exception("Operacion cancelada");
+                        }
                 }
                 else
                 {
                     var nuevaEntidadForm = new AltaEmpresaForm(userBox.Text, passBox.Text);
-                    if (nuevaEntidadForm.ShowDialog(this) == DialogResult.OK)
-                    {
-                        MessageBox.Show(nuevaEntidadForm.getResultado());
-                    }
-                    else
+                    if (nuevaEntidadForm.ShowDialog(this) != DialogResult.OK)
                     {
                         throw new Exception("Operacion cancelada");
                     }
                 }
+
+                this.Close();
 
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
 
-            }
-            finally {
-                this.Dispose();
-                this.Close();
             }
         }
 
