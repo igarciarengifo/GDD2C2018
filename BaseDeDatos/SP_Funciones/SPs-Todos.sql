@@ -1396,10 +1396,10 @@ BEGIN
 	
 END
 
-
+GO
 
 ---------------------------------------------------------------------------------------
-IF OBJECT_ID('LOOPP.[SP_GetEspectaculoFiltradoPorId]') IS NOT NULL
+IF OBJECT_ID('LOOPP.SP_GetEspectaculoFiltradoPorId') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_GetEspectaculoFiltradoPorId
 GO
 
@@ -1413,8 +1413,9 @@ BEGIN
 	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion
 END
 
+GO
 -------------------------------------------------------------------------------------
-IF OBJECT_ID('LOOPP.[SP_GetEspectaculoPorId]') IS NOT NULL
+IF OBJECT_ID('LOOPP.SP_GetEspectaculoPorId') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_GetEspectaculoPorId
 GO
 
@@ -1424,6 +1425,8 @@ BEGIN
 	select * from LOOPP.Espectaculos
 	where id_espectaculo = @idEspectaculo
 END
+
+GO
 
 ---------------------------------------------------------------------
 
