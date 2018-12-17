@@ -53,10 +53,11 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
 
         private void newEmpresaBtn_Click(object sender, EventArgs e)
         {
-            this.Dispose();
-            this.Close();
+            
             AltaEmpresaForm altaEmpresa = new AltaEmpresaForm(new Empresa());
             altaEmpresa.Show();
+            this.Dispose();
+            this.Close();
         }
 
         private void updateBox_Click(object sender, EventArgs e)

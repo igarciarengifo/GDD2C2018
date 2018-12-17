@@ -58,7 +58,7 @@ AS
 		if ( @user is null)
 			begin
 				EXEC @idUsu =  LOOPP.SP_AltaUsuario_Autogenerado @cuil, @nombre
-				SET @resultado = CONVERT(varchar(255), @idUsu)+';'+@cuil + '!' + @nombre
+				SET @resultado = CONVERT(varchar(255), @idUsu)+';1234'
 			end
 		else
 			begin
@@ -181,7 +181,7 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
    ,@idCliente int
   
   AS
-	declare @resultado varchar(255), @iduser int
+	declare @resultado varchar(255), @iduser int, @estado nvarchar(50)
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
@@ -193,10 +193,12 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
 		BEGIN
 			RAISERROR('Ya se encuentra registrado un cliente con el mismo email',16,1)
 		END
-		select @iduser= id_usuario
+		select @iduser= id_usuario, @estado=estado
 		from LOOPP.Clientes
 		where id_cliente=@idCliente
-
+		if (@estado = 'Inconsistente')
+			 SET @estado = 'Habilitado'
+	
 		UPDATE LOOPP.Clientes
 		SET
 			nombre=@nombre,
@@ -214,9 +216,10 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
 			direccion_localidad=@localidad,
 			
 			codigo_postal=@cod_postal,
-			baja_logica=@baja_logica
-
+			baja_logica=@baja_logica,
+			estado=@estado
 		WHERE id_cliente=@idCliente
+	
 
 		if (@baja_logica ='True')
 			begin
@@ -230,6 +233,7 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
 						SET habilitado='True'
 						WHERE id_usuario= @iduser
 			end
+		
 
 	
 	COMMIT TRANSACTION [T]
@@ -246,6 +250,7 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
 
 	END CATCH;
 	SELECT @resultado
+	
 GO
 
 -----------------------------------------------------------------------
@@ -412,7 +417,7 @@ BEGIN TRY
 	if ( @user is null)
 		begin
 			EXEC @idUsu =  LOOPP.SP_AltaUsuario_Autogenerado @cuit, @razon
-			SET @resultado = CONVERT(varchar(255), @idUsu)+';'+@cuit + '!' + @razon
+			SET @resultado = CONVERT(varchar(255), @idUsu)+';1234'
 		end
 	else
 		begin
@@ -1532,4 +1537,19 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarPublicacion]
 
 	END CATCH;
 	SELECT @resultado
+GO
+
+---------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_BloquearUsuario') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_BloquearUsuario
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_BloquearUsuario] @id_usuario int
+AS
+BEGIN
+	UPDATE LOOPP.Usuarios
+	SET habilitado='False'
+	where id_usuario=@id_usuario
+END
+
 GO

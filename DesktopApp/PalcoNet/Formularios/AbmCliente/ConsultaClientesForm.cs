@@ -61,10 +61,11 @@ namespace PalcoNet.Formularios.AbmCliente
 
         private void newBtn_Click(object sender, EventArgs e)
         {
-            this.Dispose();
-            this.Close();
+          
             AltaClienteForm altaCliente = new AltaClienteForm(new Cliente());
             altaCliente.Show();
+            this.Dispose();
+            this.Close();
         }
 
         private void updateBtn_Click(object sender, EventArgs e)

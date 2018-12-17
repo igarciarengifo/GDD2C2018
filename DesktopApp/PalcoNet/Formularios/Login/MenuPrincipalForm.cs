@@ -51,10 +51,16 @@ namespace PalcoNet.Formularios
                 this.actualizarStatusLabel();
                 this.habilitar_func_x_rol();
             }
-            else { 
-                this.Dispose();
-                this.Close();
+            else {
+
+                //Si ya cargue el formulario, verifico que si no se inicio sesion, cierro la ventana ya que se cerró el login
+                if (this.WindowState == FormWindowState.Maximized)
+                {
+                    this.Close();
+                }
             }
+            
+           
         }
 
         private void habilitar_func_x_rol()
@@ -136,6 +142,10 @@ namespace PalcoNet.Formularios
          
             this.WindowState = FormWindowState.Maximized;
             this.actualizarStatusLabel();
+            if (!(DatosSesion.sesion_iniciada)) {
+                this.Close();
+            }
+            
         }
 
         private void actualizarStatusLabel()

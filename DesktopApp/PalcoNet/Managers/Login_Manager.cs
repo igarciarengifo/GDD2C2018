@@ -27,16 +27,20 @@ namespace PalcoNet.Managers
                 if (usuarioLogin.password.Equals(passHash))
                 {
                     id_usuario = usuarioLogin.id_usuario;
-                    if (usuario_Mgr.hasInvalidData(id_usuario)) {
+                    Boolean esUsuarioInconsistente = usuario_Mgr.hasInvalidData(id_usuario);
+                    if (esUsuarioInconsistente) {
                         throw new Exception("El usuario tiene datos personales inconsistentes. Contacte con el administrador para realizar los cambios.");
                     }
                     usuario_Mgr.reiniciarIntentos(usuarioLogin.id_usuario);
                 }
                 else {
                     usuario_Mgr.agregarIntentoFallido(usuarioLogin.id_usuario);
-                    if (usuarioLogin.loginFallidos == 2)
+                    if ((usuarioLogin.loginFallidos + 1)>= 3)
                     {
-                        throw new System.ArgumentException("Se superaron los intentos para iniciar sesion. Usuario bloqueado. Contacte con su Administrador para desbloquear la cuenta");
+                        if (this.bloquearUsuario(usuarioLogin.id_usuario) > 0)
+                        {
+                            throw new System.ArgumentException("Se superaron los intentos para iniciar sesion. Usuario bloqueado. Contacte con su Administrador para desbloquear la cuenta");
+                        }
                     }
                     else {
                         throw new System.ArgumentException("Contraseña incorrecta. Reingrese contraseña");
@@ -48,6 +52,12 @@ namespace PalcoNet.Managers
             }
 
             return id_usuario;
+        }
+
+        private int bloquearUsuario(int id_usuario)
+        {
+            return (SQLManager.ejecutarNonQuery("LOOPP.SP_BloquearUsuario",
+                                SQLArgumentosManager.nuevoParametro("@id_usuario", id_usuario)));
         }
 
         public Boolean esPrimerLogueo(int id_usuario)
