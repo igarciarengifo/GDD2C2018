@@ -10,10 +10,26 @@ namespace PalcoNet.Managers
 {
     public class Grados_Publicacion_Manager
     {
-
+        
         public List<Grado_Publicacion> getAllGradosPublicacion()
         {
             DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetAllGradosPublicacion");
+            List<Grado_Publicacion> lista_grados = new List<Grado_Publicacion>();
+            if (resultTable != null && resultTable.Rows != null)
+            {
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    var grado = BuildGradoPublicacion(row);
+                    lista_grados.Add(grado);
+                }
+            }
+
+            return lista_grados;
+        }
+
+        public List<Grado_Publicacion> getAllGradosPublicacionActivos()
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetAllGradosActivos");
             List<Grado_Publicacion> lista_grados = new List<Grado_Publicacion>();
             if (resultTable != null && resultTable.Rows != null)
             {
