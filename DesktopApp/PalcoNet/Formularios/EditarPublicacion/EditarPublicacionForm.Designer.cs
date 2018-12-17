@@ -178,6 +178,7 @@
             this.todasUbiBtn.TabIndex = 52;
             this.todasUbiBtn.Text = "Todas las ubicaciones";
             this.todasUbiBtn.UseVisualStyleBackColor = true;
+            this.todasUbiBtn.Click += new System.EventHandler(this.todasUbiBtn_Click_1);
             // 
             // cabeceraBtn
             // 
@@ -187,6 +188,7 @@
             this.cabeceraBtn.TabIndex = 51;
             this.cabeceraBtn.Text = "Cabecera";
             this.cabeceraBtn.UseVisualStyleBackColor = true;
+            this.cabeceraBtn.Click += new System.EventHandler(this.cabeceraBtn_Click_1);
             // 
             // campoBtn
             // 
@@ -196,6 +198,7 @@
             this.campoBtn.TabIndex = 50;
             this.campoBtn.Text = "Campo";
             this.campoBtn.UseVisualStyleBackColor = true;
+            this.campoBtn.Click += new System.EventHandler(this.campoBtn_Click_1);
             // 
             // superPullBtn
             // 
@@ -205,6 +208,7 @@
             this.superPullBtn.TabIndex = 49;
             this.superPullBtn.Text = "Super PullMan";
             this.superPullBtn.UseVisualStyleBackColor = true;
+            this.superPullBtn.Click += new System.EventHandler(this.superPullBtn_Click_1);
             // 
             // pullmanBtn
             // 
@@ -214,6 +218,7 @@
             this.pullmanBtn.TabIndex = 48;
             this.pullmanBtn.Text = "PullMan";
             this.pullmanBtn.UseVisualStyleBackColor = true;
+            this.pullmanBtn.Click += new System.EventHandler(this.pullmanBtn_Click_1);
             // 
             // campoVipBtn
             // 
@@ -223,6 +228,7 @@
             this.campoVipBtn.TabIndex = 47;
             this.campoVipBtn.Text = "Campo Vip";
             this.campoVipBtn.UseVisualStyleBackColor = true;
+            this.campoVipBtn.Click += new System.EventHandler(this.campoVipBtn_Click_1);
             // 
             // vipBtn
             // 
@@ -232,6 +238,7 @@
             this.vipBtn.TabIndex = 46;
             this.vipBtn.Text = "Vip";
             this.vipBtn.UseVisualStyleBackColor = true;
+            this.vipBtn.Click += new System.EventHandler(this.vipBtn_Click_1);
             // 
             // plateaBajaBtn
             // 
@@ -241,6 +248,7 @@
             this.plateaBajaBtn.TabIndex = 45;
             this.plateaBajaBtn.Text = "Platea Baja";
             this.plateaBajaBtn.UseVisualStyleBackColor = true;
+            this.plateaBajaBtn.Click += new System.EventHandler(this.plateaBajaBtn_Click_1);
             // 
             // plateaAltaBtn
             // 
@@ -250,6 +258,7 @@
             this.plateaAltaBtn.TabIndex = 44;
             this.plateaAltaBtn.Text = "Platea Alta";
             this.plateaAltaBtn.UseVisualStyleBackColor = true;
+            this.plateaAltaBtn.Click += new System.EventHandler(this.plateaAltaBtn_Click_1);
             // 
             // label7
             // 

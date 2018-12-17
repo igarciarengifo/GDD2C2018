@@ -63,7 +63,7 @@ namespace PalcoNet.Formularios.EditarPublicacion
                     foreach (DataGridViewRow row in publicacionGridView.SelectedRows)
                     {
                         Espectaculo publicacionSeleccionada = publicacionMng.getEspectaculoPorID(Int32.Parse(row.Cells[0].Value.ToString()));
-                        if (row.Cells[4].Value.ToString() != "Borrador")
+                        if (row.Cells[6].Value.ToString() != "Borrador")
                         {
                             throw new Exception("La publicacion no se encuentra en un estado correcto. Debe ser BORRADOR ");
                         }

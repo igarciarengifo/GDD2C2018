@@ -118,7 +118,7 @@ namespace PalcoNet.Managers {
             nuevoEspectaculo.id_espectaculo = Convert.ToInt32(row["id_espectaculo"]);
             nuevoEspectaculo.descripcion = Convert.ToString(row["descripcion"]);
             nuevoEspectaculo.direccion = Convert.ToString(row["direccion"]);
-            nuevoEspectaculo.hora_espectaculo = row["hora_espectaculo"].ToString();
+            nuevoEspectaculo.hora_espectaculo = TimeSpan.Parse(row["hora_espectaculo"].ToString()).ToString(@"hh\:mm");
             nuevoEspectaculo.fecha_publicacion = Convert.ToDateTime(row["fecha_publicacion"]);
             nuevoEspectaculo.id_estado_publicacion = Convert.ToInt32(row["id_estado_publicacion"]);
             nuevoEspectaculo.id_grado_publicacion = Convert.ToInt32(row["id_grado_publicacion"]);
@@ -180,7 +180,7 @@ namespace PalcoNet.Managers {
             return espectaculos.ElementAt(0);
         }
 
-        internal void modificarEspectaculo(Espectaculo publicacionModificada, Espectaculo publicacionSeleccionada, List<Ubicacion> ubicacionesActuales, List<string> descripcionUbicaciones)
+        internal void modificarEspectaculo(Espectaculo publicacionModificada, List<Ubicacion> ubicacionesActuales, List<string> descripcionUbicaciones)
         {
             string resultadoEspectaculo = SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_ModificarPublicacion",
                 SQLArgumentosManager.nuevoParametro("@descripcion", publicacionModificada.descripcion).
@@ -191,6 +191,7 @@ namespace PalcoNet.Managers {
                 .add("@precio_base", publicacionModificada.precio_base)
                 .add("@fechaEspec", publicacionModificada.fecha_espectaculo)
                 .add("@horaEspec", publicacionModificada.hora_espectaculo)
+
                 .add("@id_espectaculo", publicacionModificada.id_espectaculo));
             if (resultadoEspectaculo.Equals("OK")) {
                 foreach (String descripcionUbicacionConID in descripcionUbicaciones)

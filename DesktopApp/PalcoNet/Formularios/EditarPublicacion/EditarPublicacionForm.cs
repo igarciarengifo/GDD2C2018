@@ -36,7 +36,8 @@ namespace PalcoNet.Formularios.EditarPublicacion
         {
             for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
             {
-                if (ubicacionesEspectaculo.Any(ubicacion => (ubicacion.fila + ubicacion.asiento).Equals(ubicacionesListBox.Items[count].ToString())))
+                if (ubicacionesEspectaculo.Any(
+                    ubicacion =>(ubicacion.id_ubicacion.ToString()+'-'+ubicacion.descripcion).Equals(ubicacionesListBox.Items[count].ToString())))
                 {
                     ubicacionesListBox.SetItemChecked(count, true);
                 }
@@ -70,10 +71,17 @@ namespace PalcoNet.Formularios.EditarPublicacion
             rubroBox.SelectedValue = publicacionSeleccionada.id_rubro;
             estadoBox.SelectedValue = publicacionSeleccionada.id_estado_publicacion;
             direccionBox.Text = publicacionSeleccionada.direccion;
-            priceBox.Text = publicacionSeleccionada.precio_base.ToString();
+            priceBox.Text = publicacionSeleccionada.precio_base.ToString("0.00");
             horariosListBox.SelectedItem = publicacionSeleccionada.hora_espectaculo;
             this.checkUbicaciones(this.getUbicacionesDeEspectaculo(publicacionSeleccionada.id_espectaculo));
-            fechaEspectaculoPicker.Value = publicacionModificada.fecha_espectaculo;
+            if (fechaEspectaculoPicker.MinDate.CompareTo(publicacionSeleccionada.fecha_espectaculo) <= 0)
+            {
+                fechaEspectaculoPicker.Value = publicacionSeleccionada.fecha_espectaculo;
+            }
+            else {
+                fechaEspectaculoPicker.Value = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            }
+            
         }
 
         private void cancelarBtn_Click(object sender, EventArgs e)
@@ -119,182 +127,7 @@ namespace PalcoNet.Formularios.EditarPublicacion
             }
         }
 
-        private void plateaAltaBtn_Click(object sender, EventArgs e)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesListBox.Items[count].ToString().Contains("Platea Alta"))
-                {
-                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                    {
-                        ubicacionesListBox.SetItemChecked(count, false);
-                    }
-                    else
-                    {
-                        ubicacionesListBox.SetItemChecked(count, true);
-                    }
-
-                }
-            }
-        }
-
-        private void plateaBajaBtn_Click(object sender, EventArgs e)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesListBox.Items[count].ToString().Contains("Platea Baja"))
-                {
-                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                    {
-                        ubicacionesListBox.SetItemChecked(count, false);
-                    }
-                    else
-                    {
-                        ubicacionesListBox.SetItemChecked(count, true);
-                    }
-
-                }
-            }
-        }
-
-        private void vipBtn_Click(object sender, EventArgs e)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesListBox.Items[count].ToString().Contains("-Vip-"))
-                {
-                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                    {
-                        ubicacionesListBox.SetItemChecked(count, false);
-                    }
-                    else
-                    {
-                        ubicacionesListBox.SetItemChecked(count, true);
-                    }
-
-                }
-            }
-        }
-
-        private void campoBtn_Click(object sender, EventArgs e)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesListBox.Items[count].ToString().Contains("-Campo-"))
-                {
-                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                    {
-                        ubicacionesListBox.SetItemChecked(count, false);
-                    }
-                    else
-                    {
-                        ubicacionesListBox.SetItemChecked(count, true);
-                    }
-
-                }
-            }
-        }
-
-        private void campoVipBtn_Click(object sender, EventArgs e)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesListBox.Items[count].ToString().Contains("Campo Vip"))
-                {
-                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                    {
-                        ubicacionesListBox.SetItemChecked(count, false);
-                    }
-                    else
-                    {
-                        ubicacionesListBox.SetItemChecked(count, true);
-                    }
-
-                }
-            }
-        }
-
-        private void pullmanBtn_Click(object sender, EventArgs e)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesListBox.Items[count].ToString().Contains("-PullMan-"))
-                {
-                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                    {
-                        ubicacionesListBox.SetItemChecked(count, false);
-                    }
-                    else
-                    {
-                        ubicacionesListBox.SetItemChecked(count, true);
-                    }
-
-                }
-            }
-        }
-
-        private void superPullBtn_Click(object sender, EventArgs e)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesListBox.Items[count].ToString().Contains("Super PullMan"))
-                {
-                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                    {
-                        ubicacionesListBox.SetItemChecked(count, false);
-                    }
-                    else
-                    {
-                        ubicacionesListBox.SetItemChecked(count, true);
-                    }
-
-                }
-            }
-        }
-
-        private void cabeceraBtn_Click(object sender, EventArgs e)
-        {
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-                if (ubicacionesListBox.Items[count].ToString().Contains("Cabecera"))
-                {
-                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                    {
-                        ubicacionesListBox.SetItemChecked(count, false);
-                    }
-                    else
-                    {
-                        ubicacionesListBox.SetItemChecked(count, true);
-                    }
-
-                }
-            }
-        }
-
-        private void todasUbiBtn_Click(object sender, EventArgs e)
-        {
-
-            foreach (int i in ubicacionesListBox.CheckedIndices)
-            {
-                ubicacionesListBox.SetItemCheckState(i, CheckState.Unchecked);
-            }
-
-            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
-            {
-
-                if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
-                {
-                    ubicacionesListBox.SetItemChecked(count, false);
-                }
-                else
-                {
-                    ubicacionesListBox.SetItemChecked(count, true);
-                }
-
-
-            }
-        }
-
+       
         private void cargarUbicaciones()
         {
             Ubicaciones_Manager ubicacionMng = new Ubicaciones_Manager();
@@ -360,12 +193,188 @@ namespace PalcoNet.Formularios.EditarPublicacion
                 publicacionModificada.id_rubro = (int)rubroBox.SelectedValue;
                 publicacionModificada.hora_espectaculo = horariosListBox.SelectedItem.ToString();
                 publicacionModificada.fecha_espectaculo = fechaEspectaculoPicker.Value;
-                espectaculoMng.modificarEspectaculo(publicacionModificada, publicacionSeleccionada, ubicacionesActuales, ubicacionesListBox.CheckedItems.Cast<String>().ToList());
+                espectaculoMng.modificarEspectaculo(publicacionModificada, ubicacionesActuales, ubicacionesListBox.CheckedItems.Cast<String>().ToList());
                 MessageBox.Show("Se realizó correctamente la generación de la publicación");
 
             }
             catch (Exception exc) {
                 MessageBox.Show(exc.Message);
+            }
+        }
+
+        private void plateaAltaBtn_Click_1(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Platea Alta"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+
+        }
+
+        private void plateaBajaBtn_Click_1(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Platea Baja"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void vipBtn_Click_1(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("-Vip-"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void campoBtn_Click_1(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("-Campo-"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void campoVipBtn_Click_1(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Campo Vip"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void pullmanBtn_Click_1(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("-PullMan-"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void superPullBtn_Click_1(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Super PullMan"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void cabeceraBtn_Click_1(object sender, EventArgs e)
+        {
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+                if (ubicacionesListBox.Items[count].ToString().Contains("Cabecera"))
+                {
+                    if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                    {
+                        ubicacionesListBox.SetItemChecked(count, false);
+                    }
+                    else
+                    {
+                        ubicacionesListBox.SetItemChecked(count, true);
+                    }
+
+                }
+            }
+        }
+
+        private void todasUbiBtn_Click_1(object sender, EventArgs e)
+        {
+            foreach (int i in ubicacionesListBox.CheckedIndices)
+            {
+                ubicacionesListBox.SetItemCheckState(i, CheckState.Unchecked);
+            }
+
+            for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
+            {
+
+                if (ubicacionesListBox.CheckedItems.Contains(ubicacionesListBox.Items[count]))
+                {
+                    ubicacionesListBox.SetItemChecked(count, false);
+                }
+                else
+                {
+                    ubicacionesListBox.SetItemChecked(count, true);
+                }
+
+
             }
         }
     }

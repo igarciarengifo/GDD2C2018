@@ -1418,11 +1418,11 @@ GO
 CREATE PROCEDURE [LOOPP].[SP_AllEspectaculosPorIdUsuario] @idUsuario int
 AS
 BEGIN
-	select [id_espectaculo],esp.[descripcion] as 'Descripcion' ,fecha_publicacion as 'Fecha de publicacion', direccion as 'Direccion', estP.descripcion as 'Estado Publicacion'
+	select [id_espectaculo],esp.[descripcion] as 'Descripcion' ,fecha_publicacion as 'Fecha de publicacion', fecha_espectaculo as 'Fecha de espectaculo', hora_espectaculo as 'Horario de espectaculo', direccion as 'Direccion', estP.descripcion as 'Estado Publicacion'
 	from Espectaculos esp
 	inner join LOOPP.Estados_Publicacion estP on estP.id_estado_publicacion=esp.id_estado_publicacion
 	where esp.id_usuario_responsable=@idUsuario
-	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion
+	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion, fecha_espectaculo, hora_espectaculo
 	
 END
 
@@ -1436,11 +1436,11 @@ GO
 CREATE PROCEDURE [LOOPP].[SP_GetEspectaculoFiltradoPorId] @idEspectaculo int
 AS
 BEGIN
-	select [id_espectaculo],esp.[descripcion] as 'Descripcion' ,fecha_publicacion as 'Fecha de publicacion', direccion as 'Direccion', estP.descripcion as 'Estado Publicacion'
+	select [id_espectaculo],esp.[descripcion] as 'Descripcion' ,fecha_publicacion as 'Fecha de publicacion', fecha_espectaculo as 'Fecha de espectaculo', hora_espectaculo as 'Horario de espectaculo', direccion as 'Direccion', estP.descripcion as 'Estado Publicacion'
 	from Espectaculos esp
 	inner join LOOPP.Estados_Publicacion estP on estP.id_estado_publicacion=esp.id_estado_publicacion
 	where id_espectaculo = @idEspectaculo
-	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion
+	group by [id_espectaculo],esp.[descripcion], fecha_publicacion, direccion, estP.descripcion, fecha_espectaculo, hora_espectaculo
 END
 
 GO
@@ -1466,7 +1466,9 @@ GO
 CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesEspectaculo] @id_espectaculo int
 AS
 BEGIN
-	select * from LOOPP.Ubicaciones u
+	select u.id_ubicacion, T_U.descripcion + '-' +fila+LTRIM(RTRIM(STR(asiento))) as descripcion, fila, asiento, sin_numerar, u.id_tipo_ubicacion
+	from LOOPP.Ubicaciones u
+	INNER JOIN Tipo_Ubicacion T_U on T_U.id_tipo_ubicacion=U.id_tipo_ubicacion
 	inner join Ubicac_X_Espectaculo uxe on uxe.id_espectaculo=@id_espectaculo and uxe.id_ubicacion=u.id_ubicacion
 
 END
