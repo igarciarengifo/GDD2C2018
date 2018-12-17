@@ -24,7 +24,7 @@ namespace PalcoNet.Formularios.AbmGrado {
 
         public void cargar_datos() {
             List<Grado_Publicacion> grados = new List<Grado_Publicacion>();
-            grados = gradoMngr.getAllGradosPublicacion();
+            grados = gradoMngr.getAllGradosPublicacionActivos();
 
             if (grados.Count > 0) {
                 dataGridView1.DataSource = grados;
@@ -70,8 +70,9 @@ namespace PalcoNet.Formularios.AbmGrado {
 
                 if (salida.Equals("OK")) {
                     MessageBox.Show("Baja correcta.");
+                    this.cargar_datos();
                 } else {
-                    MessageBox.Show("Ha ocurrido un error.");
+                    MessageBox.Show("El grado no se puede eliminar porque está siendo usado.");
                 }    
             }
         }

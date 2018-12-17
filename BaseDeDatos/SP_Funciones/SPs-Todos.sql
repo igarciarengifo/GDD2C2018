@@ -2,7 +2,6 @@
 /*										CREACION DE SPs y FN												*/
 /*##########################################################################################################*/
 
-
 -------------------------------------------------------------------
 
 /*LOOPP.SP_AltaUsuario_Autogenerado*/
@@ -653,14 +652,16 @@ GO
 IF OBJECT_ID('[LOOPP].[SP_ModificarGrado]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_ModificarGrado]
 GO
-CREATE PROCEDURE [LOOPP].[SP_ModificarGrado] @id int,@comision numeric(19,2),@descripcion nvarchar(20)
+CREATE PROCEDURE [LOOPP].[SP_ModificarGrado] @id int,@comision numeric(10,2),@descripcion nvarchar(20)
 AS
-	declare @resultado varchar(10)
+	declare @resultado varchar(10);
+
 	if not exists (select 1 from [LOOPP].[Espectaculos] e
 				   inner join [LOOPP].[Ubicac_X_Espectaculo] ue
 				   on e.[id_espectaculo]=ue.[id_espectaculo]
 				   where id_grado_publicacion=@id
-				   and getdate() between e.[fecha_publicacion] and e.[fecha_espectaculo])
+				   and getdate() between e.[fecha_publicacion] and e.[fecha_espectaculo]
+				   )
 		BEGIN
 			if @descripcion is null and @comision is not null
 			begin
@@ -685,6 +686,7 @@ AS
 			set @resultado='OK';
 		END
 	else set @resultado='ERROR'--EXISTEN PUBLICACIONES CON LA PRIORIDAD QUE SE QUIERE MODIFICAR
+
 	select @resultado;
 GO
 
@@ -1552,4 +1554,39 @@ BEGIN
 	where id_usuario=@id_usuario
 END
 
+GO
+/*Retorna los Medios de pago por cliente*/
+IF OBJECT_ID('LOOPP.SP_GetMedioPagoXCliente') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetMedioPagoXCliente
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_GetMedioPagoXCliente] @idCliente int
+AS
+	select id_forma_pago_cliente,descripcion+' '+cast(isnull(nro_tarjeta,'') as varchar(20)) descripcion
+	from [LOOPP].[Formas_Pago_Cliente]
+	where id_cliente=@idCliente 
+	and descripcion != 'Efectivo'
+GO
+
+/*Inserta medio de pago asociado para un cliente*/
+IF OBJECT_ID('LOOPP.SP_InsertarMedioPago') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_InsertarMedioPago
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_InsertarMedioPago] @idCliente int,@descripcion nvarchar(20),@marca nvarchar(20),@nro bigint
+AS
+	declare @resultado varchar(10);
+
+	if not exists (select 1 from [LOOPP].[Formas_Pago_Cliente] 
+				   where [id_cliente]=@idCliente and [descripcion]=@descripcion and [marca]=@marca and [nro_tarjeta]=@nro)
+		begin
+
+			insert into [LOOPP].[Formas_Pago_Cliente]([descripcion],[nro_tarjeta],[marca],[id_cliente])
+			values (@descripcion,@nro,@marca,@idCliente)
+
+			set @resultado = 'OK'
+		end
+	else set @resultado = 'ERROR'
+
+	select @resultado;
 GO
