@@ -92,6 +92,13 @@ namespace PalcoNet.Formularios
                 flpCentral.Controls.Add(historialClienteBtn);
             }
 
+            if (f.Any(func => func.nombre.Equals("Canjear Puntos")))
+            {
+                canjeDePuntosBtn.Visible = true;
+                flpCentral.Controls.Add(canjeDePuntosBtn);
+            }
+
+
             if (f.Any(func => func.nombre.Equals("Facturar rendiciones")))
             {
                 rendConsBtn.Visible = true;
@@ -120,9 +127,6 @@ namespace PalcoNet.Formularios
 
             ToolStripItem menu_grados = menuStrip1.Items.Find("gradosDePublicaciónToolStripMenuItem", true)[0];
             menu_grados.Visible = f.Any(func => func.nombre.Equals("ABM Grado Publicacion"));
-
-            ToolStripItem menu_historial_puntos = menuStrip1.Items.Find("puntosToolStripMenuItem", true)[0];
-            menu_historial_puntos.Visible = f.Any(func => func.nombre.Equals("Canjear Puntos"));
 
             this.Visible = true;
         }
