@@ -2,7 +2,6 @@
 /*										CREACION DE SPs y FN												*/
 /*##########################################################################################################*/
 
-
 -------------------------------------------------------------------
 
 /*LOOPP.SP_AltaUsuario_Autogenerado*/
@@ -648,14 +647,16 @@ GO
 IF OBJECT_ID('[LOOPP].[SP_ModificarGrado]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_ModificarGrado]
 GO
-CREATE PROCEDURE [LOOPP].[SP_ModificarGrado] @id int,@comision numeric(19,2),@descripcion nvarchar(20)
+CREATE PROCEDURE [LOOPP].[SP_ModificarGrado] @id int,@comision numeric(10,2),@descripcion nvarchar(20)
 AS
-	declare @resultado varchar(10)
+	declare @resultado varchar(10);
+
 	if not exists (select 1 from [LOOPP].[Espectaculos] e
 				   inner join [LOOPP].[Ubicac_X_Espectaculo] ue
 				   on e.[id_espectaculo]=ue.[id_espectaculo]
 				   where id_grado_publicacion=@id
-				   and getdate() between e.[fecha_publicacion] and e.[fecha_espectaculo])
+				   and getdate() between e.[fecha_publicacion] and ue.[fecha_espectaculo]
+				   )
 		BEGIN
 			if @descripcion is null and @comision is not null
 			begin
@@ -680,6 +681,7 @@ AS
 			set @resultado='OK';
 		END
 	else set @resultado='ERROR'--EXISTEN PUBLICACIONES CON LA PRIORIDAD QUE SE QUIERE MODIFICAR
+
 	select @resultado;
 GO
 
