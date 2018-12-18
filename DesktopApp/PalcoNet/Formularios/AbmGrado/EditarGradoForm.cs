@@ -58,6 +58,19 @@ namespace PalcoNet.Formularios.AbmGrado {
             }
         }
 
+        private const char SignoDecimal = ','; // Carácter separador decimal
+
+        private void txtComision_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var textBox = (TextBox)sender;
+            // Si el carácter pulsado no es un carácter válido se anula
+            e.Handled = !char.IsDigit(e.KeyChar) // No es dígito
+                        && !char.IsControl(e.KeyChar) // No es carácter de control (backspace)
+                        && (e.KeyChar != SignoDecimal // No es signo decimal o es la 1ª posición o ya hay un signo decimal
+                            || textBox.SelectionStart == 0
+                            || textBox.Text.Contains(SignoDecimal));
+        }
+
      
     }
 }
