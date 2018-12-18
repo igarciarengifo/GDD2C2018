@@ -1723,7 +1723,7 @@ IF OBJECT_ID('[LOOPP].[SP_GetUbicacionesXEspec]') IS NOT NULL
 GO
 CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec] @id int,@fecha date,@hora time,@idTipoUbic int
 AS
-	select distinct u.id_ubicacion,'Fila '+[fila]+' - Asiento'+cast([asiento] as varchar(10))
+	select distinct u.id_ubicacion,'Fila '+[fila]+' - Asiento'+cast([asiento] as varchar(10)) Ubicacion
 	from [LOOPP].[Ubicac_X_Espectaculo] ue
 	inner join [LOOPP].[Espectaculos] e
 	on ue.id_espectaculo=e.id_espectaculo
