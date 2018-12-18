@@ -731,17 +731,21 @@ AS
 
 			set @resultado='OK';
 		end
-	if exists (select 1 from [LOOPP].[Func_X_Rol] where id_rol=@idRol and id_funcionalidad=@idFunc and baja_logica='True')
+	else
 		begin
-			update [LOOPP].[Func_X_Rol]
-			set baja_logica = 'False'
-			where id_rol=@idRol and id_funcionalidad=@idFunc;
+		if exists (select 1 from [LOOPP].[Func_X_Rol] where id_rol=@idRol and id_funcionalidad=@idFunc)
+			begin
+				update [LOOPP].[Func_X_Rol]
+				set baja_logica = 'False'
+				where id_rol=@idRol 
+				and id_funcionalidad=@idFunc;
 
-			set @resultado='OK';
+				set @resultado='OK';
+			end
+		else set @resultado='ERROR';
 		end
-	else set @resultado='ERROR';
 	
-	select @resultado
+	select @resultado;
 GO
 ------------------------------------------------------------------------
 /*LOOPP.SP_AltaNuevoRol*/
@@ -838,7 +842,7 @@ BEGIN
 	JOIN [LOOPP].[Func_X_Rol] FR ON (FR.ID_Funcionalidad = F.id_funcionalidad)
 	JOIN [LOOPP].[Roles] R ON (R.id_rol=FR.id_rol)
 	WHERE R.id_rol=@id_rol
-	AND R.baja_logica = 'False'
+	AND FR.baja_logica = 'False'
 END
 GO
 ---------------------------------------------------------------------------------------
@@ -1234,8 +1238,8 @@ BEGIN
 
 		select esp.id_espectaculo
 			  ,esp.descripcion Espectaculo
-			  ,uesp.fecha_espectaculo [Fecha Espectaculo]
-			  ,uesp.hora_espectaculo [Horarios]
+			  ,esp.fecha_espectaculo [Fecha Espectaculo]
+			  ,esp.hora_espectaculo [Horarios]
 		from [LOOPP].[Espectaculos] esp
 		inner join #Temp_Rubros rubros
 		on esp.id_rubro=rubros.id_rubro
@@ -1245,8 +1249,8 @@ BEGIN
 			on esp.id_grado_publicacion=grado.id_grado_publicacion
 		inner join [LOOPP].[Ubicac_X_Espectaculo] uesp
 			on esp.id_espectaculo=uesp.id_espectaculo
-		where uesp.fecha_espectaculo between cast(@desde as date) and cast(@hasta as date)
-		group by esp.id_espectaculo,esp.descripcion,grado.id_grado_publicacion,uesp.fecha_espectaculo,uesp.hora_espectaculo
+		where esp.fecha_espectaculo between cast(@desde as date) and cast(@hasta as date)
+		group by esp.id_espectaculo,esp.descripcion,grado.id_grado_publicacion,esp.fecha_espectaculo,esp.hora_espectaculo
 		order by grado.id_grado_publicacion
 	end
 END
