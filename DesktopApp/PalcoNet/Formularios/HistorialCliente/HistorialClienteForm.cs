@@ -16,15 +16,16 @@ namespace PalcoNet.Formularios.HistorialCliente
 
         public HistorialClienteForm() {
             InitializeComponent();
-            this.cargar_datos(SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_HistorialComprasCliente",
-                                        //SQLArgumentosManager.nuevoParametro("@idUsuario", 2)));
-                                        SQLArgumentosManager.nuevoParametro("@idUsuario", DatosSesion.id_usuario)));
+            DataTable resultTable = clienteMngr.getHistorialCliente(DatosSesion.id_usuario);
+            if (resultTable != null && resultTable.Rows.Count > 0){
+                this.cargar_datos(resultTable);
+            }
+            else {
+                MessageBox.Show("No posee información de compras.");
+            }
+            
         }
-
-      /*  private void Form1_Load(object sender, EventArgs e) {
-        dgv_personalizado.Cargar_datos(Hacer_consulta("Select * FROM Personas"))
-
-        }*/
+        Cliente_Manager clienteMngr = new Cliente_Manager();
 
         private void cerrar_ventana(object sender, EventArgs e)
         {

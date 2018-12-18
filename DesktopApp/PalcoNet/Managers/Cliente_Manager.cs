@@ -118,6 +118,13 @@ namespace PalcoNet.Managers
         {
             return SQLManager.ejecutarEscalarQuery<int>("LOOPP.SP_GetPuntosClienteConIdUsuario",
                 SQLArgumentosManager.nuevoParametro("@idUsuario", idUsuario));
+
+        public DataTable getHistorialCliente(int id_usuario) {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_HistorialComprasCliente",
+                                                //SQLArgumentosManager.nuevoParametro("@idUsuario", 2)));
+                                            SQLArgumentosManager.nuevoParametro("@idUsuario", id_usuario));
+            return resultTable;
+
         }
     }
 }
