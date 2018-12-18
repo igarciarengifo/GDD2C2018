@@ -50,9 +50,9 @@
             this.lblComision.AutoSize = true;
             this.lblComision.Location = new System.Drawing.Point(47, 102);
             this.lblComision.Name = "lblComision";
-            this.lblComision.Size = new System.Drawing.Size(70, 17);
+            this.lblComision.Size = new System.Drawing.Size(112, 17);
             this.lblComision.TabIndex = 1;
-            this.lblComision.Text = "Comisión*";
+            this.lblComision.Text = "Comisión (#,##)*";
             // 
             // txtDescripcion
             // 
@@ -67,6 +67,7 @@
             this.txtComision.Name = "txtComision";
             this.txtComision.Size = new System.Drawing.Size(206, 22);
             this.txtComision.TabIndex = 3;
+            this.txtComision.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtComision_KeyPress);
             // 
             // btnAceptar
             // 

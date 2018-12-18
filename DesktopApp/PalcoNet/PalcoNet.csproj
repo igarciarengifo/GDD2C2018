@@ -143,6 +143,12 @@
     <Compile Include="Formularios\CanjePuntos\CanjePuntosForm.Designer.cs">
       <DependentUpon>CanjePuntosForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\CanjePuntos\HistorialPuntosForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\CanjePuntos\HistorialPuntosForm.Designer.cs">
+      <DependentUpon>HistorialPuntosForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Comprar\ComprarEntradaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\CanjePuntos\CanjePuntosForm.resx">
       <DependentUpon>CanjePuntosForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\CanjePuntos\HistorialPuntosForm.resx">
+      <DependentUpon>HistorialPuntosForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Comprar\ComprarEntradaForm.resx">
       <DependentUpon>ComprarEntradaForm.cs</DependentUpon>

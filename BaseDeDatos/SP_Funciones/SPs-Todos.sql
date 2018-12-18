@@ -1669,6 +1669,7 @@ BEGIN
 END
 
 GO
+<<<<<<< HEAD
 --------------------------------------------------------------------------------
 
 /*SP que modifica descripcion de rol cuando el rol esta activo, en caso de estar de baja retorna error*/
@@ -1739,3 +1740,23 @@ AS
 
 GO
 --------------------------------------------------------------------------------
+=======
+
+----------------------------------------------------
+
+IF OBJECT_ID('LOOPP.SP_GetHistorialCanje') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetHistorialCanje
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_GetHistorialCanje] @idUsuario int
+AS
+BEGIN
+	select can.id_canje as 'Codigo', fecha_canje as 'Fecha de Canje', cli.nombre+' '+cli.apellido as 'Responsable', cc.descripcion as 'Producto Canjeado', can.puntos_canjeados as 'Puntos canjeados'
+	from LOOPP.Canjes can
+	inner join Clientes cli on cli.id_cliente=can.id_cliente 
+	inner join Catalogo_Canjes cc on cc.id_codigo=can.id_codigo
+	where cli.id_usuario= @idUsuario
+END
+
+GO
+>>>>>>> 8b507854be58c6450e1827fa7bb7955b2b81a924

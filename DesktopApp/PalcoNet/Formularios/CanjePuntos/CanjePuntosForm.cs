@@ -99,5 +99,11 @@ namespace PalcoNet.Formularios.CanjePuntos
             this.Dispose();
             this.Close();
         }
+
+        private void historialPuntosBtn_Click(object sender, EventArgs e)
+        {
+            HistorialPuntosForm historialPuntos = new HistorialPuntosForm();
+            historialPuntos.ShowDialog();
+        }
     }
 }

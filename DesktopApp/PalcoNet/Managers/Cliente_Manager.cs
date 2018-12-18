@@ -128,5 +128,13 @@ namespace PalcoNet.Managers
             return resultTable;
 
         }
+
+        internal DataTable getCanjesDeUsuario(int id_usuario)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetHistorialCanje",
+                                            SQLArgumentosManager.nuevoParametro("@idUsuario", id_usuario));
+            return resultTable;
+
+        }
     }
 }
