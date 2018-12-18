@@ -34,7 +34,7 @@ namespace PalcoNet.Formularios.GenerarPublicacion
             this.cargarGradosPublicacion();
             this.cargarHorarios();
             this.cargarUbicaciones();
-            publicacionCalendar.MinDate = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            publicacionCalendar.MinDate = DatosSesion.getFechaSistema();
         }
 
         private void cargarUbicaciones()

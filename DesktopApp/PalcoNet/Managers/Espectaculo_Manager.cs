@@ -32,7 +32,7 @@ namespace PalcoNet.Managers {
 
         public void nuevaPublicacion(int usuarioEmpresa, Double precioBase, string descripcion, string direccion, int id_grado_publicacion, int id_estadoPublicacion, int id_rubro, List<String> horariosSeleccionados, List<String> descripcionesUbicaciones, List<DateTime> fechasSeleccionadas)
         {
-            DateTime fecha_publicacion = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            DateTime fecha_publicacion = DatosSesion.getFechaSistema();
             DateTime fecha_vencimiento = fecha_publicacion.AddDays(7);
             foreach (DateTime fechaSeleccionada in fechasSeleccionadas)
             {

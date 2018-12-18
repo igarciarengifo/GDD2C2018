@@ -13,7 +13,7 @@ namespace PalcoNet.Managers
     {
         public string altaEmpresaYUsuario(string user, string pass, Entidades.Empresa nuevaEmpresa)
         {
-            DateTime fechaCreacion = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            DateTime fechaCreacion = DatosSesion.getFechaSistema();
            return SQLManager.ejecutarEscalarQuery<string> ("LOOPP.SP_NuevoEmpresa",
                                                  SQLArgumentosManager.nuevoParametro("@razon",nuevaEmpresa.razon_social)
                                                  .add("@cuit",nuevaEmpresa.cuit)

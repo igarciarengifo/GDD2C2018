@@ -45,6 +45,7 @@
             this.nuevoRolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consultarRolesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelEmpresas = new System.Windows.Forms.Panel();
+            this.canjeDePuntosBtn = new System.Windows.Forms.Button();
             this.estadisticasBtn = new System.Windows.Forms.Button();
             this.historialClienteBtn = new System.Windows.Forms.Button();
             this.factComBtn = new System.Windows.Forms.Button();
@@ -58,7 +59,6 @@
             this.estadoActualLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.canjeDePuntosBtn = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.panelEmpresas.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -214,6 +214,17 @@
             this.panelEmpresas.Size = new System.Drawing.Size(780, 113);
             this.panelEmpresas.TabIndex = 0;
             // 
+            // canjeDePuntosBtn
+            // 
+            this.canjeDePuntosBtn.Location = new System.Drawing.Point(635, 27);
+            this.canjeDePuntosBtn.Margin = new System.Windows.Forms.Padding(3, 3, 50, 3);
+            this.canjeDePuntosBtn.Name = "canjeDePuntosBtn";
+            this.canjeDePuntosBtn.Size = new System.Drawing.Size(121, 51);
+            this.canjeDePuntosBtn.TabIndex = 11;
+            this.canjeDePuntosBtn.Text = "Canje de puntos";
+            this.canjeDePuntosBtn.UseVisualStyleBackColor = true;
+            this.canjeDePuntosBtn.Click += new System.EventHandler(this.canjeDePuntosBtn_Click);
+            // 
             // estadisticasBtn
             // 
             this.estadisticasBtn.Location = new System.Drawing.Point(491, 54);
@@ -343,16 +354,6 @@
             this.label1.Size = new System.Drawing.Size(643, 47);
             this.label1.TabIndex = 0;
             this.label1.Text = "Bienvenido al sistema Palco Net";
-            // 
-            // canjeDePuntosBtn
-            // 
-            this.canjeDePuntosBtn.Location = new System.Drawing.Point(635, 27);
-            this.canjeDePuntosBtn.Margin = new System.Windows.Forms.Padding(3, 3, 50, 3);
-            this.canjeDePuntosBtn.Name = "canjeDePuntosBtn";
-            this.canjeDePuntosBtn.Size = new System.Drawing.Size(121, 51);
-            this.canjeDePuntosBtn.TabIndex = 11;
-            this.canjeDePuntosBtn.Text = "Canje de puntos";
-            this.canjeDePuntosBtn.UseVisualStyleBackColor = true;
             // 
             // MenuPrincipalForm
             // 

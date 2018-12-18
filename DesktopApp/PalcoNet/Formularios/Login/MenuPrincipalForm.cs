@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using PalcoNet.Formularios.EditarPublicacion;
+using PalcoNet.Formularios.CanjePuntos;
 
 namespace PalcoNet.Formularios
 {
@@ -253,6 +254,12 @@ namespace PalcoNet.Formularios
         private void comprarBtn_Click(object sender, EventArgs e) {
             ComprarEntradaForm comprarForm = new ComprarEntradaForm();
             comprarForm.ShowDialog();
+        }
+
+        private void canjeDePuntosBtn_Click(object sender, EventArgs e)
+        {
+            CanjePuntosForm canjePuntosForm = new CanjePuntosForm();
+            canjePuntosForm.ShowDialog();
         }
 
       

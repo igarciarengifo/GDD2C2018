@@ -1555,6 +1555,7 @@ BEGIN
 END
 
 GO
+-------------------------------------------------------------------
 /*Retorna los Medios de pago por cliente*/
 IF OBJECT_ID('LOOPP.SP_GetMedioPagoXCliente') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_GetMedioPagoXCliente
@@ -1567,7 +1568,7 @@ AS
 	where id_cliente=@idCliente 
 	and descripcion != 'Efectivo'
 GO
-
+---------------------------------------------------------------------
 /*Inserta medio de pago asociado para un cliente*/
 IF OBJECT_ID('LOOPP.SP_InsertarMedioPago') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_InsertarMedioPago
@@ -1589,4 +1590,82 @@ AS
 	else set @resultado = 'ERROR'
 
 	select @resultado;
+GO
+--------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_GetCatalogo') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetCatalogo
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_GetCatalogo]
+AS
+BEGIN
+	select id_codigo, stock as 'Stock', descripcion as 'Descripcion', puntos_validos as 'Puntos necesarios'
+	from LOOPP.Catalogo_Canjes
+END
+
+GO
+------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_GetPuntosClienteConIdUsuario') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetPuntosClienteConIdUsuario
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_GetPuntosClienteConIdUsuario] @idUsuario int
+AS
+BEGIN
+	select puntos_acumulados
+	from LOOPP.Clientes c
+	where c.id_usuario= @idUsuario
+END
+
+GO
+----------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_CanjearProducto') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_CanjearProducto
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_CanjearProducto] @idProducto int, @idUsuario int, @fechaCanje datetime
+AS
+BEGIN
+	DECLARE @puntosCanjeados int, @idCanje int, @idCliente int, @resultado varchar(255)
+	BEGIN TRANSACTION [T]
+
+	BEGIN TRY
+		UPDATE LOOPP.Catalogo_Canjes
+			SET stock = stock - 1
+		WHERE id_codigo = @idProducto
+
+		SELECT @puntosCanjeados=puntos_validos
+		FROM LOOPP.Catalogo_Canjes
+		WHERE id_codigo=@idProducto
+
+		SELECT @idCliente=id_cliente
+		FROM LOOPP.Clientes
+		WHERE id_usuario=@idUsuario
+
+		UPDATE LOOPP.Clientes
+			SET puntos_acumulados= puntos_acumulados-@puntosCanjeados
+		WHERE id_usuario=@idUsuario
+
+		INSERT INTO LOOPP.Canjes(fecha_canje, puntos_canjeados, id_codigo, id_cliente)
+		VALUES (@fechaCanje, @puntosCanjeados, @idProducto, @idCliente)
+		
+		SELECT @idCanje=SCOPE_IDENTITY() 
+		FROM LOOPP.Canjes
+
+	COMMIT TRANSACTION [T]
+
+	set @resultado = 'OK;'+CONVERT(varchar(255),@idCanje)
+
+	END TRY
+
+	BEGIN CATCH
+
+      ROLLBACK TRANSACTION [T]
+
+	  set @resultado ='ERROR;' +ERROR_MESSAGE();
+
+	END CATCH;
+	SELECT @resultado
+END
+
 GO

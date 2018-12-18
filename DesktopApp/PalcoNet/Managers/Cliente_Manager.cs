@@ -41,17 +41,6 @@ namespace PalcoNet.Managers
                                             .add("@email", clienteABuscar.mail)
                                             .add("@nroDoc", clienteABuscar.nro_documento));
 
-            //List<Cliente> clientesEncontrados = new List<Cliente>();
-
-            //if (resultTable != null && resultTable.Rows != null)
-            //{
-            //    foreach (DataRow row in resultTable.Rows)
-            //    {
-            //        Cliente clienteEncontrado = this.BuildCliente(row);
-            //        clientesEncontrados.Add(clienteEncontrado);
-            //    }
-            //}
-
             return resultTable;
         }
 
@@ -123,6 +112,12 @@ namespace PalcoNet.Managers
             }
 
             return lista_clientes.ElementAt(0);
+        }
+
+        internal int getPuntosClienteConIdUsuario(int idUsuario)
+        {
+            return SQLManager.ejecutarEscalarQuery<int>("LOOPP.SP_GetPuntosClienteConIdUsuario",
+                SQLArgumentosManager.nuevoParametro("@idUsuario", idUsuario));
         }
     }
 }

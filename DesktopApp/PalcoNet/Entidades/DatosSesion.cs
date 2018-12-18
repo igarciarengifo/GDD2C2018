@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,10 @@ namespace PalcoNet.Entidades
             password = "";
             id_rol = 0;
             id_usuario = 0;
+        }
+
+        public static DateTime getFechaSistema() {
+            return Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
         }
     }
 }

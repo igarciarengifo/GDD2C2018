@@ -58,7 +58,7 @@ namespace PalcoNet.Formularios.EditarPublicacion
             this.cargarGradosPublicacion();
             this.cargarHorarios();
             this.cargarUbicaciones();
-            fechaEspectaculoPicker.MinDate = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            fechaEspectaculoPicker.MinDate = DatosSesion.getFechaSistema() ;
         }
 
         public EditarPublicacionForm(Espectaculo publicacionSeleccionada)
@@ -79,7 +79,7 @@ namespace PalcoNet.Formularios.EditarPublicacion
                 fechaEspectaculoPicker.Value = publicacionSeleccionada.fecha_espectaculo;
             }
             else {
-                fechaEspectaculoPicker.Value = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+                fechaEspectaculoPicker.Value = DatosSesion.getFechaSistema();
             }
             
         }
