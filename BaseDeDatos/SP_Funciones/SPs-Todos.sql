@@ -1601,7 +1601,7 @@ AS
 	declare @resultado varchar(55);
 
 	if not exists (select 1 from [LOOPP].[Formas_Pago_Cliente]
-				   where [id_cliente]=@idCliente and [id_forma_pago]=@idFormaPago and [nro_tarjeta]=@nro)
+				   where [nro_tarjeta]=@nro)
 		begin
 
 			insert into [LOOPP].[Formas_Pago_Cliente]([id_cliente], [id_forma_pago], [nro_tarjeta])
@@ -1609,7 +1609,7 @@ AS
 
 			set @resultado = 'OK'
 		end
-	else set @resultado = 'ERROR. No pudo agregarse el medio de pago'
+	else set @resultado = 'ERROR. No pudo agregarse el medio de pago porque ya existe en el sistema.'
 
 	select @resultado;
 GO
