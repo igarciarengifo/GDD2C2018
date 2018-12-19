@@ -177,6 +177,7 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
    ,@cod_postal varchar(255)
    ,@baja_logica bit
    ,@idCliente int
+   ,@estaInhabilitado bit
   
   AS
 	declare @resultado varchar(255), @iduser int, @estado nvarchar(50)
@@ -218,6 +219,9 @@ CREATE PROCEDURE [LOOPP].[SP_ModificarCliente]
 			estado=@estado
 		WHERE id_cliente=@idCliente
 	
+		UPDATE LOOPP.Usuarios
+			SET habilitado=~@estaInhabilitado
+			where id_usuario=@iduser
 
 		if (@baja_logica ='True')
 			begin
@@ -1812,3 +1816,19 @@ BEGIN
 END
 
 GO
+--------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_EsUsuarioHabilitado') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_EsUsuarioHabilitado
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_EsUsuarioHabilitado] @id_cliente int
+AS
+BEGIN
+	select habilitado
+	from LOOPP.Usuarios usu
+	inner join Clientes cli on cli.id_usuario=usu.id_usuario
+	where cli.id_cliente=@id_cliente
+END
+
+GO
+

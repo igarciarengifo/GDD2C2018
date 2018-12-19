@@ -85,5 +85,11 @@ namespace PalcoNet.Managers
             return SQLManager.ejecutarEscalarQuery<bool>("LOOPP.SP_EsPrimerLogueo",
                         SQLArgumentosManager.nuevoParametro("@id_user", id_usuario));
         }
+
+        internal bool esUsuarioHabilitado(int id_cliente)
+        {
+            return SQLManager.ejecutarEscalarQuery<bool>("LOOPP.SP_EsUsuarioHabilitado",
+                        SQLArgumentosManager.nuevoParametro("@id_cliente", id_cliente));
+        }
     }
 }

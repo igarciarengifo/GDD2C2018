@@ -17,6 +17,7 @@ namespace PalcoNet.Formularios.AbmCliente
         Boolean esModificacion;
         string user, pass, resultado;
         Cliente_Manager clienteMng = new Cliente_Manager();
+        Usuario_Manager usuario_Mng = new Usuario_Manager();
         Cliente clienteModificacion;
         List<Forma_Pago> formasDePago = new List<Forma_Pago>();
         List<Forma_Pago_Cliente> nuevasFormasDePago = new List<Forma_Pago_Cliente>();
@@ -29,6 +30,7 @@ namespace PalcoNet.Formularios.AbmCliente
             {
                 clienteModificacion = cliente;
                 dadoDeBajaBox.Visible = true;
+                inhabilitadoBox.Visible = true;
                 nameBox.Text = cliente.nombre;
                 lastNameBox.Text = cliente.apellido;
                 comboTipo.SelectedValue = cliente.tipo_documento;
@@ -44,6 +46,7 @@ namespace PalcoNet.Formularios.AbmCliente
                 localidadBox.Text = cliente.direccion_localidad;
                 codPostalBox.Text = cliente.codigo_postal;
                 dadoDeBajaBox.Checked = cliente.baja_logica;
+                inhabilitadoBox.Checked = !usuario_Mng.esUsuarioHabilitado(cliente.id_cliente);
                 nuevasFormasDePago=clienteMng.getMediosDePagoDeUsuario(clienteModificacion.id_cliente);
                 this.cargarDataTarjetasActuales();
                 esModificacion = true;
@@ -114,7 +117,7 @@ namespace PalcoNet.Formularios.AbmCliente
             clienteModificacion.direccion_localidad = localidadBox.Text;
             clienteModificacion.codigo_postal = codPostalBox.Text;
             clienteModificacion.baja_logica = dadoDeBajaBox.Checked;
-            resultado = clienteMng.modificarCliente(clienteModificacion, nuevasFormasDePago, formasPagoModificadas);
+            resultado = clienteMng.modificarCliente(inhabilitadoBox.Checked, clienteModificacion, nuevasFormasDePago, formasPagoModificadas);
 
             if (resultado.Equals("OK"))
             {

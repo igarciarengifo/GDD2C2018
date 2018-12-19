@@ -76,6 +76,7 @@
             this.NroTarjeta = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Descripcion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Marca = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.inhabilitadoBox = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataFormasPago)).BeginInit();
@@ -388,9 +389,9 @@
             this.dadoDeBajaBox.AutoSize = true;
             this.dadoDeBajaBox.Location = new System.Drawing.Point(363, 449);
             this.dadoDeBajaBox.Name = "dadoDeBajaBox";
-            this.dadoDeBajaBox.Size = new System.Drawing.Size(80, 17);
+            this.dadoDeBajaBox.Size = new System.Drawing.Size(90, 17);
             this.dadoDeBajaBox.TabIndex = 4;
-            this.dadoDeBajaBox.Text = "Inhabilitado";
+            this.dadoDeBajaBox.Text = "Dado de baja";
             this.dadoDeBajaBox.UseVisualStyleBackColor = true;
             // 
             // panel1
@@ -534,11 +535,22 @@
             this.Marca.Name = "Marca";
             this.Marca.ReadOnly = true;
             // 
+            // inhabilitadoBox
+            // 
+            this.inhabilitadoBox.AutoSize = true;
+            this.inhabilitadoBox.Location = new System.Drawing.Point(459, 449);
+            this.inhabilitadoBox.Name = "inhabilitadoBox";
+            this.inhabilitadoBox.Size = new System.Drawing.Size(80, 17);
+            this.inhabilitadoBox.TabIndex = 12;
+            this.inhabilitadoBox.Text = "Inhabilitado";
+            this.inhabilitadoBox.UseVisualStyleBackColor = true;
+            // 
             // AltaClienteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1050, 534);
+            this.Controls.Add(this.inhabilitadoBox);
             this.Controls.Add(this.dataFormasPago);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.button2);
@@ -612,5 +624,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn NroTarjeta;
         private System.Windows.Forms.DataGridViewTextBoxColumn Descripcion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Marca;
+        private System.Windows.Forms.CheckBox inhabilitadoBox;
     }
 }

@@ -188,7 +188,7 @@ namespace PalcoNet.Formularios
         {
             this.primer_inicio();
             //Si ya cargue el formulario, verifico que si no se inicio sesion, cierro la ventana ya que se cerró el login
-            if (this.WindowState == FormWindowState.Maximized)
+            if (!DatosSesion.sesion_iniciada)
             {
                 this.Close();
             }

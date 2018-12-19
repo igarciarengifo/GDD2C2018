@@ -179,7 +179,7 @@ namespace PalcoNet.Managers
 
         }
 
-        internal string modificarCliente(Cliente clienteModificacion, List<Forma_Pago_Cliente> nuevasFormasDePago, List<Forma_Pago_Cliente> formasPagoModificadas)
+        internal string modificarCliente(Boolean estaInhabilitado, Cliente clienteModificacion, List<Forma_Pago_Cliente> nuevasFormasDePago, List<Forma_Pago_Cliente> formasPagoModificadas)
         {
             string resultado = SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_ModificarCliente",
                                                 SQLArgumentosManager.nuevoParametro("@nombre", clienteModificacion.nombre)
@@ -197,7 +197,8 @@ namespace PalcoNet.Managers
                                                 .add("@localidad", clienteModificacion.direccion_localidad)
                                                 .add("@cod_postal", clienteModificacion.codigo_postal)
                                                 .add("@baja_logica", clienteModificacion.baja_logica)
-                                                .add("@idCliente", clienteModificacion.id_cliente));
+                                                .add("@idCliente", clienteModificacion.id_cliente)
+                                                .add("@estaInhabilitado", estaInhabilitado));
             
             foreach (Forma_Pago_Cliente formaPagoActual in nuevasFormasDePago) {
                 if (!(formasPagoModificadas.Any(formaPagoModificada => formaPagoModificada.nro_tarjeta==formaPagoActual.nro_tarjeta && formaPagoModificada.id_forma_pago==formaPagoActual.id_forma_pago))) {
