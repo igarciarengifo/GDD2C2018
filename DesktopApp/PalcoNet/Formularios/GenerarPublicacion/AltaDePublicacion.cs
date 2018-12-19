@@ -340,11 +340,13 @@ namespace PalcoNet.Formularios.GenerarPublicacion
 
         private void todasUbiBtn_Click(object sender, EventArgs e)
         {
-
-            foreach (int i in ubicacionesListBox.CheckedIndices)
-            {
-                ubicacionesListBox.SetItemCheckState(i, CheckState.Unchecked);
+            if (ubicacionesListBox.CheckedIndices.Count>0 && ubicacionesListBox.CheckedIndices.Count<ubicacionesListBox.Items.Count) {
+                foreach (int i in ubicacionesListBox.CheckedIndices)
+                {
+                    ubicacionesListBox.SetItemCheckState(i, CheckState.Unchecked);
+                }
             }
+            
 
             for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
             {

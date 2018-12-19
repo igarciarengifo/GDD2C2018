@@ -195,6 +195,7 @@ namespace PalcoNet.Formularios.EditarPublicacion
                 publicacionModificada.fecha_espectaculo = fechaEspectaculoPicker.Value;
                 espectaculoMng.modificarEspectaculo(publicacionModificada, ubicacionesActuales, ubicacionesListBox.CheckedItems.Cast<String>().ToList());
                 MessageBox.Show("Se realizó correctamente la generación de la publicación");
+                this.Close();
 
             }
             catch (Exception exc) {
@@ -357,10 +358,14 @@ namespace PalcoNet.Formularios.EditarPublicacion
 
         private void todasUbiBtn_Click_1(object sender, EventArgs e)
         {
-            foreach (int i in ubicacionesListBox.CheckedIndices)
+            if (ubicacionesListBox.CheckedIndices.Count > 0 && ubicacionesListBox.CheckedIndices.Count < ubicacionesListBox.Items.Count)
             {
-                ubicacionesListBox.SetItemCheckState(i, CheckState.Unchecked);
+                foreach (int i in ubicacionesListBox.CheckedIndices)
+                {
+                    ubicacionesListBox.SetItemCheckState(i, CheckState.Unchecked);
+                }
             }
+
 
             for (int count = 0; count < ubicacionesListBox.Items.Count; count++)
             {
