@@ -50,6 +50,10 @@ namespace PalcoNet.Formularios.AbmRol {
                         }
                     }
                     MessageBox.Show("Nuevo rol agregado correctamente.");
+                    this.Dispose();
+                    this.Close();
+                    ConsultaRolesForm consultaRolForm = new ConsultaRolesForm();
+                    consultaRolForm.ShowDialog();
                 } else {
                     MessageBox.Show("Ha ocurrido un error");
                 }

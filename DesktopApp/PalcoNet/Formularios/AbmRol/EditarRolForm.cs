@@ -71,7 +71,7 @@ namespace PalcoNet.Formularios.AbmRol {
                 this.verificarCamposObligatorios();
                 Rol nuevoRol = new Rol();
                 nuevoRol.nombre = txtNombre.Text;
-                //id_rol = rolMngr.nuevoRol(nuevoRol);
+                salida1 = rolMngr.modificarRol(rolEdited.id_rol, nuevoRol.nombre);
                 salida1 = "OK";
                 if (salida1.Equals("OK")) {
                     funcionalidadMngr.deshabilitarFuncsXRol(rolEdited.id_rol);
@@ -86,6 +86,8 @@ namespace PalcoNet.Formularios.AbmRol {
                     MessageBox.Show("Se ha modificado el rol correctamente.");
                     this.Dispose();
                     this.Close();
+                    ConsultaRolesForm consultaRolForm = new ConsultaRolesForm();
+                    consultaRolForm.ShowDialog();
                 } else {
                     MessageBox.Show("Ha ocurrido un error");
                 }
