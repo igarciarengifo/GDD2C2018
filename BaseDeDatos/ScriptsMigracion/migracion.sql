@@ -446,7 +446,7 @@ into #TEMP_Espectaculo
 			,t.venc_publicacion
 			,t.descripcion
 			,e.id_estado_publicacion
-			,4--grado de publicacion 'Baja'
+			,3--grado de publicacion 'Baja'
 			,cast(espec_fecha as date) 
 			,cast(venc_publicacion as date) 
 			,'00:00:00'
