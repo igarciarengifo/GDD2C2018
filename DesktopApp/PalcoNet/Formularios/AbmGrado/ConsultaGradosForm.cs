@@ -46,7 +46,7 @@ namespace PalcoNet.Formularios.AbmGrado {
             this.Dispose();
             this.Close();
             AltaGradoForm altaGradoForm = new AltaGradoForm();
-            altaGradoForm.Show();
+            altaGradoForm.ShowDialog();
         }
 
         private void modificarBtn_Click(object sender, EventArgs e) {
@@ -55,7 +55,7 @@ namespace PalcoNet.Formularios.AbmGrado {
                 DataGridViewRow dtv = dataGridView1.SelectedRows[0];
                 Grado_Publicacion gradoSelected = (Grado_Publicacion)dtv.DataBoundItem;
                 EditarGradoForm editarGradoForm = new EditarGradoForm(gradoSelected);
-                editarGradoForm.Show();
+                editarGradoForm.ShowDialog();
                 this.Dispose();
                 this.Close();
             }

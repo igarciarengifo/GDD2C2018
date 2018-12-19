@@ -91,7 +91,7 @@ namespace PalcoNet.Managers
 
         public string modificarRol(int id_rol, string descripcion) {
             return SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_ModificarDescRol",
-                                        SQLArgumentosManager.nuevoParametro("@idRol", id_rol)
+                                        SQLArgumentosManager.nuevoParametro("@id", id_rol)
                                         .add("@descripcion", descripcion));
         }
     }

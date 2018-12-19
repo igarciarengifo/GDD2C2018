@@ -59,7 +59,7 @@ namespace PalcoNet.Formularios.GenerarRendicionComisiones
             int cantidad = Convert.ToInt32(txtCantidad.Text);
             Factura factura = mngrCompra.generarRendicion(idEmpresa, idEspectaculo, cantidad);
             FacturaForm facturaForm = new FacturaForm(factura);
-            facturaForm.Show();
+            facturaForm.ShowDialog();
             this.Dispose();
             this.Close();
         }

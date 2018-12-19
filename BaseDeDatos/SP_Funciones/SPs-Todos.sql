@@ -730,17 +730,21 @@ AS
 
 			set @resultado='OK';
 		end
-	if exists (select 1 from [LOOPP].[Func_X_Rol] where id_rol=@idRol and id_funcionalidad=@idFunc and baja_logica='True')
+	else
 		begin
-			update [LOOPP].[Func_X_Rol]
-			set baja_logica = 'False'
-			where id_rol=@idRol and id_funcionalidad=@idFunc;
+		if exists (select 1 from [LOOPP].[Func_X_Rol] where id_rol=@idRol and id_funcionalidad=@idFunc)
+			begin
+				update [LOOPP].[Func_X_Rol]
+				set baja_logica = 'False'
+				where id_rol=@idRol 
+				and id_funcionalidad=@idFunc;
 
-			set @resultado='OK';
+				set @resultado='OK';
+			end
+		else set @resultado='ERROR';
 		end
-	else set @resultado='ERROR';
 	
-	select @resultado
+	select @resultado;
 GO
 ------------------------------------------------------------------------
 /*LOOPP.SP_AltaNuevoRol*/
@@ -837,7 +841,7 @@ BEGIN
 	JOIN [LOOPP].[Func_X_Rol] FR ON (FR.ID_Funcionalidad = F.id_funcionalidad)
 	JOIN [LOOPP].[Roles] R ON (R.id_rol=FR.id_rol)
 	WHERE R.id_rol=@id_rol
-	AND R.baja_logica = 'False'
+	AND FR.baja_logica = 'False'
 END
 GO
 ---------------------------------------------------------------------------------------
@@ -1197,7 +1201,7 @@ GO
 IF OBJECT_ID('[LOOPP].[SP_FiltrarEspectaculos]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_FiltrarEspectaculos]
 GO
-CREATE PROCEDURE [LOOPP].[SP_FiltrarEspectaculos] @idEspectaculo int, @idList varchar(100), @desde date, @hasta date
+CREATE PROCEDURE [LOOPP].[SP_FiltrarEspectaculos] @idEspectaculo int, @idList varchar(100), @desde varchar(15), @hasta varchar(15)
 AS
 BEGIN
 	
@@ -1216,7 +1220,7 @@ BEGIN
 		inner join [LOOPP].[Ubicac_X_Espectaculo] uesp
 			on esp.id_espectaculo=uesp.id_espectaculo
 		where esp.id_espectaculo=@idEspectaculo 
-		and esp.fecha_espectaculo between @desde and @hasta
+		and esp.fecha_espectaculo between cast(@desde as date) and cast(@hasta as date)
 		group by esp.id_espectaculo,esp.descripcion,grado.id_grado_publicacion,esp.fecha_espectaculo,esp.hora_espectaculo
 		order by grado.id_grado_publicacion
 	end
@@ -1233,8 +1237,8 @@ BEGIN
 
 		select esp.id_espectaculo
 			  ,esp.descripcion Espectaculo
-			  ,uesp.fecha_espectaculo [Fecha Espectaculo]
-			  ,uesp.hora_espectaculo [Horarios]
+			  ,esp.fecha_espectaculo [Fecha Espectaculo]
+			  ,esp.hora_espectaculo [Horarios]
 		from [LOOPP].[Espectaculos] esp
 		inner join #Temp_Rubros rubros
 		on esp.id_rubro=rubros.id_rubro
@@ -1244,8 +1248,8 @@ BEGIN
 			on esp.id_grado_publicacion=grado.id_grado_publicacion
 		inner join [LOOPP].[Ubicac_X_Espectaculo] uesp
 			on esp.id_espectaculo=uesp.id_espectaculo
-		where uesp.fecha_espectaculo between @desde and @hasta
-		group by esp.id_espectaculo,esp.descripcion,grado.id_grado_publicacion,uesp.fecha_espectaculo,uesp.hora_espectaculo
+		where esp.fecha_espectaculo between cast(@desde as date) and cast(@hasta as date)
+		group by esp.id_espectaculo,esp.descripcion,grado.id_grado_publicacion,esp.fecha_espectaculo,esp.hora_espectaculo
 		order by grado.id_grado_publicacion
 	end
 END
@@ -1657,7 +1661,7 @@ BEGIN
 END
 
 GO
-------------------------------------------------------------------
+--------------------------------------------------------------------------------
 IF OBJECT_ID('LOOPP.SP_GetPuntosClienteConIdUsuario') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_GetPuntosClienteConIdUsuario
 GO
@@ -1671,7 +1675,7 @@ BEGIN
 END
 
 GO
-----------------------------------------------------
+--------------------------------------------------------------------------------
 IF OBJECT_ID('LOOPP.SP_CanjearProducto') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_CanjearProducto
 GO
@@ -1722,6 +1726,78 @@ BEGIN
 END
 
 GO
+<<<<<<< HEAD
+--------------------------------------------------------------------------------
+
+/*SP que modifica descripcion de rol cuando el rol esta activo, en caso de estar de baja retorna error*/
+IF OBJECT_ID('[LOOPP].[SP_ModificarDescRol]') IS NOT NULL
+    DROP PROCEDURE [LOOPP].[SP_ModificarDescRol]
+GO
+CREATE PROCEDURE [LOOPP].[SP_ModificarDescRol] @id int,@descripcion varchar(50)
+AS
+	declare @resultado varchar(10);
+
+	if not exists (select 1 from [LOOPP].[Roles] where id_rol=@id and baja_logica = 1)
+	begin
+		update [LOOPP].[Roles]
+		set [nombre]= @descripcion
+		where id_rol=@id
+		and baja_logica != 1
+
+		set @resultado = 'OK'
+	end
+	else set @resultado='ERROR'
+	
+	select @resultado; 
+
+GO
+--------------------------------------------------------------------------------
+
+/*SP que devuelve tipos de ubicacion disponible segun espectaculo*/
+IF OBJECT_ID('[LOOPP].[SP_GetTipoUbicXEspect]') IS NOT NULL
+    DROP PROCEDURE [LOOPP].[SP_GetTipoUbicXEspect]
+GO
+CREATE PROCEDURE [LOOPP].[SP_GetTipoUbicXEspect] @id int,@fecha date,@hora time
+AS
+	select distinct tu.*
+	from [LOOPP].[Ubicac_X_Espectaculo] ue
+	inner join [LOOPP].[Espectaculos] e
+	on ue.id_espectaculo=e.id_espectaculo
+	inner join [LOOPP].[Ubicaciones] u
+	on ue.id_ubicacion=u.id_ubicacion
+	inner join [LOOPP].[Tipo_Ubicacion] tu
+	on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
+	where e.id_espectaculo=@id 
+	and e.fecha_espectaculo=@fecha 
+	and e.hora_espectaculo=@hora
+	and ue.disponible = 1
+
+GO
+--------------------------------------------------------------------------------
+
+/*SP que devuelve las ubicaciones segun espectaculo y tipo de ubicacion seleccionado*/
+IF OBJECT_ID('[LOOPP].[SP_GetUbicacionesXEspec]') IS NOT NULL
+    DROP PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec]
+GO
+CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec] @id int,@fecha date,@hora time,@idTipoUbic int
+AS
+	select distinct u.id_ubicacion,'Fila '+[fila]+' - Asiento'+cast([asiento] as varchar(10)) Ubicacion
+	from [LOOPP].[Ubicac_X_Espectaculo] ue
+	inner join [LOOPP].[Espectaculos] e
+	on ue.id_espectaculo=e.id_espectaculo
+	inner join [LOOPP].[Ubicaciones] u
+	on ue.id_ubicacion=u.id_ubicacion
+	inner join [LOOPP].[Tipo_Ubicacion] tu
+	on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
+	where e.id_espectaculo=@id 
+	and e.fecha_espectaculo=@fecha 
+	and e.hora_espectaculo=@hora
+	and ue.disponible = 1
+	and tu.id_tipo_ubicacion=@idTipoUbic
+
+GO
+--------------------------------------------------------------------------------
+=======
 
 ----------------------------------------------------
 
@@ -1740,3 +1816,4 @@ BEGIN
 END
 
 GO
+>>>>>>> 8b507854be58c6450e1827fa7bb7955b2b81a924

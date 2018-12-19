@@ -35,7 +35,7 @@ namespace PalcoNet.Formularios.AbmGrado {
                 this.Dispose();
                 this.Close();
                 ConsultaGradosForm consultaGradoForm = new ConsultaGradosForm();
-                consultaGradoForm.Show();
+                consultaGradoForm.ShowDialog();
             } catch (Exception exc) {
                 MessageBox.Show(exc.Message);
             }
