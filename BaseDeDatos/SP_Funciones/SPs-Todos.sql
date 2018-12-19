@@ -1941,4 +1941,37 @@ declare @resultado varchar(255)
 
 	SELECT @resultado
 GO
+--------------------------------------------------------------------------------------
+IF OBJECT_ID('[LOOPP].[SP_ActualizarPuntosClientes]') IS NOT NULL
+    DROP PROCEDURE [LOOPP].[SP_ActualizarPuntosClientes]
+GO
+CREATE PROCEDURE [LOOPP].[SP_ActualizarPuntosClientes]
+AS
+BEGIN
+	DECLARE @puntosCliente int, @idCliente int
+	DECLARE db_cursor CURSOR FOR 
+		SELECT id_cliente 
+		FROM LOOPP.Clientes
+	OPEN db_cursor  
+	FETCH NEXT FROM db_cursor INTO @idCliente  
 
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN
+		SELECT @puntosCliente= sum(com.puntos)
+		from LOOPP.Compras com
+		where id_cliente=@idCliente
+		group by id_cliente
+		UPDATE LOOPP.Clientes
+			SET puntos_acumulados= @puntosCliente
+		where id_cliente=@idCliente
+		FETCH NEXT FROM db_cursor INTO @idCliente 
+	END 
+
+	CLOSE db_cursor  
+	DEALLOCATE db_cursor	
+
+END
+GO
+
+EXEC LOOPP.[SP_ActualizarPuntosClientes]
+DROP PROCEDURE [LOOPP].[SP_ActualizarPuntosClientes]
