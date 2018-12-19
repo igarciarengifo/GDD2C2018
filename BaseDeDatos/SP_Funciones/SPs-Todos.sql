@@ -109,6 +109,7 @@ AS
 
       ROLLBACK TRANSACTION [T]
 			set @resultado = 'ERROR: '+ERROR_MESSAGE()
+			SET @idCliente=0
 
 	END CATCH;
 	select @resultado as 'resultadoCliente',  @idUsu as 'id_usuario', @idCliente as 'id_cliente', @user as 'username', @pass as 'password'
@@ -281,7 +282,6 @@ GO
 -----------------------------------------------------------------------
 /*Funcion que calcula precio de entrada segun ubicacion*/
 
-/*Funcion que calcula precio de entrada segun ubicacion*/
 IF OBJECT_ID('LOOPP.Fn_PrecioXUbicacion') IS NOT NULL
     DROP FUNCTION LOOPP.Fn_PrecioXUbicacion
 GO
@@ -1265,28 +1265,26 @@ GO
 IF OBJECT_ID('[LOOPP].[SP_HistorialComprasCliente]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_HistorialComprasCliente]
 GO
-
 CREATE PROCEDURE [LOOPP].[SP_HistorialComprasCliente] @idUsuario int
 AS
-	select comp.fecha_compra [Fecha Compra]
-		  ,esp.descripcion Espectaculo
-		  ,esp.fecha_espectaculo [Fecha Espectaculo]
-		  ,comp.importe_total [Importe Total]
-		  ,fp.descripcion [Forma de Pago]
-	from [LOOPP].[Compras] comp
-	inner join [LOOPP].[Clientes] cli
-		on comp.id_cliente=cli.id_cliente and cli.id_usuario=@idUsuario
-	inner join [LOOPP].[Formas_Pago_Cliente] fpc
-		on comp.id_forma_pago_cliente=fpc.id_forma_pago_cliente
-	inner join LOOPP.Formas_Pago fp
-		on fp.id_forma_pago = fpc.id_forma_pago
-	inner join [LOOPP].[Localidades_Vendidas] locven
-		on locven.id_compra=comp.id_compra
-	inner join [LOOPP].Ubicac_X_Espectaculo uesp
-		on uesp.id_espectaculo=locven.id_espectaculo and uesp.id_ubicacion=locven.id_ubicacion
-	inner join [LOOPP].Espectaculos esp
-		on uesp.id_espectaculo=esp.id_espectaculo
-	order by comp.fecha_compra
+	select	comp.fecha_compra [Fecha Compra], 
+			esp.descripcion [Espectaculo], 
+			esp.fecha_espectaculo [Fecha Espectaculo], 
+			comp.importe_total [Importe Total], 
+			fp.descripcion [Forma de Pago], 
+			ub.fila [Fila], 
+			ub.asiento [Asiento]
+	from LOOPP.Compras comp
+	inner join LOOPP.Clientes cli on cli.id_cliente=comp.id_cliente
+	inner join LOOPP.Localidades_Vendidas lcv on lcv.id_compra=comp.id_compra
+	inner join LOOPP.Espectaculos esp on esp.id_espectaculo=lcv.id_espectaculo
+	inner join LOOPP.Ubicaciones ub on lcv.id_ubicacion=ub.id_ubicacion
+	inner join LOOPP.Formas_Pago_Cliente fpc on fpc.id_forma_pago_cliente=comp.id_forma_pago_cliente
+	inner join LOOPP.Formas_Pago fp on fp.id_forma_pago = fpc.id_forma_pago
+	where id_usuario=@idUsuario
+	group by comp.id_compra, comp.fecha_compra, esp.descripcion, esp.fecha_espectaculo, comp.importe_total,fp.descripcion, ub.fila, ub.asiento
+
+	order by comp.id_compra
 GO
 
 ---------------------------------------------------------------------------------------
