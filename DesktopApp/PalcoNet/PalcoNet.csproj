@@ -48,6 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entidades\Forma_Pago.cs" />
+    <Compile Include="Entidades\Forma_Pago_Cliente.cs" />
+    <Compile Include="Entidades\ResultadoAltaCliente.cs" />
     <Compile Include="Entidades\Rubro.cs" />
     <Compile Include="Entidades\TiposDocumento.cs" />
     <Compile Include="Entidades\Tipo_Ubicacion.cs" />
@@ -226,6 +229,7 @@
     <Compile Include="Managers\Compra_Manager.cs" />
     <Compile Include="Managers\Espectaculo_Manager.cs" />
     <Compile Include="Managers\Empresa_Manager.cs" />
+    <Compile Include="Managers\FormaPago_Manager.cs" />
     <Compile Include="Managers\Tipo_Ubicacion_Manager.cs" />
     <Compile Include="Managers\Ubicaciones_Manager.cs" />
     <Compile Include="Managers\Grados_Publicacion_Manager.cs" />

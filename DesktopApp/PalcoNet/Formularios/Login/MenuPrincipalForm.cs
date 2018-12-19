@@ -38,11 +38,11 @@ namespace PalcoNet.Formularios
             historialClienteBtn.Visible = false;
             estadisticasBtn.Visible = false;
             menuStrip1.Visible = false;
-            this.iniciar_sesion();
+            this.primer_inicio();
 
         }
 
-        private void iniciar_sesion()
+        private void primer_inicio()
         {
             LoginForm login_scr = new LoginForm();
             login_scr.ShowDialog();
@@ -52,15 +52,6 @@ namespace PalcoNet.Formularios
                 this.actualizarStatusLabel();
                 this.habilitar_func_x_rol();
             }
-            else {
-
-                //Si ya cargue el formulario, verifico que si no se inicio sesion, cierro la ventana ya que se cerró el login
-                if (this.WindowState == FormWindowState.Maximized)
-                {
-                    this.Close();
-                }
-            }
-            
            
         }
 
@@ -189,18 +180,19 @@ namespace PalcoNet.Formularios
         {
             DatosSesion.cerrar_sesion();
             this.Visible = false;
-            iniciar_sesion();
+            reiniciar_sesion();
            
         }
 
-        private void historialPuntosToolStripMenuItem_Click(object sender, EventArgs e)
+        private void reiniciar_sesion()
         {
+            this.primer_inicio();
+            //Si ya cargue el formulario, verifico que si no se inicio sesion, cierro la ventana ya que se cerró el login
+            if (this.WindowState == FormWindowState.Maximized)
+            {
+                this.Close();
+            }
 
-        }
-
-        private void canjeDePuntosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void newPubBtn_Click(object sender, EventArgs e)

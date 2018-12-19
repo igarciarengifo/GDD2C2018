@@ -52,6 +52,8 @@ END
 		DROP TABLE [LOOPP].[Funcionalidades];
 	IF OBJECT_ID('LOOPP.Roles') IS NOT NULL
 		DROP TABLE [LOOPP].[Roles];
+	IF OBJECT_ID('LOOPP.Formas_Pago') IS NOT NULL
+		DROP TABLE [LOOPP].[Formas_Pago];
 	
 
 /*##########################################################################################################*/
@@ -228,16 +230,25 @@ Print '***Inicio de creacion de tablas***'
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
 	);
 
+	
+	/*-15- Formas de Pago*/
+	CREATE TABLE LOOPP.Formas_Pago(
+		id_forma_pago int identity(1,1) NOT NULL,
+		descripcion nvarchar(20) NOT NULL,
+		marca nvarchar(20),
+		primary key ([id_forma_pago]),
+	);
+
 
 	/*-15- Formas de Pago Cliente*/
 	CREATE TABLE LOOPP.Formas_Pago_Cliente(
 		id_forma_pago_cliente int identity(1,1) NOT NULL,
-		descripcion nvarchar(20) NOT NULL,
+		id_forma_pago int NOT NULL,
 		nro_tarjeta bigint,
-		marca nvarchar(20),
 		id_cliente int NOT NULL,
 		primary key ([id_forma_pago_cliente]),
-		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
+		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente),
+		foreign key (id_forma_pago) references [LOOPP].[Formas_Pago](id_forma_pago)
 	);
 	
 	/*-16- Catalogo de canjes*/

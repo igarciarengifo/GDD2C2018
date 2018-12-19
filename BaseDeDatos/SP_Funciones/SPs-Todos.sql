@@ -29,7 +29,7 @@ IF OBJECT_ID('LOOPP.SP_NuevoCliente') IS NOT NULL
 DROP PROCEDURE LOOPP.SP_NuevoCliente
 GO
 
-CREATE PROCEDURE LOOPP.SP_NuevoCliente 
+CREATE PROCEDURE LOOPP.SP_NuevoCliente
 	@nombre varchar(255)
    ,@apellido varchar(255)
    ,@tipo_doc varchar(20)
@@ -46,18 +46,20 @@ CREATE PROCEDURE LOOPP.SP_NuevoCliente
    ,@cod_postal varchar(255)
    ,@user varchar(255)
    ,@pass varchar(255)
-   
+
 AS
-	declare @resultado varchar(255)
+	declare @resultado varchar(255), @idUsu int, @idCliente int
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
-		declare @idUsu int;
 		/*En el momento de crear usuarios, el campo username tiene una constraint de unicidad, si ya existe uno igual dara error de constraint*/
 		if ( @user is null)
 			begin
 				EXEC @idUsu =  LOOPP.SP_AltaUsuario_Autogenerado @cuil, @nombre
-				SET @resultado = CONVERT(varchar(255), @idUsu)+';1234'
+
+				select @pass = password, @user= username
+				from LOOPP.usuarios
+				where id_usuario = @idUsu
 			end
 		else
 			begin
@@ -65,14 +67,11 @@ AS
 							[username]
 							,[password])
 				values (@user,@pass);
-		
-
 				select @idUsu=[id_usuario]
 				from [LOOPP].[Usuarios]
 				where [username]=@user;
-				SET @resultado = CONVERT(varchar(255), @idUsu)+';'
 		end
-		INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
+		INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol)
 		VALUES (@idUsu,2);
 
 		if not exists (select 1 from [LOOPP].[Clientes] where (tipo_documento=@tipo_doc and nro_documento=@documento) or mail=@mail)
@@ -94,26 +93,26 @@ AS
 					  ,[codigo_postal]
 					  ,[id_usuario] )
 			values (@nombre,@apellido,@tipo_doc,@documento,@cuil,@fecha_nac,@mail,@telefono,@calle,@nroCalle,@piso,@depto,@localidad,@cod_postal,@idUsu)
+			SELECT @idCliente=SCOPE_IDENTITY()
+			FROM LOOPP.Clientes
 		end
-		else 
+		else
 			RAISERROR('El cliente ya existe en el sistema',16,1)
-	
-	COMMIT TRANSACTION [T]
+	SET @resultado = 'OK'
 
-	set @resultado = @resultado +';OK';
+
+	COMMIT TRANSACTION [T]
 
 	END TRY
 
 	BEGIN CATCH
 
       ROLLBACK TRANSACTION [T]
-
-	  set @resultado = ERROR_MESSAGE()+';;ERROR';
+			set @resultado = 'ERROR: '+ERROR_MESSAGE()
 
 	END CATCH;
-	select @resultado
+	select @resultado as 'resultadoCliente',  @idUsu as 'id_usuario', @idCliente as 'id_cliente', @user as 'username', @pass as 'password'
 GO
-
 ---------------------------------------------------------------------------------------
 
 /* LOOPP.SP_FiltrarClientes */
@@ -1269,8 +1268,10 @@ AS
 	from [LOOPP].[Compras] comp
 	inner join [LOOPP].[Clientes] cli
 		on comp.id_cliente=cli.id_cliente and cli.id_usuario=@idUsuario
-	inner join [LOOPP].[Formas_Pago_Cliente] fp
-		on comp.id_forma_pago_cliente=fp.id_forma_pago_cliente
+	inner join [LOOPP].[Formas_Pago_Cliente] fpc
+		on comp.id_forma_pago_cliente=fpc.id_forma_pago_cliente
+	inner join LOOPP.Formas_Pago fp
+		on fp.id_forma_pago = fpc.id_forma_pago
 	inner join [LOOPP].[Localidades_Vendidas] locven
 		on locven.id_compra=comp.id_compra
 	inner join [LOOPP].Ubicac_X_Espectaculo uesp
@@ -1555,6 +1556,21 @@ BEGIN
 END
 
 GO
+------------------------------------------------------------------
+/*Retorna medio de pagos validos*/
+
+
+IF OBJECT_ID('LOOPP.SP_GetFormasPagoValidas') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetFormasPagoValidas
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_GetFormasPagoValidas] 
+AS
+	select *
+	from [LOOPP].[Formas_Pago] 
+	where descripcion != 'Efectivo'
+GO
+
 -------------------------------------------------------------------
 /*Retorna los Medios de pago por cliente*/
 IF OBJECT_ID('LOOPP.SP_GetMedioPagoXCliente') IS NOT NULL
@@ -1563,34 +1579,71 @@ GO
 
 CREATE PROCEDURE [LOOPP].[SP_GetMedioPagoXCliente] @idCliente int
 AS
-	select id_forma_pago_cliente,descripcion+' '+cast(isnull(nro_tarjeta,'') as varchar(20)) descripcion
-	from [LOOPP].[Formas_Pago_Cliente]
+	select *
+	from [LOOPP].[Formas_Pago_Cliente] fpc
+	inner join LOOPP.Formas_Pago fp on fp.id_forma_pago=fpc.id_forma_pago
 	where id_cliente=@idCliente 
-	and descripcion != 'Efectivo'
+	and fp.descripcion != 'Efectivo'
 GO
 ---------------------------------------------------------------------
-/*Inserta medio de pago asociado para un cliente*/
+
+/*Inserta medio de pago asociado para un cliente */
 IF OBJECT_ID('LOOPP.SP_InsertarMedioPago') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_InsertarMedioPago
 GO
 
-CREATE PROCEDURE [LOOPP].[SP_InsertarMedioPago] @idCliente int,@descripcion nvarchar(20),@marca nvarchar(20),@nro bigint
+CREATE PROCEDURE [LOOPP].[SP_InsertarMedioPago] @idCliente int,@idFormaPago int, @nro bigint
 AS
-	declare @resultado varchar(10);
+	declare @resultado varchar(55);
 
-	if not exists (select 1 from [LOOPP].[Formas_Pago_Cliente] 
-				   where [id_cliente]=@idCliente and [descripcion]=@descripcion and [marca]=@marca and [nro_tarjeta]=@nro)
+	if not exists (select 1 from [LOOPP].[Formas_Pago_Cliente]
+				   where [id_cliente]=@idCliente and [id_forma_pago]=@idFormaPago and [nro_tarjeta]=@nro)
 		begin
 
-			insert into [LOOPP].[Formas_Pago_Cliente]([descripcion],[nro_tarjeta],[marca],[id_cliente])
-			values (@descripcion,@nro,@marca,@idCliente)
+			insert into [LOOPP].[Formas_Pago_Cliente]([id_cliente], [id_forma_pago], [nro_tarjeta])
+			values (@idCliente, @idFormaPago, @nro)
 
 			set @resultado = 'OK'
 		end
-	else set @resultado = 'ERROR'
+	else set @resultado = 'ERROR. No pudo agregarse el medio de pago'
 
 	select @resultado;
 GO
+
+------------------------------------------------------------------------------
+
+/*Elimina medio de pago asociado para un cliente */
+IF OBJECT_ID('LOOPP.SP_EliminarMedioPagoCliente') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_EliminarMedioPagoCliente
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_EliminarMedioPagoCliente] @idFormaPagoCliente int
+AS
+	declare @resultado varchar(55);
+	BEGIN TRANSACTION [T]
+
+	BEGIN TRY
+		DELETE LOOPP.Formas_Pago_Cliente
+		WHERE id_forma_pago_cliente=@idFormaPagoCliente
+
+	
+	COMMIT TRANSACTION [T]
+
+	set @resultado = 'OK';
+
+	END TRY
+
+	BEGIN CATCH
+
+      ROLLBACK TRANSACTION [T]
+
+	  set @resultado = 'No pudo agregarse el medio de pago: '+ERROR_MESSAGE();
+
+	END CATCH;
+	SELECT @resultado
+GO
+
+
 --------------------------------------------------------------------------------
 IF OBJECT_ID('LOOPP.SP_GetCatalogo') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_GetCatalogo

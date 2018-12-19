@@ -18,12 +18,17 @@ namespace PalcoNet.Formularios.AbmCliente
         string user, pass, resultado;
         Cliente_Manager clienteMng = new Cliente_Manager();
         Cliente clienteModificacion;
+        List<Forma_Pago> formasDePago = new List<Forma_Pago>();
+        List<Forma_Pago_Cliente> nuevasFormasDePago = new List<Forma_Pago_Cliente>();
+        List<Forma_Pago_Cliente> formasPagoModificadas = new List<Forma_Pago_Cliente>();
+
         public AltaClienteForm(Cliente cliente) {
             InitializeComponent();
+            cargarCombosTarjetas();
             if (cliente.id_cliente != 0)
             {
                 clienteModificacion = cliente;
-                habilitadoBox.Visible = true;
+                dadoDeBajaBox.Visible = true;
                 nameBox.Text = cliente.nombre;
                 lastNameBox.Text = cliente.apellido;
                 comboTipo.SelectedValue = cliente.tipo_documento;
@@ -38,14 +43,25 @@ namespace PalcoNet.Formularios.AbmCliente
                 deptoBox.Text = cliente.direccion_depto;
                 localidadBox.Text = cliente.direccion_localidad;
                 codPostalBox.Text = cliente.codigo_postal;
-                habilitadoBox.Checked = cliente.baja_logica;
+                dadoDeBajaBox.Checked = cliente.baja_logica;
+                nuevasFormasDePago=clienteMng.getMediosDePagoDeUsuario(clienteModificacion.id_cliente);
+                this.cargarDataTarjetasActuales();
                 esModificacion = true;
             }
             else {
-                habilitadoBox.Visible = false;
+                dadoDeBajaBox.Visible = false;
                 esModificacion = false;
             }
   
+        }
+
+        private void cargarDataTarjetasActuales()
+        {
+            foreach (Forma_Pago_Cliente formaPagoCliente in nuevasFormasDePago) { 
+                Forma_Pago formaPago = formasDePago.Find(formaDePago => formaDePago.id_forma_pago==formaPagoCliente.id_forma_pago);
+                agregarNuevaTarjetaData(formaPagoCliente.nro_tarjeta, formaPago.marca, formaPago.descripcion);
+            }
+            
         }
 
         public AltaClienteForm(string username, string passw)
@@ -53,14 +69,12 @@ namespace PalcoNet.Formularios.AbmCliente
             InitializeComponent();
             user = username;
             pass = passw;
-            habilitadoBox.Visible = false;
+            cargarCombosTarjetas();
+            dadoDeBajaBox.Visible = false;
             esModificacion = false;
         }
 
-        public string getResultado()
-        {
-            return resultado;
-        }
+
 
         private void newClienteBtn_Click(object sender, EventArgs e)
         {
@@ -84,6 +98,7 @@ namespace PalcoNet.Formularios.AbmCliente
 
         private void modificarCliente( )
         {
+            agregarFormasDePago(formasPagoModificadas);
             clienteModificacion.nombre = nameBox.Text;
             clienteModificacion.apellido = lastNameBox.Text;
             clienteModificacion.tipo_documento = comboTipo.SelectedValue.ToString();
@@ -98,12 +113,12 @@ namespace PalcoNet.Formularios.AbmCliente
             clienteModificacion.direccion_depto = deptoBox.Text;
             clienteModificacion.direccion_localidad = localidadBox.Text;
             clienteModificacion.codigo_postal = codPostalBox.Text;
-            clienteModificacion.baja_logica = habilitadoBox.Checked;
-            resultado = clienteMng.modificarCliente(clienteModificacion);
+            clienteModificacion.baja_logica = dadoDeBajaBox.Checked;
+            resultado = clienteMng.modificarCliente(clienteModificacion, nuevasFormasDePago, formasPagoModificadas);
 
             if (resultado.Equals("OK"))
             {
-                MessageBox.Show("Se realizaron los cambios correctamente.", "Operacion correcta");
+                MessageBox.Show("Se realizaron los cambios sobre los datos del cliente.", "Operacion correcta");
                 this.Dispose();
                 this.Close();
 
@@ -146,18 +161,17 @@ namespace PalcoNet.Formularios.AbmCliente
             nuevaPersona.direccion_piso = Convert.ToInt32(pisoBox.Text);
             nuevaPersona.direccion_depto = deptoBox.Text;
             nuevaPersona.codigo_postal = codPostalBox.Text;
-
-            resultado = clienteMng.altaClienteYUsuario(user, pass, nuevaPersona);
-            String[] arrayResultado = resultado.Split(';');
+            this.agregarFormasDePago(nuevasFormasDePago);
+            ResultadoAltaCliente resultadoAlta = clienteMng.altaClienteYUsuario(user, pass, nuevaPersona, nuevasFormasDePago);
+            
             string passToHash;
-            if (arrayResultado.ElementAt(2).Equals("OK"))
+            if (resultadoAlta.resultadoCliente.Equals("OK"))
             {
                 Usuario_Manager userMng = new Usuario_Manager();
-                MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
                 if (user == null)
                 {
-                    MessageBox.Show("La nueva contraseña es: " + arrayResultado.ElementAt(1) + ".\n El usuario es: " + nuevaPersona.cuil, "Operacion correcta");
-                    passToHash = arrayResultado.ElementAt(1);
+                    MessageBox.Show("La nueva contraseña es: " + resultadoAlta.password + ".\n El usuario es: " + resultadoAlta.username, "Operacion correcta");
+                    passToHash = resultadoAlta.password;
                     this.DialogResult = DialogResult.OK;
                 }
                 else
@@ -165,18 +179,41 @@ namespace PalcoNet.Formularios.AbmCliente
                     passToHash = pass;
                 }
                 String passHash = Encriptacion.getHashSha256(passToHash);
-                userMng.cambiarPassword(passHash, Convert.ToInt32(arrayResultado.ElementAt(0)));
+                userMng.cambiarPassword(passHash, resultadoAlta.id_usuario);
+                if (resultadoAlta.resultadoTarjeta.Equals("OK"))
+                {
+                    MessageBox.Show("Se realizaron los cambios correctamente.", "Resultado operacion");
+                }
+                else {
+                    MessageBox.Show("Contacte con el administrador para agregar un medio de pago.", "Resultado operacion");
+                }
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
             {
-                MessageBox.Show(arrayResultado.ElementAt(0),
+                MessageBox.Show(resultadoAlta.resultadoCliente,
                     "No pudo realizarse operacion",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Exclamation,
                     MessageBoxDefaultButton.Button1);
             }
+        }
+
+        private void agregarFormasDePago(List<Forma_Pago_Cliente> listaFormasPago)
+        {
+
+            foreach (DataGridViewRow row in dataFormasPago.Rows)
+            {
+                Forma_Pago_Cliente nuevaFormaPago = new Forma_Pago_Cliente();
+                nuevaFormaPago.nro_tarjeta = Int64.Parse(row.Cells[0].Value.ToString());
+                string marca=row.Cells[1].Value.ToString();
+                string descripcion = row.Cells[2].Value.ToString();
+                Forma_Pago formaPagoGral = formasDePago.Find(formaPago => formaPago.marca.Equals(marca) && formaPago.descripcion.Equals(descripcion));
+                nuevaFormaPago.id_forma_pago = formaPagoGral.id_forma_pago;
+                listaFormasPago.Add(nuevaFormaPago);
+            }
+
         }
 
         private void verificarCamposObligatorios()
@@ -186,7 +223,25 @@ namespace PalcoNet.Formularios.AbmCliente
                 throw new ArgumentException("Debe completar los datos obligatorios indicados");
             }
             this.validarFormatoCUIL();
+            if (dataFormasPago.Rows.Count == 0) {
+                throw new ArgumentException("Debe ingresar al menos un medio de pago");
+            }
 
+        }
+
+        private void validarNumeroTarjeta()
+        {
+            foreach (DataGridViewRow row in dataFormasPago.Rows)
+            {
+                if (row.Cells["NroTarjeta"].Value.ToString().Equals(nroTarjetaBox.Text)) {
+                    throw new Exception("Ya se agregó una tarjeta con el numero ingresado.");
+                }
+            }
+
+            if (!(nroTarjetaBox.Text.Length.Equals(16) &&  nroTarjetaBox.Text.All(character => Char.IsDigit(character))))
+            {
+                throw new Exception("Formato incorrecto. Debe ingresar 16 numeros");
+            }
         }
 
         private void validarFormatoCUIL()
@@ -216,6 +271,75 @@ namespace PalcoNet.Formularios.AbmCliente
         private void AltaClienteForm_Load(object sender, EventArgs e)
         {
             comboTipo.DataSource = new TiposDocumento().getAll();
+            if (esModificacion && nuevasFormasDePago.Count == 0) {
+                MessageBox.Show("Debe ingresar forma de pago. ");
+            }
+            if (dataFormasPago.RowCount == 0)
+            {
+                button2.Enabled = false;
+            }
+            else {
+                button2.Enabled = true;
+            }
+        }
+
+        private void cargarCombosTarjetas()
+        {
+            FormaPago_Manager formaPagoMng = new FormaPago_Manager();
+            formasDePago = formaPagoMng.getFormasPagosValidas();
+            List<String> marcasList = formasDePago.Select(formaPago => formaPago.marca).ToList();
+            marcaBox.DataSource = (new HashSet<String>(marcasList).ToList());
+            List<String> descripcionList = formasDePago.Select(formaPago => formaPago.descripcion).ToList();
+            descripcionPagoBox.DataSource = (new HashSet<String>(descripcionList)).ToList();
+
+        }
+
+        private void agregarTarjetaBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                validarNumeroTarjeta();
+                this.agregarNuevaTarjetaData(Int64.Parse(nroTarjetaBox.Text), marcaBox.SelectedValue.ToString(), descripcionPagoBox.SelectedValue.ToString());
+                
+                button2.Enabled = true;
+            }
+            catch (Exception exc) {
+                MessageBox.Show(exc.Message,
+                    "No pudo realizarse operacion",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation,
+                    MessageBoxDefaultButton.Button1);
+            }
+            
+
+        }
+
+        private void agregarNuevaTarjetaData(Int64 nroTarjeta, string marca, string descripcion)
+        {
+            var index = dataFormasPago.Rows.Add();
+            dataFormasPago.Rows[index].Cells["NroTarjeta"].Value = nroTarjeta.ToString();
+            dataFormasPago.Rows[index].Cells["Descripcion"].Value = marca;
+            dataFormasPago.Rows[index].Cells["Marca"].Value = descripcion;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (dataFormasPago.SelectedRows.Count > 0)
+            {
+
+                foreach (DataGridViewRow row in dataFormasPago.SelectedRows)
+                {
+                    dataFormasPago.Rows.RemoveAt(row.Index);
+                }
+            }
+            if (dataFormasPago.RowCount == 0)
+            {
+                button2.Enabled = false;
+            }
+            else
+            {
+                button2.Enabled = true;
+            }
         }
     }
 }

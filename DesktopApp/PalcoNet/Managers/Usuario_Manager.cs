@@ -30,7 +30,14 @@ namespace PalcoNet.Managers
                 return null;
             }
 
-            return usuariosEncontrados.ElementAt(0);
+            if (usuariosEncontrados.Count == 0)
+            {
+                return null;
+            }
+            else {
+                return usuariosEncontrados.ElementAt(0);
+            }
+            
         }
 
         private Usuario BuildUsuario(DataRow row)

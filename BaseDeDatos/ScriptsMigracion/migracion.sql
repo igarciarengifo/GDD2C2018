@@ -36,6 +36,17 @@ FROM gd_esquema.Maestra
 ORDER BY Ubicacion_Tipo_Codigo
 GO
 -------------------------------------------------------------------------------
+/*Creacion de formas de pago disponibles*/
+
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Efectivo', null);
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Credito', 'VISA');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Credito', 'MASTERCARD');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Credito', 'AMERICAN EXPRESS');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Debito', 'VISA');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Debito', 'MASTERCARD');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Debito', 'AMERICAN EXPRESS');
+
+-------------------------------------------------------------------------------
 
 /*Creacion de Rubros*/
 
@@ -47,7 +58,6 @@ INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Audio Visual');
 -------------------------------------------------------------------------------
 
 /*Grados de Publicacion*/
-INSERT INTO LOOPP.Grados_Publicacion (comision,descripcion) VALUES (0.00,'No Definido');
 INSERT INTO LOOPP.Grados_Publicacion (comision,descripcion) VALUES (0.30,'Alta');
 INSERT INTO LOOPP.Grados_Publicacion (comision, descripcion) VALUES (0.25, 'Media');
 INSERT INTO LOOPP.Grados_Publicacion (comision, descripcion) VALUES (0.10, 'Baja');
@@ -383,16 +393,15 @@ DROP TABLE #Temp_Empresas;
 /*Migracion Forma de pago clientes*/
 
 insert into [LOOPP].[Formas_Pago_Cliente] (
-	descripcion,
-	id_cliente
-	 )
-select	
-		[Forma_Pago_Desc],
-		clie.id_cliente 
+	id_forma_pago,
+	id_cliente,
+	nro_tarjeta)
+select 1,clie.id_cliente, null
 FROM [gd_esquema].[Maestra] m
 inner join [LOOPP].[Clientes] clie on clie.nro_documento = m.Cli_Dni
 where Forma_Pago_Desc is not null
-group by Forma_Pago_Desc, clie.id_cliente
+group by clie.id_cliente
+
 -------------------------------------------------------------------------------
 
 /*Migracion de Espectaculos*/
