@@ -1726,7 +1726,6 @@ BEGIN
 END
 
 GO
-<<<<<<< HEAD
 --------------------------------------------------------------------------------
 
 /*SP que modifica descripcion de rol cuando el rol esta activo, en caso de estar de baja retorna error*/
@@ -1796,9 +1795,6 @@ AS
 	and tu.id_tipo_ubicacion=@idTipoUbic
 
 GO
---------------------------------------------------------------------------------
-=======
-
 ----------------------------------------------------
 
 IF OBJECT_ID('LOOPP.SP_GetHistorialCanje') IS NOT NULL
@@ -1816,4 +1812,3 @@ BEGIN
 END
 
 GO
->>>>>>> 8b507854be58c6450e1827fa7bb7955b2b81a924
