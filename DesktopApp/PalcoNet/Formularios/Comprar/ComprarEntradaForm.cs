@@ -41,6 +41,11 @@ namespace PalcoNet.Formularios.Comprar {
         private void cargarEspectaculosCmb() {
             List<Espectaculo> espectaculos = new List<Espectaculo>();
             espectaculos = especMngr.getEspectaculosActivos();
+            Espectaculo itemDef = new Espectaculo();
+            itemDef.id_espectaculo = 0;
+            itemDef.descripcion = "Seleccionar";
+            espectaculos.Insert(0,itemDef);         
+
             cmbEspectaculo.DisplayMember = "descripcion";
             cmbEspectaculo.ValueMember = "id_espectaculo";
             cmbEspectaculo.DataSource = espectaculos;
@@ -52,49 +57,50 @@ namespace PalcoNet.Formularios.Comprar {
         }
 
         private void btnFiltrar_Click(object sender, EventArgs e) {
-            if (this.verificarCamposObligatorios()) {
-                string idCadena = "";
-                foreach (Rubro item in checkedListBox1.CheckedItems) {
-                    string id_Rubro = (item.id_rubro).ToString();
-                    idCadena += id_Rubro + ",";
-                }
-                idCadena = idCadena.Substring(0, idCadena.Length - 1);
-                int idEspectaculo = 0;
-                
-                
-                DateTime desde = dateTimePicker1.Value;
-                DateTime hasta = dateTimePicker2.Value;
-                string feDesde = desde.ToString("dd-MM-yyyy");
-                string feHasta = hasta.ToString("dd-MM-yyyy");
-
-                DataTable datos = new DataTable();
-
-                if (cmbEspectaculo.SelectedValue != null) {
-                    idEspectaculo = (int)cmbEspectaculo.SelectedValue;
-                    datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
-                } else {
-
-                    datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
-                }
-                if (datos.Rows.Count > 0) {
-                    this.cargar_datos(datos);
-                } else {
-                    MessageBox.Show("No hay resultados.");
-                }
-                
+            this.verificarCamposObligatorios();
+            string idCadena = "";
+            foreach (Rubro item in checkedListBox1.CheckedItems) {
+                string id_Rubro = (item.id_rubro).ToString();
+                idCadena += id_Rubro + ",";
             }
+            idCadena = idCadena.Substring(0, idCadena.Length - 1);
+            int idEspectaculo = 0;
+                
+                
+            DateTime desde = dateTimePicker1.Value;
+            DateTime hasta = dateTimePicker2.Value;
+            string feDesde = desde.ToString("dd-MM-yyyy");
+            string feHasta = hasta.ToString("dd-MM-yyyy");
+
+            DataTable datos = new DataTable();
+
+            if (cmbEspectaculo.SelectedValue != null) {
+                idEspectaculo = (int)cmbEspectaculo.SelectedValue;
+                datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
+            } else {
+
+                datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
+            }
+            if (datos.Rows.Count > 0) {
+                this.cargar_datos(datos);
+            } else {
+                MessageBox.Show("No hay resultados.");
+            }
+                
+            
         }
 
-        private bool verificarCamposObligatorios() {           
+        private void verificarCamposObligatorios() {           
           /*  if (cmbEspectaculo.SelectedValue == null) {
                 MessageBox.Show("Debe elegir un espectáculo.");
                 return false;
             }*/
             if (!(checkedListBox1.CheckedItems.Count > 0)){
-                MessageBox.Show("Debe seleccionar por lo menos una categoría.");
-                return false;
+                //MessageBox.Show("Debe seleccionar por lo menos una categoría.");
+                throw new ArgumentException("Debe seleccionar por lo menos una categoría.");
+                //return false;
             }
-            return true;
+           // return true;
         }
 
         

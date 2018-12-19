@@ -1776,20 +1776,40 @@ AS
 GO
 --------------------------------------------------------------------------------
 
+/*Funcion que calcula el precio por ubicacion*/
+IF OBJECT_ID('[LOOPP].[Fn_CalcularPrecioUbic]') IS NOT NULL
+    DROP FUNCTION [LOOPP].[Fn_CalcularPrecioUbic]
+GO
+CREATE FUNCTION [LOOPP].[Fn_CalcularPrecioUbic] (@precioBase numeric(18,2), @idGrado int, @porcentual numeric(10,2))
+RETURNS numeric(18,2)
+AS 
+	BEGIN
+		declare @precio numeric(18,2)
+		
+		select @precio=@precioBase+(@precioBase*comision)+(@precioBase*@porcentual)
+		from [LOOPP].[Grados_Publicacion]
+		where id_grado_publicacion=@idGrado
+	
+		RETURN @precio
+	END
+GO
+
 /*SP que devuelve las ubicaciones segun espectaculo y tipo de ubicacion seleccionado*/
 IF OBJECT_ID('[LOOPP].[SP_GetUbicacionesXEspec]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec]
 GO
 CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec] @id int,@fecha date,@hora time,@idTipoUbic int
 AS
-	select distinct u.id_ubicacion,'Fila '+[fila]+' - Asiento'+cast([asiento] as varchar(10)) Ubicacion
+	select distinct u.id_ubicacion
+		  ,'Fila '+[fila]+' - Asiento '+cast([asiento] as varchar(10))+
+		  ' - Costo '+cast([LOOPP].[Fn_CalcularPrecioUbic](e.precio_base,e.id_grado_publicacion,tu.porcentual) as varchar(10)) Ubicacion
 	from [LOOPP].[Ubicac_X_Espectaculo] ue
 	inner join [LOOPP].[Espectaculos] e
-	on ue.id_espectaculo=e.id_espectaculo
+		on ue.id_espectaculo=e.id_espectaculo
 	inner join [LOOPP].[Ubicaciones] u
-	on ue.id_ubicacion=u.id_ubicacion
+		on ue.id_ubicacion=u.id_ubicacion
 	inner join [LOOPP].[Tipo_Ubicacion] tu
-	on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
+		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
 	where e.id_espectaculo=@id 
 	and e.fecha_espectaculo=@fecha 
 	and e.hora_espectaculo=@hora
@@ -1828,5 +1848,97 @@ BEGIN
 	where cli.id_cliente=@id_cliente
 END
 
+GO
+
+--------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+/*SP que devuelve consulta con compras segun id seleccionadas en la APP*/
+IF OBJECT_ID('[LOOPP].[SP_RetornaUbicacionesDeLista]') IS NOT NULL
+    DROP PROCEDURE [LOOPP].[SP_RetornaUbicacionesDeLista]
+GO
+CREATE PROCEDURE [LOOPP].[SP_RetornaUbicacionesDeLista] @idUbicaciones varchar(30)
+AS
+BEGIN
+
+	DECLARE @SQL varchar(max)
+
+	SET @SQL = 
+			'select [id_ubicacion],[id_tipo_ubicacion]
+			from [LOOPP].[Ubicaciones]
+			where [id_ubicacion] IN (' + @idUbicaciones + ')'
+
+	EXEC(@SQL)	
+END
+GO
+/*SP que inserta la compra de ubicacion*/
+IF OBJECT_ID('[LOOPP].[SP_ComprarEspectaculo]') IS NOT NULL
+    DROP PROCEDURE [LOOPP].[SP_ComprarEspectaculo]
+GO
+CREATE PROCEDURE [LOOPP].[SP_ComprarEspectaculo] @idCliente int,@idEspec int, @idUbic varchar(30), @idFormaPago int
+AS
+declare @resultado varchar(255)
+	BEGIN TRANSACTION [T]
+
+	BEGIN TRY
+	/*Genero tabla temporal con los registros obtenidos*/
+	CREATE TABLE #Temp_Ubicaciones ([id_ubicacion] int NOT NULL,[id_tipo_ubicacion] int NOT NULL)
+
+	insert into #Temp_Ubicaciones ([id_ubicacion],[id_tipo_ubicacion]) 
+	exec [LOOPP].[SP_RetornaUbicacionesDeLista] @idUbic
+
+	--Inserta compras
+	insert into [LOOPP].[Compras]([fecha_compra]
+								 ,[importe_total]
+								 ,[cantidad_compra]
+								 ,[id_forma_pago_cliente]
+								 ,[puntos]
+								 ,[id_cliente]
+								 )
+
+	select getdate()
+		 ,sum([LOOPP].[Fn_CalcularPrecioUbic](e.precio_base,e.id_grado_publicacion,tu.porcentual))
+		 ,count(1)
+		 ,@idFormaPago
+		 ,0
+		 ,@idCliente
+	from #Temp_Ubicaciones u
+	inner join [LOOPP].[Ubicac_X_Espectaculo] ue
+		on u.id_ubicacion=ue.id_ubicacion
+	inner join [LOOPP].[Espectaculos] e
+		on ue.id_espectaculo=e.id_espectaculo
+	inner join [LOOPP].[Tipo_Ubicacion] tu
+		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
+	where e.id_espectaculo=@idEspec 
+	and tu.id_tipo_ubicacion=u.id_tipo_ubicacion
+
+	--Inserta Localidades
+
+	declare @idCompra int;
+	select @idCompra=MAX(id_compra) from [LOOPP].[Compras]
+
+	insert into [LOOPP].[Localidades_Vendidas]([id_compra],[id_espectaculo],[id_ubicacion])
+	select @idCompra,@idEspec,id_ubicacion
+	from #Temp_Ubicaciones
+
+	update [LOOPP].[Ubicac_X_Espectaculo]
+	set [disponible]='False'
+	where id_ubicacion in (select id_ubicacion from #Temp_Ubicaciones)
+	and id_espectaculo=@idEspec;
+
+	COMMIT TRANSACTION [T]
+
+	set @resultado = 'OK';
+
+	END TRY
+
+	BEGIN CATCH
+
+      ROLLBACK TRANSACTION [T]
+
+	  set @resultado = ERROR_MESSAGE();
+
+	END CATCH;
+
+	SELECT @resultado
 GO
 

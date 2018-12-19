@@ -43,20 +43,20 @@ namespace PalcoNet.Formularios.AbmRol
         }
 
         private void nuevoBtn_Click(object sender, EventArgs e) {
-            AltaRolForm altaRolForm = new AltaRolForm();
-            altaRolForm.ShowDialog();
             this.Dispose();
             this.Close();
+            AltaRolForm altaRolForm = new AltaRolForm();
+            altaRolForm.ShowDialog();            
         }
 
         private void modificarBtn_Click(object sender, EventArgs e) {
             if (dataGridView1.SelectedRows.Count > 0) {
                 DataGridViewRow dtv = dataGridView1.SelectedRows[0];
                 Rol rolSelected = (Rol)dtv.DataBoundItem;
-                EditarRolForm editarGradoForm = new EditarRolForm(rolSelected);
-                editarGradoForm.ShowDialog();
                 this.Dispose();
                 this.Close();
+                EditarRolForm editarGradoForm = new EditarRolForm(rolSelected);
+                editarGradoForm.ShowDialog();               
             }
         }
 
