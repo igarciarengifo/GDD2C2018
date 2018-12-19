@@ -54,10 +54,11 @@ namespace PalcoNet.Formularios.AbmGrado {
             if (dataGridView1.SelectedRows.Count > 0) {              
                 DataGridViewRow dtv = dataGridView1.SelectedRows[0];
                 Grado_Publicacion gradoSelected = (Grado_Publicacion)dtv.DataBoundItem;
-                EditarGradoForm editarGradoForm = new EditarGradoForm(gradoSelected);
-                editarGradoForm.ShowDialog();
                 this.Dispose();
                 this.Close();
+                EditarGradoForm editarGradoForm = new EditarGradoForm(gradoSelected);
+                editarGradoForm.ShowDialog();
+                
             }
             
         }
