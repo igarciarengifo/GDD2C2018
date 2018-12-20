@@ -1752,6 +1752,20 @@ GO
 
 --------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
+/*Funcion que calcula los puntos*/
+IF OBJECT_ID('LOOPP.Fn_CalcularPuntos') IS NOT NULL
+	DROP FUNCTION [LOOPP].[Fn_CalcularPuntos];
+GO
+
+CREATE FUNCTION [LOOPP].[Fn_CalcularPuntos] (@Importe_total numeric (18,0))
+RETURNS int
+AS BEGIN
+		declare @puntos int
+	set @puntos = ( @Importe_total /10)
+	
+    RETURN @puntos
+END
+
 /*SP que devuelve consulta con compras segun id seleccionadas en la APP*/
 IF OBJECT_ID('[LOOPP].[SP_RetornaUbicacionesDeLista]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_RetornaUbicacionesDeLista]
@@ -1785,18 +1799,6 @@ declare @resultado varchar(255)
 
 	insert into #Temp_Ubicaciones ([id_ubicacion],[id_tipo_ubicacion]) 
 	exec [LOOPP].[SP_RetornaUbicacionesDeLista] @idUbicaciones
-
-	select [LOOPP].[Fn_CalcularPrecioUbic](e.precio_base,e.id_grado_publicacion,tu.porcentual) costo_entrada
-	into #Temp_Compra
-	from #Temp_Ubicaciones u
-	inner join [LOOPP].[Ubicac_X_Espectaculo] ue
-		on u.id_ubicacion=ue.id_ubicacion
-	inner join [LOOPP].[Espectaculos] e
-		on ue.id_espectaculo=e.id_espectaculo
-	inner join [LOOPP].[Tipo_Ubicacion] tu
-		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
-	where e.id_espectaculo=@idEspec 
-	and tu.id_tipo_ubicacion=u.id_tipo_ubicacion
 
 	--Inserta compras
 	insert into [LOOPP].[Compras]([fecha_compra]
@@ -1853,8 +1855,7 @@ declare @resultado varchar(255)
 	END CATCH;
 	
 	SELECT @resultado
-	
-GO
+GO	
 -------------------------------------------------------------------------------------
 
 IF OBJECT_ID('LOOPP.SP_GetMayorAnioActividad') IS NOT NULL
