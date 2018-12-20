@@ -40,18 +40,19 @@
             this.btnComprar = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cmbMedioPago = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
+            this.panelMP = new System.Windows.Forms.Panel();
+            this.label19 = new System.Windows.Forms.Label();
+            this.nroTarjetaBox = new System.Windows.Forms.TextBox();
+            this.btnNuevoMP = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.cmbTipoMP = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.panelMP.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -93,9 +94,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(15, 101);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 20);
+            this.label3.Size = new System.Drawing.Size(94, 20);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Ubicación:";
+            this.label3.Text = "Ubicación*:";
             // 
             // btnAgregar
             // 
@@ -122,9 +123,9 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(15, 60);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(125, 20);
+            this.label2.Size = new System.Drawing.Size(131, 20);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Tipo Ubicación:";
+            this.label2.Text = "Tipo Ubicación*:";
             // 
             // label1
             // 
@@ -148,17 +149,18 @@
             // btnComprar
             // 
             this.btnComprar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnComprar.Location = new System.Drawing.Point(581, 535);
+            this.btnComprar.Location = new System.Drawing.Point(579, 591);
             this.btnComprar.Name = "btnComprar";
             this.btnComprar.Size = new System.Drawing.Size(157, 40);
             this.btnComprar.TabIndex = 2;
             this.btnComprar.Text = "Comprar";
             this.btnComprar.UseVisualStyleBackColor = true;
+            this.btnComprar.Click += new System.EventHandler(this.btnComprar_Click);
             // 
             // btnCancelar
             // 
             this.btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancelar.Location = new System.Drawing.Point(418, 535);
+            this.btnCancelar.Location = new System.Drawing.Point(416, 591);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(157, 40);
             this.btnCancelar.TabIndex = 3;
@@ -169,23 +171,13 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.label4);
-            this.panel2.Controls.Add(this.comboBox1);
+            this.panel2.Controls.Add(this.cmbMedioPago);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Location = new System.Drawing.Point(25, 318);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(711, 104);
             this.panel2.TabIndex = 4;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(531, 42);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(157, 40);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Nuevo Medio de Pago";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // label4
             // 
@@ -197,13 +189,13 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Datos de Pago del Cliente";
             // 
-            // comboBox1
+            // cmbMedioPago
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(151, 51);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(348, 24);
-            this.comboBox1.TabIndex = 4;
+            this.cmbMedioPago.FormattingEnabled = true;
+            this.cmbMedioPago.Location = new System.Drawing.Point(151, 51);
+            this.cmbMedioPago.Name = "cmbMedioPago";
+            this.cmbMedioPago.Size = new System.Drawing.Size(348, 24);
+            this.cmbMedioPago.TabIndex = 4;
             // 
             // label5
             // 
@@ -211,29 +203,52 @@
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(6, 51);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(125, 20);
+            this.label5.Size = new System.Drawing.Size(131, 20);
             this.label5.TabIndex = 2;
-            this.label5.Text = "Medio de Pago:";
+            this.label5.Text = "Medio de Pago*:";
             // 
-            // panel3
+            // panelMP
             // 
-            this.panel3.Controls.Add(this.button2);
-            this.panel3.Controls.Add(this.label6);
-            this.panel3.Controls.Add(this.comboBox2);
-            this.panel3.Controls.Add(this.label7);
-            this.panel3.Location = new System.Drawing.Point(25, 428);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(711, 104);
-            this.panel3.TabIndex = 5;
+            this.panelMP.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelMP.Controls.Add(this.label19);
+            this.panelMP.Controls.Add(this.nroTarjetaBox);
+            this.panelMP.Controls.Add(this.btnNuevoMP);
+            this.panelMP.Controls.Add(this.label6);
+            this.panelMP.Controls.Add(this.cmbTipoMP);
+            this.panelMP.Controls.Add(this.label7);
+            this.panelMP.Location = new System.Drawing.Point(25, 428);
+            this.panelMP.Name = "panelMP";
+            this.panelMP.Size = new System.Drawing.Size(711, 157);
+            this.panelMP.TabIndex = 5;
             // 
-            // button2
+            // label19
             // 
-            this.button2.Location = new System.Drawing.Point(531, 42);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(157, 40);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Nuevo Medio de Pago";
-            this.button2.UseVisualStyleBackColor = true;
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(8, 96);
+            this.label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(102, 20);
+            this.label19.TabIndex = 8;
+            this.label19.Text = "Nro. Tarjeta:";
+            // 
+            // nroTarjetaBox
+            // 
+            this.nroTarjetaBox.Location = new System.Drawing.Point(151, 96);
+            this.nroTarjetaBox.Margin = new System.Windows.Forms.Padding(4);
+            this.nroTarjetaBox.Name = "nroTarjetaBox";
+            this.nroTarjetaBox.Size = new System.Drawing.Size(249, 22);
+            this.nroTarjetaBox.TabIndex = 7;
+            // 
+            // btnNuevoMP
+            // 
+            this.btnNuevoMP.Location = new System.Drawing.Point(477, 76);
+            this.btnNuevoMP.Name = "btnNuevoMP";
+            this.btnNuevoMP.Size = new System.Drawing.Size(198, 40);
+            this.btnNuevoMP.TabIndex = 6;
+            this.btnNuevoMP.Text = "Nuevo Medio de Pago";
+            this.btnNuevoMP.UseVisualStyleBackColor = true;
+            this.btnNuevoMP.Click += new System.EventHandler(this.btnNuevoMP_Click);
             // 
             // label6
             // 
@@ -241,25 +256,25 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(7, 12);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(204, 18);
+            this.label6.Size = new System.Drawing.Size(174, 18);
             this.label6.TabIndex = 5;
-            this.label6.Text = "Datos de Pago del Cliente";
+            this.label6.Text = "Nuevo Medio de Pago";
             // 
-            // comboBox2
+            // cmbTipoMP
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(151, 51);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(348, 24);
-            this.comboBox2.TabIndex = 4;
+            this.cmbTipoMP.FormattingEnabled = true;
+            this.cmbTipoMP.Location = new System.Drawing.Point(151, 51);
+            this.cmbTipoMP.Name = "cmbTipoMP";
+            this.cmbTipoMP.Size = new System.Drawing.Size(249, 24);
+            this.cmbTipoMP.TabIndex = 4;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(6, 51);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(139, 20);
+            this.label7.Size = new System.Drawing.Size(125, 20);
             this.label7.TabIndex = 2;
             this.label7.Text = "Medio de Pago:";
             // 
@@ -267,8 +282,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(774, 600);
-            this.Controls.Add(this.panel3);
+            this.ClientSize = new System.Drawing.Size(774, 643);
+            this.Controls.Add(this.panelMP);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnComprar);
@@ -280,8 +295,8 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.panelMP.ResumeLayout(false);
+            this.panelMP.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -297,17 +312,18 @@
         private System.Windows.Forms.Button btnCancelar;
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cmbMedioPago;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Panel panelMP;
+        private System.Windows.Forms.Button btnNuevoMP;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox cmbTipoMP;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox cmbUbicacion;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblDescripcion;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox nroTarjetaBox;
     }
 }

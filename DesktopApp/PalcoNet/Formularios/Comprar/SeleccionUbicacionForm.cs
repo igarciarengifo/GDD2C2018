@@ -17,10 +17,13 @@ namespace PalcoNet.Formularios.Comprar{
             espectaculoItem = espectaculo;
             lblDescripcion.Text = espectaculo.descripcion;
             this.cargarTipoUbicacionCmb(espectaculo);
+            this.cargarMediosPagoCmb();
         }
 
         Compra_Manager compraMngr = new Compra_Manager();
+        Cliente_Manager clienteMngr = new Cliente_Manager();
         Tipo_Ubicacion_Manager tpUbicMngr = new Tipo_Ubicacion_Manager();
+        FormaPago_Manager formaPagoMngr = new FormaPago_Manager();
         Ubicaciones_Manager ubicacionMngr = new Ubicaciones_Manager();
         Espectaculo espectaculoItem = new Espectaculo();
         List<Ubicacion> ubicacionesList = new List<Ubicacion>();
@@ -47,6 +50,31 @@ namespace PalcoNet.Formularios.Comprar{
             cmbUbicacion.DataSource = ubicaciones;
         }
 
+        private void cargarMPNuevo() {
+            List<Forma_Pago> formasPagos = new List<Forma_Pago>();
+            formasPagos = formaPagoMngr.getFormasPagosValidas();
+            cmbTipoMP.DisplayMember = "marca";
+            cmbTipoMP.ValueMember = "id_forma_pago";
+            cmbTipoMP.DataSource = formasPagos;         
+        }
+
+        private void cargarMediosPagoCmb() {
+            List<Forma_Pago_Cliente> formasPagos = new List<Forma_Pago_Cliente>();
+            formasPagos = clienteMngr.getMediosDePagoDeUsuario(DatosSesion.id_usuario);
+            if (formasPagos.Count > 0)
+            {
+                cmbMedioPago.DisplayMember = "marca";
+                cmbMedioPago.ValueMember = "id_forma_pago_cliente";
+                cmbMedioPago.DataSource = formasPagos;
+
+                panelMP.Visible = false;
+            }
+            else {
+                panelMP.Visible = true;
+                this.cargarMPNuevo();
+            }            
+        }
+
         private void btnCancelar_Click(object sender, EventArgs e) {
             this.Dispose();
             this.Close();
@@ -67,5 +95,60 @@ namespace PalcoNet.Formularios.Comprar{
                 MessageBox.Show("Debe seleccionar una ubicación.");
             }
         }
+
+        private void btnNuevoMP_Click(object sender, EventArgs e) {
+          
+            if (cmbTipoMP.SelectedValue != null) {
+                this.validarNumeroTarjeta();
+                Forma_Pago_Cliente mp = new Forma_Pago_Cliente();
+                mp.id_cliente = DatosSesion.id_usuario;
+                mp.id_forma_pago = (int)cmbTipoMP.SelectedValue;
+                mp.nro_tarjeta = Int64.Parse(nroTarjetaBox.Text);
+                string resultado = clienteMngr.altaDeMedioDePago(mp);
+                if (resultado.Equals("OK")) {
+                    this.cargarMediosPagoCmb();
+                }
+            }
+
+        }
+
+        private void validarNumeroTarjeta() {            
+            if (!(nroTarjetaBox.Text.Length.Equals(16) && nroTarjetaBox.Text.All(character => Char.IsDigit(character)))) {
+                throw new ArgumentException("Formato incorrecto. Debe ingresar 16 numeros.");
+            }
+        }
+
+        private void btnComprar_Click(object sender, EventArgs e) {
+            this.verificarCamposObligatorios();
+            string idCadena = "";
+            foreach (Ubicacion item in ubicacionesList)
+            {
+                string id_ubic = (item.id_ubicacion).ToString();
+                idCadena += id_ubic + ",";
+            }
+            idCadena = idCadena.Substring(0, idCadena.Length - 1); 
+            Compra compra = new Compra();
+            compra.id_cliente = DatosSesion.id_usuario;
+            compra.id_espectaculo = espectaculoItem.id_espectaculo;
+            compra.listUbicaciones = idCadena;
+            compra.id_medio_pago = (int)cmbMedioPago.SelectedValue;
+            string resultado = compraMngr.comprarEntrada(compra);
+            if (resultado.Equals("OK")) {
+                MessageBox.Show("La compra se ha realizado con éxito. Disfrute el espectáculo!");
+            }
+        }
+
+        private void verificarCamposObligatorios()
+        {
+            if (String.IsNullOrEmpty(cmbMedioPago.SelectedItem.ToString())) {
+                throw new ArgumentException("Debe indicar un medio de pago.");
+            }
+
+            if (ubicacionesList.Count == 0) {
+                throw new ArgumentException("Debe agregar por lo menos una entrada/ubicación.");
+            }
+
+        }
+
     }
 }

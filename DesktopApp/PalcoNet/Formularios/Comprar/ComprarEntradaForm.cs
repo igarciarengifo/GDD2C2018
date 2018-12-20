@@ -138,24 +138,21 @@ namespace PalcoNet.Formularios.Comprar {
             dgv_vista.DataSource = split(total_los_datos);
         }
 
-        private void btnElegirUbicacion_Click(object sender, EventArgs e)
-        {
-            if (dgv_vista.SelectedRows.Count > 0)
-            {
+        private void btnElegirUbicacion_Click(object sender, EventArgs e) {
+            if (dgv_vista.SelectedRows.Count > 0) {
                 DataGridViewRow dtv = dgv_vista.SelectedRows[0];
 
                 int id_esp = Convert.ToInt32(dtv.Cells["id_espectaculo"].Value);
                 string hora = Convert.ToString(dtv.Cells["Horarios"].Value);
                 string descripcion = Convert.ToString(dtv.Cells["Espectaculo"].Value);
                 DateTime fecha = Convert.ToDateTime(dtv.Cells["Fecha Espectaculo"].Value);
-                //string feDesde = fecha.ToString("dd-MM-yyyy");
+                
                 Espectaculo espectaculo = new Espectaculo();
                 espectaculo.id_espectaculo = id_esp;
                 espectaculo.fecha_espectaculo = fecha;
                 espectaculo.hora_espectaculo = hora;
                 espectaculo.descripcion = descripcion;
-                //MessageBox.Show(id_esp.ToString() + " fecha " + feDesde + "hora " + hora);
-               // Grado_Publicacion gradoSelected = (Grado_Publicacion)dtv.DataBoundItem;
+
                 SeleccionUbicacionForm selectUbicacionForm = new SeleccionUbicacionForm(espectaculo);
                 selectUbicacionForm.ShowDialog();
                 this.Dispose();

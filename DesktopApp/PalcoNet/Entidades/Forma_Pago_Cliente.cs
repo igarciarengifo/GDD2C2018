@@ -12,5 +12,6 @@ namespace PalcoNet.Entidades
         public int id_forma_pago { get; set; }
         public int id_forma_pago_cliente { get; set; }
         public int id_cliente { get; set; }
+        public string marca { get; set; }
     }
 }

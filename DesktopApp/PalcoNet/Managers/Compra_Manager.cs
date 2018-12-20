@@ -45,20 +45,14 @@ namespace PalcoNet.Managers {
             return resultTable;
         }
 
-        public List<Grado_Publicacion> getAllGrados()
-        {
-            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetAllGradosPublicacion");
-            var lista_grados = new List<Grado_Publicacion>();
-            if (resultTable != null && resultTable.Rows != null)
-            {
-                foreach (DataRow row in resultTable.Rows)
-                {
-                   // var grado = BuildGrado(row);
-                    //lista_grados.Add(grado);
-                }
-            }
+        public string comprarEntrada(Compra compra) {
+            return SQLManager.ejecutarEscalarQuery<string>("LOOPP.SP_ComprarEspectaculo",
+                                             SQLArgumentosManager.nuevoParametro("@idCliente", compra.id_cliente)
+                                             .add("@idEspec", compra.id_espectaculo)
+                                             .add("@idUbicaciones", compra.listUbicaciones)
+                                             .add("@idFormaPago", compra.id_medio_pago));
 
-            return lista_grados;
         }
+
     }
 }

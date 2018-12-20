@@ -91,6 +91,7 @@ namespace PalcoNet.Managers
                     forma_pago_cliente.id_forma_pago = Int32.Parse(row["id_forma_pago"].ToString());
                     forma_pago_cliente.id_forma_pago_cliente = Int32.Parse(row["id_forma_pago_cliente"].ToString());
                     forma_pago_cliente.nro_tarjeta = Int64.Parse(row["nro_tarjeta"].ToString());
+                    forma_pago_cliente.marca = Convert.ToString(row["marca"]) + " - " + Int64.Parse(row["nro_tarjeta"].ToString());
                     formasPagosActuales.Add(forma_pago_cliente);
                 }
             }
