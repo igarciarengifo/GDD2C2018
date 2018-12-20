@@ -783,31 +783,16 @@ GO
 
 CREATE PROCEDURE [LOOPP].[SP_DevuelveItemsPorIdFactura] @idFactura int
 AS
-	select 		  comp.fecha_compra
-				  ,tub.descripcion+' - Fila '+ub.fila+' - Asiento '+cast(ub.asiento as varchar(10))+' '+case when ub.sin_numerar=1 then 'Sin numero' else '' end ubicacion
-				  ,sum(comp.importe_total) importe_total
-				  ,sum(comp.cantidad_compra) cantidad_compra
-				  ,SUM([LOOPP].[Fn_CalcularComision](comp.importe_total,esp.id_grado_publicacion)) comision
-			from [LOOPP].[Item_Factura] ifact
-			left join [LOOPP].[Facturas] fact
-				on ifact.nro_factura=fact.nro_factura
-			inner join [LOOPP].[Espectaculos] esp
-				on fact.id_espectaculo=esp.id_espectaculo
-			inner join [LOOPP].[Ubicac_X_Espectaculo] uesp
-				on esp.id_espectaculo=uesp.id_espectaculo
-			inner join [LOOPP].[Ubicaciones] ub
-				on uesp.id_ubicacion=ub.id_ubicacion
-			inner join [LOOPP].[Tipo_Ubicacion] tub
-				on ub.id_tipo_ubicacion=tub.id_tipo_ubicacion
-			inner join [LOOPP].[Localidades_Vendidas] lv
-				on uesp.id_espectaculo=lv.id_espectaculo
-			inner join [LOOPP].[Compras] comp
-				on lv.id_compra=comp.id_compra
-			where ifact.nro_factura = @idFactura
-			group by comp.fecha_compra
-					,tub.descripcion+' - Fila '+ub.fila+' - Asiento '+cast(ub.asiento as varchar(10))+' '+case when ub.sin_numerar=1 then 'Sin numero' else '' end
+	select ifact.descripcion ubicacion
+		  ,ifact.monto_compra importe_total
+		  ,ifact.cantidad cantidad_compra
+		  ,ifact.monto_comision comision
+	from [LOOPP].[Item_Factura] ifact
+	inner join [LOOPP].[Facturas] fact
+		on ifact.nro_factura=fact.nro_factura
+	where ifact.nro_factura = @idFactura
+	order by ubicacion
 GO
-
 --------------------------------------------------------------------------------
 /* LOOPP.SP_FiltrarEmpresas*/
 
@@ -997,20 +982,22 @@ GO
 IF OBJECT_ID('[LOOPP].[SP_GenerarRendicionComision]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_GenerarRendicionComision]
 GO
-CREATE PROCEDURE [LOOPP].[SP_GenerarRendicionComision] @idEmpresa int, @idEspectaculo int, @cantidad int
+create PROCEDURE [LOOPP].[SP_GenerarRendicionComision] @idEmpresa int, @idEspectaculo int, @cantidad int
 AS
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
 
-		select top (@cantidad)
-		           comp.id_compra
-				  ,esp.id_espectaculo
+		select top (@cantidad) *
+		into #Temp_Compra
+		from [LOOPP].[Compras]
+		order by fecha_compra asc
+
+			select distinct esp.id_espectaculo
 				  ,emp.id_empresa
-				  ,comp.fecha_compra
-				  ,comp.importe_total
-				  ,comp.cantidad_compra
-				  ,[LOOPP].[Fn_CalcularComision](comp.importe_total,esp.id_grado_publicacion) comision
+				  ,uesp.precio
+				  ,[LOOPP].[Fn_CalcularComision](uesp.precio,esp.id_grado_publicacion) comision
+				  ,tu.descripcion+' - Fila '+ub.fila+' - Asiento '+cast(ub.asiento as varchar(10)) ubicacion
 			into #Temp_Rendicion
 			from [LOOPP].[Empresas] emp
 			left join [LOOPP].[Usuarios] usu
@@ -1019,31 +1006,28 @@ AS
 				on usu.id_usuario=esp.id_usuario_responsable 
 			inner join [LOOPP].[Ubicac_X_Espectaculo] uesp
 				on esp.id_espectaculo=uesp.id_espectaculo
+			inner join [LOOPP].[Ubicaciones] ub
+				on uesp.id_ubicacion=ub.id_ubicacion
+			inner join [LOOPP].[Tipo_Ubicacion] tu
+				on ub.id_tipo_ubicacion=tu.id_tipo_ubicacion
 			inner join [LOOPP].[Localidades_Vendidas] lv
 				on uesp.id_espectaculo=lv.id_espectaculo
-			inner join [LOOPP].[Compras] comp
+			inner join #Temp_Compra comp
 				on lv.id_compra=comp.id_compra
 			where emp.id_empresa=@idEmpresa
 			and esp.id_espectaculo=@idEspectaculo
-			group by comp.id_compra
-					,esp.id_espectaculo
-					,emp.id_empresa
-					,comp.fecha_compra
-					,comp.importe_total
-					,comp.cantidad_compra
-					,[LOOPP].[Fn_CalcularComision](comp.importe_total,esp.id_grado_publicacion)
-			order by comp.fecha_compra asc
+
 		
 		declare @newId int;
 		select @newId=MAX([nro_factura])+1 from [LOOPP].[Facturas];
 
 		insert into [LOOPP].[Facturas]([nro_factura],[id_empresa],[id_espectaculo],[fecha_factura],[total_factura],[total_comision])
-		select @newId,id_empresa,id_espectaculo,GETDATE(),SUM(importe_total),SUM(comision)
+		select @newId,id_empresa,id_espectaculo,GETDATE(),SUM(precio),SUM(comision)
 		from #Temp_Rendicion
 		group by id_empresa,id_espectaculo
 		
 		insert into [LOOPP].[Item_Factura]([nro_factura],[monto_compra],[monto_comision],[cantidad],[descripcion])
-		select @newId,importe_total,comision,cantidad_compra,'Comision por compra'
+		select @newId,precio,comision,1,ubicacion
 		from #Temp_Rendicion
 
 		update LOOPP.Compras
@@ -1059,6 +1043,7 @@ AS
 	where nro_factura=@newId;
 
 	drop table #Temp_Rendicion;
+	drop table #Temp_Compra;
 
 	END TRY
 
@@ -1070,7 +1055,6 @@ AS
 
 	END CATCH;
 GO
-
 ---------------------------------------------------------------------------------------
 /*[LOOPP].[SP_GetAllGradosActivos */
 
