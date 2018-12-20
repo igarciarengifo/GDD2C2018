@@ -1209,7 +1209,7 @@ CREATE PROCEDURE [LOOPP].[SP_FiltrarEspectaculos] @idEspectaculo int, @idList va
 AS
 BEGIN
 	
-	if (@idEspectaculo is not null)
+	if (@idEspectaculo != 0)
 	begin
 
 		select esp.id_espectaculo
@@ -1229,7 +1229,7 @@ BEGIN
 		order by grado.id_grado_publicacion
 	end
 
-	if (@idEspectaculo is null and @idList is not null)
+	if (@idEspectaculo = 0 and @idList is not null)
 	begin
 
 		/*Genero tabla temporal con los registros obtenidos*/
@@ -1258,7 +1258,6 @@ BEGIN
 	end
 END
 GO
-
 ---------------------------------------------------------------------------------------
 /*Historial de compras del cliente*/
 
