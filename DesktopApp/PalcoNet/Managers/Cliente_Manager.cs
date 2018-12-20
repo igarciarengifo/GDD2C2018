@@ -159,7 +159,8 @@ namespace PalcoNet.Managers
         internal int getPuntosClienteConIdUsuario(int idUsuario)
         {
             return SQLManager.ejecutarEscalarQuery<int>("LOOPP.SP_GetPuntosClienteConIdUsuario",
-                SQLArgumentosManager.nuevoParametro("@idUsuario", idUsuario));
+                SQLArgumentosManager.nuevoParametro("@idUsuario", idUsuario)
+                                    .add("@fechaActual", DatosSesion.getFechaSistema()));
 
         }
 
