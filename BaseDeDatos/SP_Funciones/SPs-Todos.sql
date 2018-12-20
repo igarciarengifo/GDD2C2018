@@ -1664,71 +1664,6 @@ END
 
 GO
 --------------------------------------------------------------------------------
-IF OBJECT_ID('LOOPP.SP_GetPuntosClienteConIdUsuario') IS NOT NULL
-    DROP PROCEDURE LOOPP.SP_GetPuntosClienteConIdUsuario
-GO
-
-CREATE PROCEDURE [LOOPP].[SP_GetPuntosClienteConIdUsuario] @idUsuario int
-AS
-BEGIN
-	select puntos_acumulados
-	from LOOPP.Clientes c
-	where c.id_usuario= @idUsuario
-END
-
-GO
---------------------------------------------------------------------------------
-IF OBJECT_ID('LOOPP.SP_CanjearProducto') IS NOT NULL
-    DROP PROCEDURE LOOPP.SP_CanjearProducto
-GO
-
-CREATE PROCEDURE [LOOPP].[SP_CanjearProducto] @idProducto int, @idUsuario int, @fechaCanje datetime
-AS
-BEGIN
-	DECLARE @puntosCanjeados int, @idCanje int, @idCliente int, @resultado varchar(255)
-	BEGIN TRANSACTION [T]
-
-	BEGIN TRY
-		UPDATE LOOPP.Catalogo_Canjes
-			SET stock = stock - 1
-		WHERE id_codigo = @idProducto
-
-		SELECT @puntosCanjeados=puntos_validos
-		FROM LOOPP.Catalogo_Canjes
-		WHERE id_codigo=@idProducto
-
-		SELECT @idCliente=id_cliente
-		FROM LOOPP.Clientes
-		WHERE id_usuario=@idUsuario
-
-		UPDATE LOOPP.Clientes
-			SET puntos_acumulados= puntos_acumulados-@puntosCanjeados
-		WHERE id_usuario=@idUsuario
-
-		INSERT INTO LOOPP.Canjes(fecha_canje, puntos_canjeados, id_codigo, id_cliente)
-		VALUES (@fechaCanje, @puntosCanjeados, @idProducto, @idCliente)
-		
-		SELECT @idCanje=SCOPE_IDENTITY() 
-		FROM LOOPP.Canjes
-
-	COMMIT TRANSACTION [T]
-
-	set @resultado = 'OK;'+CONVERT(varchar(255),@idCanje)
-
-	END TRY
-
-	BEGIN CATCH
-
-      ROLLBACK TRANSACTION [T]
-
-	  set @resultado ='ERROR;' +ERROR_MESSAGE();
-
-	END CATCH;
-	SELECT @resultado
-END
-
-GO
---------------------------------------------------------------------------------
 
 /*SP que modifica descripcion de rol cuando el rol esta activo, en caso de estar de baja retorna error*/
 IF OBJECT_ID('[LOOPP].[SP_ModificarDescRol]') IS NOT NULL
@@ -1941,41 +1876,6 @@ declare @resultado varchar(255)
 
 	SELECT @resultado
 GO
---------------------------------------------------------------------------------------
-IF OBJECT_ID('[LOOPP].[SP_ActualizarPuntosClientes]') IS NOT NULL
-    DROP PROCEDURE [LOOPP].[SP_ActualizarPuntosClientes]
-GO
-CREATE PROCEDURE [LOOPP].[SP_ActualizarPuntosClientes]
-AS
-BEGIN
-	DECLARE @puntosCliente int, @idCliente int
-	DECLARE db_cursor CURSOR FOR 
-		SELECT id_cliente 
-		FROM LOOPP.Clientes
-	OPEN db_cursor  
-	FETCH NEXT FROM db_cursor INTO @idCliente  
-
-	WHILE @@FETCH_STATUS = 0  
-	BEGIN
-		SELECT @puntosCliente= sum(com.puntos)
-		from LOOPP.Compras com
-		where id_cliente=@idCliente
-		group by id_cliente
-		UPDATE LOOPP.Clientes
-			SET puntos_acumulados= @puntosCliente
-		where id_cliente=@idCliente
-		FETCH NEXT FROM db_cursor INTO @idCliente 
-	END 
-
-	CLOSE db_cursor  
-	DEALLOCATE db_cursor	
-
-END
-GO
-
-EXEC LOOPP.[SP_ActualizarPuntosClientes]
-DROP PROCEDURE [LOOPP].[SP_ActualizarPuntosClientes]
-
 -------------------------------------------------------------------------------------
 
 IF OBJECT_ID('LOOPP.SP_GetMayorAnioActividad') IS NOT NULL

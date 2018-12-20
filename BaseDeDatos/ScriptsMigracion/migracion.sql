@@ -667,3 +667,4 @@ order by c.id_compra
 --130.362
 
 drop table #Temp_Ubic_Espec_compra
+

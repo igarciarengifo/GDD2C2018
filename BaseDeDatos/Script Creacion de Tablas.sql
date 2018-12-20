@@ -8,6 +8,8 @@ END
 
 /*BORRADO DE ENTIDADES*/
 
+	IF OBJECT_ID('LOOPP.Registro_Puntos') IS NOT NULL
+		DROP TABLE [LOOPP].[Registro_Puntos];
 	IF OBJECT_ID('LOOPP.Localidades_Vendidas') IS NOT NULL
 		DROP TABLE [LOOPP].[Localidades_Vendidas];
 	IF OBJECT_ID('LOOPP.Item_Factura') IS NOT NULL
@@ -66,14 +68,14 @@ Print '***Inicio de creacion de tablas***'
 		[nombre] varchar (50) NOT NULL,
 		[baja_logica] bit NOT NULL DEFAULT('False'),
 		primary key ([id_rol])
-	);
+	) 
 
 	/*-2- Tabla Funcionalidades*/
 	CREATE TABLE [LOOPP].[Funcionalidades](
 		id_funcionalidad int IDENTITY(1,1) NOT NULL,
 		nombre varchar(30) NOT NULL,
 		primary key ([id_funcionalidad])
-	);
+	) 
 
 	/*-3- Tabla Funcionalidad por Rol*/
 	CREATE TABLE [LOOPP].[Func_X_Rol](
@@ -83,7 +85,7 @@ Print '***Inicio de creacion de tablas***'
 		PRIMARY KEY ( [id_funcionalidad], [id_rol]),
 		foreign key ([id_funcionalidad]) references [LOOPP].[Funcionalidades]([id_funcionalidad]),
 		foreign key ([id_rol]) references [LOOPP].[Roles]([id_rol])
-	);
+	) 
 	
 	/*-4- Tabla Usuarios*/
 	CREATE TABLE [LOOPP].[Usuarios](
@@ -94,7 +96,7 @@ Print '***Inicio de creacion de tablas***'
 		[habilitado] bit NOT NULL DEFAULT('True'),
 		[primerLoginAuto] bit NOT NULL DEFAULT('False'),
 		primary key ([id_usuario])
-	);
+	) 
 
 	/*-5- Tabla Rol por Usuario*/
 	CREATE TABLE [LOOPP].[Rol_X_Usuario](
@@ -104,7 +106,7 @@ Print '***Inicio de creacion de tablas***'
 		PRIMARY KEY ( [id_usuario], [id_rol]),
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario]),
 		foreign key ([id_rol]) references [LOOPP].[Roles]([id_rol])
-	);
+	) 
 
 	/*-6- Tabla Empresas*/
 	CREATE TABLE LOOPP.Empresas(
@@ -126,14 +128,14 @@ Print '***Inicio de creacion de tablas***'
 		UNIQUE (cuit),
 		primary key ([id_empresa]),
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
-	);
+	) 
 
 	/*-7- Tabla Estados de Publicacion*/
 	CREATE TABLE LOOPP.Estados_Publicacion(
 		id_estado_publicacion int identity(1,1) NOT NULL,
 		descripcion nvarchar(255) NOT NULL,
 		primary key ([id_estado_publicacion])
-	);
+	) 
 
 	/*-8- Tabla Grados de Publicacion*/
 	CREATE TABLE LOOPP.Grados_Publicacion(
@@ -142,14 +144,14 @@ Print '***Inicio de creacion de tablas***'
 		comision numeric(10,2) NOT NULL,
 		descripcion nvarchar(20) NOT NULL,
 		primary key ([id_grado_publicacion])
-	);
+	) 
 
 	/*-9- Tabla Rubros*/
 	CREATE TABLE LOOPP.Rubros(
 		id_rubro int identity(1,1) NOT NULL,
 		descripcion nvarchar(20) NOT NULL,
 		primary key ([id_rubro])
-	);
+	) 
 
 	/*-10- Tabla Espectaculos*/
 	CREATE TABLE LOOPP.Espectaculos(
@@ -170,7 +172,7 @@ Print '***Inicio de creacion de tablas***'
 		foreign key ([id_rubro]) references [LOOPP].[Rubros]([id_rubro]),
 		foreign key ([id_estado_publicacion]) references [LOOPP].[Estados_Publicacion]([id_estado_publicacion]),
 		foreign key ([id_grado_publicacion]) references [LOOPP].[Grados_Publicacion]([id_grado_publicacion])
-	);
+	) 
 
 	/*-11- Tabla Tipo de Ubicacion*/
 	CREATE TABLE LOOPP.Tipo_Ubicacion(
@@ -178,7 +180,7 @@ Print '***Inicio de creacion de tablas***'
 		descripcion nvarchar(20) NOT NULL,
 		porcentual numeric(10,2) NOT null,
 		primary key ([id_tipo_ubicacion])
-	);
+	) 
 
 	/*-12- Tabla Ubicaciones*/
 	CREATE TABLE LOOPP.Ubicaciones(
@@ -189,7 +191,7 @@ Print '***Inicio de creacion de tablas***'
 		id_tipo_ubicacion int not null,
 		primary key ([id_ubicacion]),
 		foreign key ([id_tipo_ubicacion]) references [LOOPP].[Tipo_Ubicacion]([id_tipo_ubicacion])
-	);
+	) 
 
 	/*-13- Tabla Ubicacion por espectaculo*/
 	CREATE TABLE [LOOPP].[Ubicac_X_Espectaculo](
@@ -200,15 +202,13 @@ Print '***Inicio de creacion de tablas***'
 		PRIMARY KEY ([id_espectaculo], [id_ubicacion]),
 		foreign key ([id_espectaculo]) references [LOOPP].[Espectaculos]([id_espectaculo]),
 		foreign key ([id_ubicacion]) references [LOOPP].[Ubicaciones]([id_ubicacion])
-	);
+	) 
 
 	/*-14- Tabla Clientes*/
 	CREATE TABLE LOOPP.Clientes(
 		id_cliente int identity(1,1) NOT NULL,
 		estado nvarchar(50) NOT NULL DEFAULT('Habilitado'),
-		baja_logica bit DEFAULT ('False'),
-		puntos_acumulados int NOT NULL DEFAULT('0'),
-		fecha_vencimiento date null,
+		baja_logica bit DEFAULT ('False'),		
 		nombre nvarchar(255) NOT NULL,
 		apellido nvarchar(255) NOT NULL,
 		tipo_documento nvarchar(20) NOT NULL DEFAULT('DNI'),
@@ -228,7 +228,7 @@ Print '***Inicio de creacion de tablas***'
 		CONSTRAINT UC_Cliente UNIQUE (tipo_documento,nro_documento),
 		primary key ([id_cliente]),
 		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
-	);
+	) 
 
 	
 	/*-15- Formas de Pago*/
@@ -237,7 +237,7 @@ Print '***Inicio de creacion de tablas***'
 		descripcion nvarchar(20) NOT NULL,
 		marca nvarchar(20),
 		primary key ([id_forma_pago]),
-	);
+	) 
 
 
 	/*-15- Formas de Pago Cliente*/
@@ -249,7 +249,7 @@ Print '***Inicio de creacion de tablas***'
 		primary key ([id_forma_pago_cliente]),
 		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente),
 		foreign key (id_forma_pago) references [LOOPP].[Formas_Pago](id_forma_pago)
-	);
+	) 
 	
 	/*-16- Catalogo de canjes*/
 	CREATE TABLE LOOPP.Catalogo_Canjes(
@@ -258,7 +258,7 @@ Print '***Inicio de creacion de tablas***'
 		descripcion	nvarchar(30) NOT NULL,
 		puntos_validos numeric(18, 0) not NULL,
 		primary key ([id_codigo])
-	);
+	) 
 
 	/*-17- Canjes*/
 	CREATE TABLE LOOPP.Canjes(
@@ -270,7 +270,7 @@ Print '***Inicio de creacion de tablas***'
 		primary key ([id_canje]),
 		foreign key (id_codigo) references [LOOPP].[Catalogo_Canjes](id_codigo),
 		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
-	);
+	) 
 
 	/*-18- Tabla Compras*/
 	CREATE TABLE LOOPP.Compras(
@@ -286,7 +286,7 @@ Print '***Inicio de creacion de tablas***'
 		foreign key ([id_forma_pago_cliente]) references [LOOPP].[Formas_Pago_Cliente]([id_forma_pago_cliente]),
 		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
 		
-	);
+	) 
 
 	/*-19- Tabla Facturas*/
 	CREATE TABLE LOOPP.Facturas(
@@ -299,7 +299,7 @@ Print '***Inicio de creacion de tablas***'
 		primary key ([nro_factura]),
 		foreign key ([id_empresa]) references [LOOPP].[Empresas]([id_empresa]),
 		foreign key ([id_espectaculo]) references [LOOPP].[Espectaculos]([id_espectaculo])
-	);
+	) 
 
 	/*-20- Tabla Items Factura*/
 	CREATE TABLE LOOPP.Item_Factura(
@@ -311,7 +311,7 @@ Print '***Inicio de creacion de tablas***'
 		descripcion nvarchar(60) NOT NULL,
 		primary key ([nro_item]),
 		foreign key ([nro_factura]) references [LOOPP].[Facturas]([nro_factura])
-	);
+	) 
 
 
 	/*-21- Tabla Localidades vendidas*/
@@ -323,6 +323,42 @@ Print '***Inicio de creacion de tablas***'
 		foreign key (id_compra) references [LOOPP].[Compras](id_compra),
 		foreign key (id_espectaculo) references [LOOPP].[Espectaculos](id_espectaculo),
 		foreign key (id_ubicacion) references [LOOPP].[Ubicaciones](id_ubicacion)
-	);
+	) 
+	
+	/*22-Creacion de tabla de puntos */
+	CREATE TABLE LOOPP.Registro_Puntos(
+		id_compra int NOT NULL,
+		id_cliente int NOT NULL,
+		puntos_usados int,
+		fecha_vencimiento datetime,
+		primary key (id_compra,id_cliente),
+		foreign key (id_compra) references [LOOPP].[Compras](id_compra),
+		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
+	) 
+	
 
 Print '***Fin de creacion de tablas***'
+GO
+Print '***Creacion Triggers***'
+GO
+create trigger TR_CrearRegistroPuntos on LOOPP.Compras
+after insert
+as
+	BEGIN TRANSACTION [T]
+
+	BEGIN TRY
+
+	insert into LOOPP.Registro_Puntos (id_cliente, id_compra,puntos_usados, fecha_vencimiento)
+	select id_cliente, id_compra, 0, DATEADD(month, 6, fecha_compra)
+	from inserted
+	COMMIT TRANSACTION [T]
+
+	END TRY
+
+	BEGIN CATCH
+
+      ROLLBACK TRANSACTION [T]
+
+	END CATCH;
+GO
+Print '***Fin Creacion Triggers***'
