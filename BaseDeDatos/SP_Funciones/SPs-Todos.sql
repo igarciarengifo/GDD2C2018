@@ -1209,7 +1209,7 @@ CREATE PROCEDURE [LOOPP].[SP_FiltrarEspectaculos] @idEspectaculo int, @idList va
 AS
 BEGIN
 	
-	if (@idEspectaculo is not null)
+	if (@idEspectaculo != 0)
 	begin
 
 		select esp.id_espectaculo
@@ -1229,7 +1229,7 @@ BEGIN
 		order by grado.id_grado_publicacion
 	end
 
-	if (@idEspectaculo is null and @idList is not null)
+	if (@idEspectaculo = 0 and @idList is not null)
 	begin
 
 		/*Genero tabla temporal con los registros obtenidos*/
@@ -1258,7 +1258,6 @@ BEGIN
 	end
 END
 GO
-
 ---------------------------------------------------------------------------------------
 /*Historial de compras del cliente*/
 
@@ -1693,7 +1692,7 @@ GO
 IF OBJECT_ID('[LOOPP].[SP_GetTipoUbicXEspect]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_GetTipoUbicXEspect]
 GO
-CREATE PROCEDURE [LOOPP].[SP_GetTipoUbicXEspect] @id int,@fecha date,@hora time
+CREATE PROCEDURE [LOOPP].[SP_GetTipoUbicXEspect] @id int,@fecha varchar(15),@hora varchar(15)
 AS
 	select distinct tu.*
 	from [LOOPP].[Ubicac_X_Espectaculo] ue
@@ -1704,40 +1703,22 @@ AS
 	inner join [LOOPP].[Tipo_Ubicacion] tu
 	on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
 	where e.id_espectaculo=@id 
-	and e.fecha_espectaculo=@fecha 
-	and e.hora_espectaculo=@hora
+	and e.fecha_espectaculo=cast(@fecha as date)
+	and e.hora_espectaculo=cast(@hora as time)
 	and ue.disponible = 1
 
 GO
 --------------------------------------------------------------------------------
 
-/*Funcion que calcula el precio por ubicacion*/
-IF OBJECT_ID('[LOOPP].[Fn_CalcularPrecioUbic]') IS NOT NULL
-    DROP FUNCTION [LOOPP].[Fn_CalcularPrecioUbic]
-GO
-CREATE FUNCTION [LOOPP].[Fn_CalcularPrecioUbic] (@precioBase numeric(18,2), @idGrado int, @porcentual numeric(10,2))
-RETURNS numeric(18,2)
-AS 
-	BEGIN
-		declare @precio numeric(18,2)
-		
-		select @precio=@precioBase+(@precioBase*comision)+(@precioBase*@porcentual)
-		from [LOOPP].[Grados_Publicacion]
-		where id_grado_publicacion=@idGrado
-	
-		RETURN @precio
-	END
-GO
-
 /*SP que devuelve las ubicaciones segun espectaculo y tipo de ubicacion seleccionado*/
 IF OBJECT_ID('[LOOPP].[SP_GetUbicacionesXEspec]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec]
 GO
-CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec] @id int,@fecha date,@hora time,@idTipoUbic int
+CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec] @id int,@fecha varchar(15),@hora varchar(15),@idTipoUbic int
 AS
 	select distinct u.id_ubicacion
 		  ,'Fila '+[fila]+' - Asiento '+cast([asiento] as varchar(10))+
-		  ' - Costo '+cast([LOOPP].[Fn_CalcularPrecioUbic](e.precio_base,e.id_grado_publicacion,tu.porcentual) as varchar(10)) Ubicacion
+		  ' - Costo '+cast(ue.precio as varchar(10)) Ubicacion
 	from [LOOPP].[Ubicac_X_Espectaculo] ue
 	inner join [LOOPP].[Espectaculos] e
 		on ue.id_espectaculo=e.id_espectaculo
@@ -1746,8 +1727,8 @@ AS
 	inner join [LOOPP].[Tipo_Ubicacion] tu
 		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
 	where e.id_espectaculo=@id 
-	and e.fecha_espectaculo=@fecha 
-	and e.hora_espectaculo=@hora
+	and e.fecha_espectaculo=cast(@fecha as date)
+	and e.hora_espectaculo=cast(@hora as time)
 	and ue.disponible = 1
 	and tu.id_tipo_ubicacion=@idTipoUbic
 
@@ -1809,7 +1790,7 @@ GO
 IF OBJECT_ID('[LOOPP].[SP_ComprarEspectaculo]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_ComprarEspectaculo]
 GO
-CREATE PROCEDURE [LOOPP].[SP_ComprarEspectaculo] @idCliente int,@idEspec int, @idUbic varchar(30), @idFormaPago int
+CREATE PROCEDURE [LOOPP].[SP_ComprarEspectaculo] @idCliente int,@idEspec int, @idUbicaciones varchar(30), @idFormaPago int
 AS
 declare @resultado varchar(255)
 	BEGIN TRANSACTION [T]
@@ -1819,7 +1800,19 @@ declare @resultado varchar(255)
 	CREATE TABLE #Temp_Ubicaciones ([id_ubicacion] int NOT NULL,[id_tipo_ubicacion] int NOT NULL)
 
 	insert into #Temp_Ubicaciones ([id_ubicacion],[id_tipo_ubicacion]) 
-	exec [LOOPP].[SP_RetornaUbicacionesDeLista] @idUbic
+	exec [LOOPP].[SP_RetornaUbicacionesDeLista] @idUbicaciones
+
+	select [LOOPP].[Fn_CalcularPrecioUbic](e.precio_base,e.id_grado_publicacion,tu.porcentual) costo_entrada
+	into #Temp_Compra
+	from #Temp_Ubicaciones u
+	inner join [LOOPP].[Ubicac_X_Espectaculo] ue
+		on u.id_ubicacion=ue.id_ubicacion
+	inner join [LOOPP].[Espectaculos] e
+		on ue.id_espectaculo=e.id_espectaculo
+	inner join [LOOPP].[Tipo_Ubicacion] tu
+		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
+	where e.id_espectaculo=@idEspec 
+	and tu.id_tipo_ubicacion=u.id_tipo_ubicacion
 
 	--Inserta compras
 	insert into [LOOPP].[Compras]([fecha_compra]
@@ -1829,13 +1822,12 @@ declare @resultado varchar(255)
 								 ,[puntos]
 								 ,[id_cliente]
 								 )
-
-	select getdate()
-		 ,sum([LOOPP].[Fn_CalcularPrecioUbic](e.precio_base,e.id_grado_publicacion,tu.porcentual))
-		 ,count(1)
-		 ,@idFormaPago
-		 ,0
-		 ,@idCliente
+	select GETDATE()
+		  ,SUM(ue.precio)
+		  ,COUNT(1)
+		  ,@idFormaPago
+		  ,[LOOPP].[Fn_CalcularPuntos](SUM(ue.precio))
+		  ,@idCliente
 	from #Temp_Ubicaciones u
 	inner join [LOOPP].[Ubicac_X_Espectaculo] ue
 		on u.id_ubicacion=ue.id_ubicacion
@@ -1851,6 +1843,13 @@ declare @resultado varchar(255)
 	declare @idCompra int;
 	select @idCompra=MAX(id_compra) from [LOOPP].[Compras]
 
+	update cli
+	set [puntos_acumulados] = [puntos_acumulados]+com.puntos
+	from [LOOPP].[Compras] com
+	inner join [LOOPP].[Clientes] cli
+	on com.id_cliente=cli.id_cliente
+	and com.id_compra=@idCompra
+
 	insert into [LOOPP].[Localidades_Vendidas]([id_compra],[id_espectaculo],[id_ubicacion])
 	select @idCompra,@idEspec,id_ubicacion
 	from #Temp_Ubicaciones
@@ -1864,6 +1863,8 @@ declare @resultado varchar(255)
 
 	set @resultado = 'OK';
 
+	Drop table #Temp_Ubicaciones;
+
 	END TRY
 
 	BEGIN CATCH
@@ -1873,8 +1874,9 @@ declare @resultado varchar(255)
 	  set @resultado = ERROR_MESSAGE();
 
 	END CATCH;
-
+	
 	SELECT @resultado
+	
 GO
 -------------------------------------------------------------------------------------
 
