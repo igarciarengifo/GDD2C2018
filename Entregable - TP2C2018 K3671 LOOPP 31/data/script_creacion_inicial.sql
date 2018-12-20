@@ -2914,49 +2914,36 @@ BEGIN
 	
 	select sum(com.puntos-regP.puntos_usados)
 	from LOOPP.Compras com 
-	inner join LOOPP.Clientes cli on cli.id_cliente=com.id_cliente
-	inner join LOOPP.Registro_Puntos regP on regP.id_compra=com.id_compra and cli.id_cliente=regP.id_cliente
-	where cli.id_usuario=@idUsuario and fecha_vencimiento>@fechaActual
-	group by cli.id_cliente
+	inner join LOOPP.Registro_Puntos regP on regP.id_compra=com.id_compra and com.id_cliente=regP.id_cliente
+	where fecha_vencimiento>@fechaActual and com.id_cliente=(select id_cliente from LOOPP.Clientes where id_usuario=@idUsuario)
+	group by com.id_cliente
 	
 END
 
 GO
 
 --------------------------------------------------------------------------------
-
-
---------------------------------------------------------------------------------
-IF OBJECT_ID('LOOPP.SP_CanjearProducto') IS NOT NULL
-    DROP PROCEDURE LOOPP.SP_CanjearProducto
+IF OBJECT_ID('LOOPP.SP_UsarPuntosDeCliente') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_UsarPuntosDeCliente 
 GO
 
-CREATE PROCEDURE [LOOPP].[SP_CanjearProducto] @idProducto int, @idUsuario int, @fechaCanje datetime
+CREATE PROCEDURE [LOOPP].[SP_UsarPuntosDeCliente] @idCliente int, @puntosProducto int
 AS
 BEGIN
-	DECLARE @puntosACanjear int, @idCanje int, @idCliente int, @resultado varchar(255), @idCompra int, @puntosDisponibles int, @puntosProducto int
-	BEGIN TRANSACTION [T]
+	DECLARE @puntosACanjear int, @idCompra int, @puntosDisponibles int
 
-	BEGIN TRY
+	DECLARE @tablaTemporalCliente TABLE( idCliente int, idCompra int, puntosValidos int )
+	
+	INSERT INTO @tablaTemporalCliente
+	select rp.id_cliente ,rp.id_compra, com.puntos-rp.puntos_usados
+	from LOOPP.Compras com
+			inner join LOOPP.Registro_Puntos rp on com.id_compra=rp.id_compra and com.id_cliente=rp.id_cliente
+	where com.puntos-rp.puntos_usados>0 and rp.id_cliente=@idCliente
+	group by rp.id_compra,  rp.id_cliente,com.puntos ,fecha_compra, rp.puntos_usados
+	order by fecha_compra asc
 
-		
-		SELECT @puntosProducto=puntos_validos
-		FROM LOOPP.Catalogo_Canjes
-		WHERE id_codigo=@idProducto
 
-		SELECT id_cliente
-		into #Temp_Cliente_Consulta
-		from LOOPP.Clientes
-		where id_usuario=@idUsuario
-
-		DECLARE db_cursor CURSOR FOR 
-			select rp.id_cliente ,rp.id_compra, com.puntos-rp.puntos_usados
-			from LOOPP.Registro_Puntos rp
-			inner join LOOPP.Compras com on com.id_compra=rp.id_compra
-			inner join #Temp_Cliente_Consulta temp on temp.id_cliente=com.id_cliente
-			where com.puntos-rp.puntos_usados>0
-			group by rp.id_compra,  rp.id_cliente,com.puntos ,fecha_compra, rp.puntos_usados
-			order by fecha_compra asc
+	DECLARE db_cursor CURSOR FOR SELECT * from @tablaTemporalCliente
 		OPEN db_cursor  
 		FETCH NEXT FROM db_cursor INTO @idCliente, @idCompra, @puntosDisponibles
 		SET @puntosACanjear= @puntosProducto
@@ -2976,7 +2963,7 @@ BEGIN
 						SET puntos_usados=puntos_usados+@puntosACanjear
 					where id_compra=@idCompra and id_cliente=@idCliente
 					SET @puntosACanjear=0
-					BREAK;
+					
 				END
 			
 			
@@ -2985,14 +2972,37 @@ BEGIN
 
 		CLOSE db_cursor  
 		DEALLOCATE db_cursor	
+		DELETE @tablaTemporalCliente
+END
+GO
+--------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_CanjearProducto') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_CanjearProducto
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_CanjearProducto] @idProducto int, @idUsuario int, @fechaCanje datetime
+AS
+BEGIN
+	DECLARE  @idCanje int, @idClienteConPuntos int, @resultado varchar(255), @idCompra int, @puntosDisponibles int, @puntosCanje int
+	BEGIN TRANSACTION [T]
+
+	BEGIN TRY
+
 		
-		drop table #Temp_Cliente_Consulta
+		SELECT @puntosCanje=puntos_validos
+		FROM LOOPP.Catalogo_Canjes
+		WHERE id_codigo=@idProducto
+		SELECT @idClienteConPuntos =id_cliente
+		FROM LOOPP.Clientes
+		WHERE id_usuario=@idUsuario
+		EXEC LOOPP.SP_UsarPuntosDeCliente @idCliente=@idClienteConPuntos ,@puntosProducto=@puntosCanje
+		
 		UPDATE LOOPP.Catalogo_Canjes
 			SET stock = stock - 1
 		WHERE id_codigo = @idProducto
 
 		INSERT INTO LOOPP.Canjes(fecha_canje, puntos_canjeados, id_codigo, id_cliente)
-		VALUES (@fechaCanje, @puntosProducto, @idProducto, @idCliente)
+		VALUES (@fechaCanje, @puntosCanje, @idProducto, @idClienteConPuntos)
 		
 		SELECT @idCanje=SCOPE_IDENTITY() 
 		FROM LOOPP.Canjes
