@@ -2912,7 +2912,7 @@ CREATE PROCEDURE [LOOPP].[SP_GetPuntosClienteConIdUsuario] @idUsuario int , @fec
 AS
 BEGIN
 	
-	select sum(com.puntos-regP.puntos_usados)
+	select sum(com.puntos-regP.puntos_usados) as 'PuntosDisponibles'
 	from LOOPP.Compras com 
 	inner join LOOPP.Registro_Puntos regP on regP.id_compra=com.id_compra and com.id_cliente=regP.id_cliente
 	where fecha_vencimiento>@fechaActual and com.id_cliente=(select id_cliente from LOOPP.Clientes where id_usuario=@idUsuario)
