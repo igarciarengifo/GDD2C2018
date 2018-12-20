@@ -1975,3 +1975,26 @@ GO
 
 EXEC LOOPP.[SP_ActualizarPuntosClientes]
 DROP PROCEDURE [LOOPP].[SP_ActualizarPuntosClientes]
+
+-------------------------------------------------------------------------------------
+
+IF OBJECT_ID('LOOPP.SP_GetMayorAnioActividad') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetMayorAnioActividad
+GO
+CREATE PROCEDURE LOOPP.SP_GetMayorAnioActividad
+AS
+	SELECT TOP 1 (YEAR(comp.fecha_compra)) AÑO
+	FROM LOOPP.Compras comp
+	ORDER BY comp.fecha_compra DESC
+GO
+
+
+IF OBJECT_ID('LOOPP.SP_GetMenorAnioActividad') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetMenorAnioActividad
+GO
+CREATE PROCEDURE LOOPP.SP_GetMenorAnioActividad
+AS
+	SELECT TOP 1 (YEAR(comp.fecha_compra)) AÑO
+	FROM LOOPP.Compras comp
+	ORDER BY comp.fecha_compra ASC
+GO

@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.anioConsultaBox = new System.Windows.Forms.ComboBox();
             this.trimestreBox = new System.Windows.Forms.NumericUpDown();
+            this.anioConsultaBox = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.dataGridEstadisticas = new System.Windows.Forms.DataGridView();
             this.label4 = new System.Windows.Forms.Label();
             this.empresasLinkLabel = new System.Windows.Forms.LinkLabel();
@@ -56,44 +56,8 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(35, 13);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(317, 115);
+            this.panel1.Size = new System.Drawing.Size(396, 115);
             this.panel1.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(14, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(196, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Ingrese los siguientes parámetros";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 50);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Año de consulta";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 82);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(108, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Trimestre de consulta";
-            // 
-            // anioConsultaBox
-            // 
-            this.anioConsultaBox.FormattingEnabled = true;
-            this.anioConsultaBox.Location = new System.Drawing.Point(163, 41);
-            this.anioConsultaBox.Name = "anioConsultaBox";
-            this.anioConsultaBox.Size = new System.Drawing.Size(121, 21);
-            this.anioConsultaBox.TabIndex = 3;
             // 
             // trimestreBox
             // 
@@ -109,7 +73,7 @@
             0,
             0});
             this.trimestreBox.Name = "trimestreBox";
-            this.trimestreBox.Size = new System.Drawing.Size(120, 20);
+            this.trimestreBox.Size = new System.Drawing.Size(160, 20);
             this.trimestreBox.TabIndex = 4;
             this.trimestreBox.Value = new decimal(new int[] {
             1,
@@ -117,16 +81,53 @@
             0,
             0});
             // 
+            // anioConsultaBox
+            // 
+            this.anioConsultaBox.FormattingEnabled = true;
+            this.anioConsultaBox.Location = new System.Drawing.Point(163, 41);
+            this.anioConsultaBox.Name = "anioConsultaBox";
+            this.anioConsultaBox.Size = new System.Drawing.Size(160, 21);
+            this.anioConsultaBox.TabIndex = 3;
+            this.anioConsultaBox.Text = "Seleccione año de consulta";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(17, 82);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(108, 13);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Trimestre de consulta";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(17, 50);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Año de consulta";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(14, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(196, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Ingrese los siguientes parámetros";
+            // 
             // dataGridEstadisticas
             // 
             this.dataGridEstadisticas.AllowUserToAddRows = false;
             this.dataGridEstadisticas.AllowUserToDeleteRows = false;
             this.dataGridEstadisticas.AllowUserToOrderColumns = true;
             this.dataGridEstadisticas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridEstadisticas.Location = new System.Drawing.Point(391, 13);
+            this.dataGridEstadisticas.Location = new System.Drawing.Point(524, 13);
             this.dataGridEstadisticas.Name = "dataGridEstadisticas";
             this.dataGridEstadisticas.ReadOnly = true;
-            this.dataGridEstadisticas.Size = new System.Drawing.Size(389, 443);
+            this.dataGridEstadisticas.Size = new System.Drawing.Size(503, 443);
             this.dataGridEstadisticas.TabIndex = 1;
             // 
             // label4
@@ -182,11 +183,11 @@
             this.cancelBtn.UseVisualStyleBackColor = true;
             this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
-            // estadisticasForm
+            // EstadisticasForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 466);
+            this.ClientSize = new System.Drawing.Size(1065, 466);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.comprasLinkLabel);
             this.Controls.Add(this.puntosLinkLabel);
@@ -194,7 +195,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dataGridEstadisticas);
             this.Controls.Add(this.panel1);
-            this.Name = "estadisticasForm";
+            this.Name = "EstadisticasForm";
             this.Text = "Estadísticas - PalcoNet";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

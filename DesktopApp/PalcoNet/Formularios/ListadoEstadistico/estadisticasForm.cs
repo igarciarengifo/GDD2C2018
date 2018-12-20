@@ -13,7 +13,7 @@ namespace PalcoNet.Formularios.ListadoEstadistico
 {
     public partial class EstadisticasForm : Form
     {
-     //   Estadisticas_Manager estadisticasMng = new Estadisticas_Manager();
+        Estadisticas_Manager estadisticasMng = new Estadisticas_Manager();
         public EstadisticasForm()
         {
             InitializeComponent();
@@ -22,12 +22,12 @@ namespace PalcoNet.Formularios.ListadoEstadistico
 
         private void cargarAniosDeConsulta()
         {
-            ///int anio = estadisticasMng.getMenorAnioActividad();
-           // int anioMayor = estadisticasMng.getMayorAnioActividad();
-           /* for (int i = anio; i <= anioMayor; i++)
+            int anio = estadisticasMng.getMenorAnioActividad();
+            int anioMayor = estadisticasMng.getMayorAnioActividad();
+            for (int i = anio; i <= anioMayor; i++)
             {
                 anioConsultaBox.Items.Add(i);
-            }*/
+            }
         }
 
 
@@ -40,20 +40,20 @@ namespace PalcoNet.Formularios.ListadoEstadistico
 
         private void empresasLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-           // DataTable resultTable = estadisticasMng.getTopEmpresasLocalidadesNoVendidas(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
-           // dataGridEstadisticas.DataSource = resultTable;
+            DataTable resultTable = estadisticasMng.getTopEmpresasLocalidadesNoVendidas(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
+            dataGridEstadisticas.DataSource = resultTable;
         }
 
         private void puntosLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-           // DataTable resultTable = estadisticasMng.getTopClientesPuntosVencidos(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
-           // dataGridEstadisticas.DataSource = resultTable;
+            DataTable resultTable = estadisticasMng.getTopClientesPuntosVencidos(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
+            dataGridEstadisticas.DataSource = resultTable;
         }
 
         private void comprasLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-           // DataTable resultTable = estadisticasMng.getTopClientesConMasCompras(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
-           // dataGridEstadisticas.DataSource = resultTable;
+            DataTable resultTable = estadisticasMng.getTopClientesConMasCompras(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
+            dataGridEstadisticas.DataSource = resultTable;
         }
     }
 }
