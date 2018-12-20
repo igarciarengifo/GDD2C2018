@@ -48,7 +48,7 @@
             this.btnPrevio = new System.Windows.Forms.Button();
             this.btnSiguiente = new System.Windows.Forms.Button();
             this.dgv_vista = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnElegirUbicacion = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_vista)).BeginInit();
             this.SuspendLayout();
@@ -265,22 +265,22 @@
             this.dgv_vista.Size = new System.Drawing.Size(932, 322);
             this.dgv_vista.TabIndex = 15;
             // 
-            // button1
+            // btnElegirUbicacion
             // 
-            this.button1.Location = new System.Drawing.Point(807, 635);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(165, 32);
-            this.button1.TabIndex = 24;
-            this.button1.Text = "Elegir Ubicación";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnElegirUbicacion.Location = new System.Drawing.Point(807, 635);
+            this.btnElegirUbicacion.Name = "btnElegirUbicacion";
+            this.btnElegirUbicacion.Size = new System.Drawing.Size(165, 32);
+            this.btnElegirUbicacion.TabIndex = 24;
+            this.btnElegirUbicacion.Text = "Elegir Ubicación";
+            this.btnElegirUbicacion.UseVisualStyleBackColor = true;
+            this.btnElegirUbicacion.Click += new System.EventHandler(this.btnElegirUbicacion_Click);
             // 
             // ComprarEntradaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1024, 679);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnElegirUbicacion);
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.btnUltima);
             this.Controls.Add(this.btnPrimera);
@@ -324,6 +324,6 @@
         private System.Windows.Forms.Button btnPrevio;
         private System.Windows.Forms.Button btnSiguiente;
         private System.Windows.Forms.DataGridView dgv_vista;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnElegirUbicacion;
     }
 }

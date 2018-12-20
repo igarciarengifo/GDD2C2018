@@ -63,9 +63,7 @@ namespace PalcoNet.Formularios.Comprar {
                 string id_Rubro = (item.id_rubro).ToString();
                 idCadena += id_Rubro + ",";
             }
-            idCadena = idCadena.Substring(0, idCadena.Length - 1);
-            int idEspectaculo = 0;
-                
+            idCadena = idCadena.Substring(0, idCadena.Length - 1);                            
                 
             DateTime desde = dateTimePicker1.Value;
             DateTime hasta = dateTimePicker2.Value;
@@ -73,37 +71,22 @@ namespace PalcoNet.Formularios.Comprar {
             string feHasta = hasta.ToString("dd-MM-yyyy");
 
             DataTable datos = new DataTable();
-
-            if (cmbEspectaculo.SelectedValue != null) {
-                idEspectaculo = (int)cmbEspectaculo.SelectedValue;
-                datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
-            } else {
-
-                datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
-            }
+            int idEspectaculo = 0;
+            idEspectaculo = (int)cmbEspectaculo.SelectedValue;
+            datos = especMngr.getEspectaculosFiltro(idEspectaculo, idCadena, feDesde, feHasta);
+         
             if (datos.Rows.Count > 0) {
                 this.cargar_datos(datos);
             } else {
                 MessageBox.Show("No hay resultados.");
-            }
-                
-            
+            }                           
         }
 
-        private void verificarCamposObligatorios() {           
-          /*  if (cmbEspectaculo.SelectedValue == null) {
-                MessageBox.Show("Debe elegir un espectáculo.");
-                return false;
-            }*/
+        private void verificarCamposObligatorios() { 
             if (!(checkedListBox1.CheckedItems.Count > 0)){
-                //MessageBox.Show("Debe seleccionar por lo menos una categoría.");
                 throw new ArgumentException("Debe seleccionar por lo menos una categoría.");
-                //return false;
             }
-           // return true;
-        }
-
-        
+        }        
 
         public void cargar_datos(DataTable dt) {
             total_los_datos = dt;
@@ -155,17 +138,26 @@ namespace PalcoNet.Formularios.Comprar {
             dgv_vista.DataSource = split(total_los_datos);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnElegirUbicacion_Click(object sender, EventArgs e)
         {
             if (dgv_vista.SelectedRows.Count > 0)
             {
                 DataGridViewRow dtv = dgv_vista.SelectedRows[0];
-                //int id_esp = Convert.ToInt32(dtv["ID"]);
+
                 int id_esp = Convert.ToInt32(dtv.Cells["id_espectaculo"].Value);
-                MessageBox.Show(id_esp.ToString());
+                string hora = Convert.ToString(dtv.Cells["Horarios"].Value);
+                string descripcion = Convert.ToString(dtv.Cells["Espectaculo"].Value);
+                DateTime fecha = Convert.ToDateTime(dtv.Cells["Fecha Espectaculo"].Value);
+                //string feDesde = fecha.ToString("dd-MM-yyyy");
+                Espectaculo espectaculo = new Espectaculo();
+                espectaculo.id_espectaculo = id_esp;
+                espectaculo.fecha_espectaculo = fecha;
+                espectaculo.hora_espectaculo = hora;
+                espectaculo.descripcion = descripcion;
+                //MessageBox.Show(id_esp.ToString() + " fecha " + feDesde + "hora " + hora);
                // Grado_Publicacion gradoSelected = (Grado_Publicacion)dtv.DataBoundItem;
-               // EditarGradoForm editarGradoForm = new EditarGradoForm(gradoSelected);
-               // editarGradoForm.Show();
+                SeleccionUbicacionForm selectUbicacionForm = new SeleccionUbicacionForm(espectaculo);
+                selectUbicacionForm.ShowDialog();
                 this.Dispose();
                 this.Close();
             }

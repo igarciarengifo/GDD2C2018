@@ -70,12 +70,10 @@ namespace PalcoNet.Formularios.AbmRol {
 
         private void verificarCamposObligatorios() {
             if (String.IsNullOrEmpty(txtNombre.Text)) {
-                MessageBox.Show("Debe completar el campo 'Nombre'");
-                return;
+                throw new ArgumentException("Debe completar el campo 'Nombre'");
             }
             if (!(checkedListBox1.CheckedItems.Count > 0)) {
-                MessageBox.Show("Debe agregar por lo menos una funcionalidad.");
-                return;
+                throw new ArgumentException("Debe agregar por lo menos una funcionalidad.");
             }
         }
       
