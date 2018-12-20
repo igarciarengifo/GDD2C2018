@@ -1758,7 +1758,7 @@ GO
 IF OBJECT_ID('[LOOPP].[SP_GetTipoUbicXEspect]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_GetTipoUbicXEspect]
 GO
-CREATE PROCEDURE [LOOPP].[SP_GetTipoUbicXEspect] @id int,@fecha date,@hora time
+CREATE PROCEDURE [LOOPP].[SP_GetTipoUbicXEspect] @id int,@fecha varchar(15),@hora varchar(15)
 AS
 	select distinct tu.*
 	from [LOOPP].[Ubicac_X_Espectaculo] ue
@@ -1769,40 +1769,22 @@ AS
 	inner join [LOOPP].[Tipo_Ubicacion] tu
 	on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
 	where e.id_espectaculo=@id 
-	and e.fecha_espectaculo=@fecha 
-	and e.hora_espectaculo=@hora
+	and e.fecha_espectaculo=cast(@fecha as date)
+	and e.hora_espectaculo=cast(@hora as time)
 	and ue.disponible = 1
 
 GO
 --------------------------------------------------------------------------------
 
-/*Funcion que calcula el precio por ubicacion*/
-IF OBJECT_ID('[LOOPP].[Fn_CalcularPrecioUbic]') IS NOT NULL
-    DROP FUNCTION [LOOPP].[Fn_CalcularPrecioUbic]
-GO
-CREATE FUNCTION [LOOPP].[Fn_CalcularPrecioUbic] (@precioBase numeric(18,2), @idGrado int, @porcentual numeric(10,2))
-RETURNS numeric(18,2)
-AS 
-	BEGIN
-		declare @precio numeric(18,2)
-		
-		select @precio=@precioBase+(@precioBase*comision)+(@precioBase*@porcentual)
-		from [LOOPP].[Grados_Publicacion]
-		where id_grado_publicacion=@idGrado
-	
-		RETURN @precio
-	END
-GO
-
 /*SP que devuelve las ubicaciones segun espectaculo y tipo de ubicacion seleccionado*/
 IF OBJECT_ID('[LOOPP].[SP_GetUbicacionesXEspec]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec]
 GO
-CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec] @id int,@fecha date,@hora time,@idTipoUbic int
+CREATE PROCEDURE [LOOPP].[SP_GetUbicacionesXEspec] @id int,@fecha varchar(15),@hora varchar(15),@idTipoUbic int
 AS
 	select distinct u.id_ubicacion
 		  ,'Fila '+[fila]+' - Asiento '+cast([asiento] as varchar(10))+
-		  ' - Costo '+cast([LOOPP].[Fn_CalcularPrecioUbic](e.precio_base,e.id_grado_publicacion,tu.porcentual) as varchar(10)) Ubicacion
+		  ' - Costo '+cast(ue.precio as varchar(10)) Ubicacion
 	from [LOOPP].[Ubicac_X_Espectaculo] ue
 	inner join [LOOPP].[Espectaculos] e
 		on ue.id_espectaculo=e.id_espectaculo
@@ -1811,8 +1793,8 @@ AS
 	inner join [LOOPP].[Tipo_Ubicacion] tu
 		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion
 	where e.id_espectaculo=@id 
-	and e.fecha_espectaculo=@fecha 
-	and e.hora_espectaculo=@hora
+	and e.fecha_espectaculo=cast(@fecha as date)
+	and e.hora_espectaculo=cast(@hora as time)
 	and ue.disponible = 1
 	and tu.id_tipo_ubicacion=@idTipoUbic
 
