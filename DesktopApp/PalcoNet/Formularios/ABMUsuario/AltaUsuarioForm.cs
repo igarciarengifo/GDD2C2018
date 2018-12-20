@@ -82,6 +82,9 @@ namespace PalcoNet.Formularios.ABMUsuario
             {
                 throw new Exception("No coinciden las contraseñas. Reingreselo");
             }
+            if (tipoComboBox.SelectedValue == null) {
+                throw new Exception("Debe seleccionar un tipo de usuario");
+            }
         }
     }
 }

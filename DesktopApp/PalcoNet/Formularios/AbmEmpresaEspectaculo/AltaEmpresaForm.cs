@@ -71,6 +71,7 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
         {
             try
             {
+                this.validarTiposCampos();
                 this.verificarCamposObligatorios();
                 if (!esModificacion)
                 {
@@ -83,6 +84,17 @@ namespace PalcoNet.Formularios.AbmEmpresaEspectaculo
             {
                 MessageBox.Show(exc.Message);
             }
+        }
+
+        private void validarTiposCampos()
+        {
+            
+            ValidarTiposEntradas.numerico(telBox.Text, "Telefono");
+            ValidarTiposEntradas.numerico(nroCalle.Text, "Nro de calle");
+
+            ValidarTiposEntradas.numerico(pisoBox.Text, "Piso");
+
+            ValidarTiposEntradas.numerico(codPostalBox.Text, "Cod Postal");
         }
 
         private void modificarEmpresa(Empresa empresaModificacion)

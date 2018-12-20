@@ -74,6 +74,7 @@ namespace PalcoNet.Formularios.AbmCliente
             pass = passw;
             cargarCombosTarjetas();
             dadoDeBajaBox.Visible = false;
+            inhabilitadoBox.Visible = false;
             esModificacion = false;
         }
 
@@ -82,7 +83,9 @@ namespace PalcoNet.Formularios.AbmCliente
         private void newClienteBtn_Click(object sender, EventArgs e)
         {
             try {
+                this.validarTiposCampos();
                 this.verificarCamposObligatorios();
+
                 if (!esModificacion)
                 {
                     this.nuevoCliente();
@@ -101,6 +104,7 @@ namespace PalcoNet.Formularios.AbmCliente
 
         private void modificarCliente( )
         {
+
             agregarFormasDePago(formasPagoModificadas);
             clienteModificacion.nombre = nameBox.Text;
             clienteModificacion.apellido = lastNameBox.Text;
@@ -134,6 +138,18 @@ namespace PalcoNet.Formularios.AbmCliente
                     MessageBoxIcon.Exclamation,
                     MessageBoxDefaultButton.Button1);
             }
+        }
+
+        private void validarTiposCampos()
+        {
+            ValidarTiposEntradas.numerico(documentoBox.Text, "Documento");
+            ValidarTiposEntradas.numerico(telBox.Text, "Telefono");
+            ValidarTiposEntradas.numerico(nroBox.Text, "Nro de calle");
+
+            ValidarTiposEntradas.numerico(pisoBox.Text,"Piso");
+
+            ValidarTiposEntradas.numerico(codPostalBox.Text, "Cod Postal");
+
         }
 
         private Nullable<int> completarPiso()

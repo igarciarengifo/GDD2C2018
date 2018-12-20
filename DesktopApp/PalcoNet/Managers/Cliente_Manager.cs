@@ -55,9 +55,10 @@ namespace PalcoNet.Managers
                     string resultadoTarjeta = this.altaDeMedioDePago(nuevaFormaPago);
                     if (!(resultadoTarjeta.Equals("OK")))
                     {
-                        resultadoAlta.resultadoTarjeta = resultadoTarjeta;
+                        
                         MessageBox.Show(resultadoAlta.resultadoTarjeta+" con numero de tarjeta " + nuevaFormaPago.nro_tarjeta.ToString());
                     }
+                    resultadoAlta.resultadoTarjeta = resultadoTarjeta;
                 }
             }
 
@@ -159,10 +160,21 @@ namespace PalcoNet.Managers
 
         internal int getPuntosClienteConIdUsuario(int idUsuario)
         {
-            return SQLManager.ejecutarEscalarQuery<int>("LOOPP.SP_GetPuntosClienteConIdUsuario",
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetPuntosClienteConIdUsuario",
                 SQLArgumentosManager.nuevoParametro("@idUsuario", idUsuario)
                                     .add("@fechaActual", DatosSesion.getFechaSistema()));
+            Int32 puntos=0;
+            if (resultTable != null && resultTable.Rows.Count > 0)
+            {
 
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    puntos = Int32.Parse(row["PuntosDisponibles"].ToString());
+                }
+
+            }
+
+            return puntos;
         }
 
         public DataTable getHistorialCliente(int id_usuario) {

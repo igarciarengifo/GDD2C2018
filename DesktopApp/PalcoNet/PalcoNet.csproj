@@ -68,6 +68,7 @@
     <Compile Include="Entidades\Rol.cs" />
     <Compile Include="Entidades\Ubicacion_X_Espectaculo.cs" />
     <Compile Include="Entidades\Usuario.cs" />
+    <Compile Include="Entidades\ValidarTiposEntradas.cs" />
     <Compile Include="Formularios\AbmCliente\AltaClienteForm.cs">
       <SubType>Form</SubType>
     </Compile>
