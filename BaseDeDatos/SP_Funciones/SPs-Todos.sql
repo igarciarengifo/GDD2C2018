@@ -1843,13 +1843,6 @@ declare @resultado varchar(255)
 	declare @idCompra int;
 	select @idCompra=MAX(id_compra) from [LOOPP].[Compras]
 
-	update cli
-	set [puntos_acumulados] = [puntos_acumulados]+com.puntos
-	from [LOOPP].[Compras] com
-	inner join [LOOPP].[Clientes] cli
-	on com.id_cliente=cli.id_cliente
-	and com.id_compra=@idCompra
-
 	insert into [LOOPP].[Localidades_Vendidas]([id_compra],[id_espectaculo],[id_ubicacion])
 	select @idCompra,@idEspec,id_ubicacion
 	from #Temp_Ubicaciones
