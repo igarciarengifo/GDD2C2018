@@ -1,3 +1,1039 @@
+USE [GD2C2018]
+GO
+
+IF (NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'LOOPP')) 
+BEGIN
+    EXEC ('CREATE SCHEMA [LOOPP]')
+END
+
+/*BORRADO DE ENTIDADES*/
+
+	IF OBJECT_ID('LOOPP.Registro_Puntos') IS NOT NULL
+		DROP TABLE [LOOPP].[Registro_Puntos];
+	IF OBJECT_ID('LOOPP.Localidades_Vendidas') IS NOT NULL
+		DROP TABLE [LOOPP].[Localidades_Vendidas];
+	IF OBJECT_ID('LOOPP.Item_Factura') IS NOT NULL
+		DROP TABLE [LOOPP].[Item_Factura];
+	IF OBJECT_ID('LOOPP.Facturas') IS NOT NULL
+		DROP TABLE [LOOPP].[Facturas];
+	IF OBJECT_ID('LOOPP.Compras') IS NOT NULL
+		DROP TABLE [LOOPP].[Compras];
+	IF OBJECT_ID('LOOPP.Formas_Pago_Cliente') IS NOT NULL
+		DROP TABLE [LOOPP].[Formas_Pago_Cliente];
+	IF OBJECT_ID('LOOPP.Canjes') IS NOT NULL
+		DROP TABLE [LOOPP].Canjes;
+	IF OBJECT_ID('LOOPP.Catalogo_Canjes') IS NOT NULL
+		DROP TABLE [LOOPP].Catalogo_Canjes;
+	IF OBJECT_ID('LOOPP.Rol_X_Usuario') IS NOT NULL
+		DROP TABLE [LOOPP].[Rol_X_Usuario];
+	IF OBJECT_ID('LOOPP.Tarjetas_Asociadas') IS NOT NULL
+		DROP TABLE [LOOPP].[Tarjetas_Asociadas];
+	IF OBJECT_ID('LOOPP.Clientes') IS NOT NULL
+		DROP TABLE [LOOPP].[Clientes];
+	IF OBJECT_ID('LOOPP.Ubicac_X_Espectaculo') IS NOT NULL
+		DROP TABLE [LOOPP].[Ubicac_X_Espectaculo];
+	IF OBJECT_ID('LOOPP.Ubicaciones') IS NOT NULL
+		DROP TABLE [LOOPP].[Ubicaciones];
+	IF OBJECT_ID('LOOPP.Tipo_Ubicacion') IS NOT NULL
+		DROP TABLE [LOOPP].[Tipo_Ubicacion];
+	IF OBJECT_ID('LOOPP.Espectaculos') IS NOT NULL
+		DROP TABLE [LOOPP].[Espectaculos];
+	IF OBJECT_ID('LOOPP.Rubros') IS NOT NULL
+		DROP TABLE [LOOPP].[Rubros];
+	IF OBJECT_ID('LOOPP.Grados_Publicacion') IS NOT NULL
+		DROP TABLE [LOOPP].[Grados_Publicacion];
+	IF OBJECT_ID('LOOPP.Estados_Publicacion') IS NOT NULL
+		DROP TABLE [LOOPP].[Estados_Publicacion];
+	IF OBJECT_ID('LOOPP.Empresas') IS NOT NULL
+		DROP TABLE [LOOPP].[Empresas];
+	IF OBJECT_ID('LOOPP.Usuarios') IS NOT NULL
+		DROP TABLE [LOOPP].[Usuarios];
+	IF OBJECT_ID('LOOPP.Func_X_Rol') IS NOT NULL
+		DROP TABLE [LOOPP].[Func_X_Rol];
+	IF OBJECT_ID('LOOPP.Funcionalidades') IS NOT NULL
+		DROP TABLE [LOOPP].[Funcionalidades];
+	IF OBJECT_ID('LOOPP.Roles') IS NOT NULL
+		DROP TABLE [LOOPP].[Roles];
+	IF OBJECT_ID('LOOPP.Formas_Pago') IS NOT NULL
+		DROP TABLE [LOOPP].[Formas_Pago];
+	
+
+/*##########################################################################################################*/
+/*										CREACION DE TABLAS													*/
+/*##########################################################################################################*/
+Print '***Inicio de creacion de tablas***'
+	/*-1- Tabla Roles*/
+	CREATE TABLE [LOOPP].[Roles](	
+		[id_rol] int IDENTITY(1,1) NOT NULL,
+		[nombre] varchar (50) NOT NULL,
+		[baja_logica] bit NOT NULL DEFAULT('False'),
+		primary key ([id_rol])
+	) 
+
+	/*-2- Tabla Funcionalidades*/
+	CREATE TABLE [LOOPP].[Funcionalidades](
+		id_funcionalidad int IDENTITY(1,1) NOT NULL,
+		nombre varchar(30) NOT NULL,
+		primary key ([id_funcionalidad])
+	) 
+
+	/*-3- Tabla Funcionalidad por Rol*/
+	CREATE TABLE [LOOPP].[Func_X_Rol](
+		[id_funcionalidad] [int] NOT NULL,
+		[id_rol] [int] NOT NULL,
+		[baja_logica] bit NOT NULL DEFAULT('False'),
+		PRIMARY KEY ( [id_funcionalidad], [id_rol]),
+		foreign key ([id_funcionalidad]) references [LOOPP].[Funcionalidades]([id_funcionalidad]),
+		foreign key ([id_rol]) references [LOOPP].[Roles]([id_rol])
+	) 
+	
+	/*-4- Tabla Usuarios*/
+	CREATE TABLE [LOOPP].[Usuarios](
+		[id_usuario] [int] IDENTITY(1,1) NOT NULL,
+		[username] [varchar](255) NOT NULL,
+		[password] [varchar](255) NOT NULL,
+		[loginFallidos] int NOT NULL DEFAULT (0),
+		[habilitado] bit NOT NULL DEFAULT('True'),
+		[primerLoginAuto] bit NOT NULL DEFAULT('False'),
+		primary key ([id_usuario])
+	) 
+
+	/*-5- Tabla Rol por Usuario*/
+	CREATE TABLE [LOOPP].[Rol_X_Usuario](
+		[id_usuario] [int] NOT NULL,
+		[id_rol] [int] NOT NULL,
+		[activo] bit NOT NULL DEFAULT('True'),
+		PRIMARY KEY ( [id_usuario], [id_rol]),
+		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario]),
+		foreign key ([id_rol]) references [LOOPP].[Roles]([id_rol])
+	) 
+
+	/*-6- Tabla Empresas*/
+	CREATE TABLE LOOPP.Empresas(
+		id_empresa int identity(1,1) NOT NULL,
+		razon_social nvarchar(255) NOT NULL,
+		cuit nvarchar(255) NOT NULL,
+		fecha_creacion datetime NULL,
+		mail nvarchar(50) NULL DEFAULT ('No definido'),
+		telefono nvarchar(15) NULL DEFAULT ('No definido'),
+		direccion_calle nvarchar(50) NULL DEFAULT ('No definido'),
+		direccion_nro numeric(18, 0) NULL DEFAULT ('0'),
+		direccion_piso numeric(18, 0) NULL DEFAULT ('0'),
+		direccion_depto nvarchar(50) NULL DEFAULT ('No definido'),
+		direccion_localidad nvarchar(50) NULL DEFAULT ('No definido'),
+		cod_postal nvarchar(50) NULL DEFAULT ('No definido'),
+		ciudad nvarchar(50) NULL DEFAULT ('No definido'),
+		baja_logica bit NOT NULL DEFAULT('False'),
+		id_usuario int not null,
+		UNIQUE (cuit),
+		primary key ([id_empresa]),
+		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
+	) 
+
+	/*-7- Tabla Estados de Publicacion*/
+	CREATE TABLE LOOPP.Estados_Publicacion(
+		id_estado_publicacion int identity(1,1) NOT NULL,
+		descripcion nvarchar(255) NOT NULL,
+		primary key ([id_estado_publicacion])
+	) 
+
+	/*-8- Tabla Grados de Publicacion*/
+	CREATE TABLE LOOPP.Grados_Publicacion(
+		id_grado_publicacion int identity(1,1) NOT NULL,
+		activo bit NOT NULL DEFAULT('True'),
+		comision numeric(10,2) NOT NULL,
+		descripcion nvarchar(20) NOT NULL,
+		primary key ([id_grado_publicacion])
+	) 
+
+	/*-9- Tabla Rubros*/
+	CREATE TABLE LOOPP.Rubros(
+		id_rubro int identity(1,1) NOT NULL,
+		descripcion nvarchar(20) NOT NULL,
+		primary key ([id_rubro])
+	) 
+
+	/*-10- Tabla Espectaculos*/
+	CREATE TABLE LOOPP.Espectaculos(
+		id_espectaculo int NOT NULL,
+		id_usuario_responsable int not null,
+		id_rubro int not null,
+		fecha_publicacion datetime NOT NULL,
+		descripcion nvarchar(255) NOT NULL,
+		direccion nvarchar(50) NULL DEFAULT ('No definido'),
+		id_estado_publicacion int not null,
+		id_grado_publicacion int not null,
+		precio_base numeric(18,2) NOT null DEFAULT(0.00),
+		[fecha_espectaculo] date not null,
+		[fecha_venc_espectaculo] date not null,
+		[hora_espectaculo] time not null,
+		primary key ([id_espectaculo]),
+		foreign key ([id_usuario_responsable]) references [LOOPP].[Usuarios]([id_usuario]),
+		foreign key ([id_rubro]) references [LOOPP].[Rubros]([id_rubro]),
+		foreign key ([id_estado_publicacion]) references [LOOPP].[Estados_Publicacion]([id_estado_publicacion]),
+		foreign key ([id_grado_publicacion]) references [LOOPP].[Grados_Publicacion]([id_grado_publicacion])
+	) 
+
+	/*-11- Tabla Tipo de Ubicacion*/
+	CREATE TABLE LOOPP.Tipo_Ubicacion(
+		id_tipo_ubicacion int  NOT NULL,
+		descripcion nvarchar(20) NOT NULL,
+		porcentual numeric(10,2) NOT null,
+		primary key ([id_tipo_ubicacion])
+	) 
+
+	/*-12- Tabla Ubicaciones*/
+	CREATE TABLE LOOPP.Ubicaciones(
+		id_ubicacion int identity(1,1) NOT NULL,
+		fila varchar(3) NOT NULL,
+		asiento numeric(18, 0) NOT NULL,
+		sin_numerar bit NULL DEFAULT('False'),
+		id_tipo_ubicacion int not null,
+		primary key ([id_ubicacion]),
+		foreign key ([id_tipo_ubicacion]) references [LOOPP].[Tipo_Ubicacion]([id_tipo_ubicacion])
+	) 
+
+	/*-13- Tabla Ubicacion por espectaculo*/
+	CREATE TABLE [LOOPP].[Ubicac_X_Espectaculo](
+		[id_espectaculo] [int] NOT NULL,
+		[id_ubicacion] [int] NOT NULL,
+		[precio] numeric(18,2) NOT null,
+		[disponible] bit not null DEFAULT('True'),
+		PRIMARY KEY ([id_espectaculo], [id_ubicacion]),
+		foreign key ([id_espectaculo]) references [LOOPP].[Espectaculos]([id_espectaculo]),
+		foreign key ([id_ubicacion]) references [LOOPP].[Ubicaciones]([id_ubicacion])
+	) 
+
+	/*-14- Tabla Clientes*/
+	CREATE TABLE LOOPP.Clientes(
+		id_cliente int identity(1,1) NOT NULL,
+		estado nvarchar(50) NOT NULL DEFAULT('Habilitado'),
+		baja_logica bit DEFAULT ('False'),		
+		nombre nvarchar(255) NOT NULL,
+		apellido nvarchar(255) NOT NULL,
+		tipo_documento nvarchar(20) NOT NULL DEFAULT('DNI'),
+		nro_documento numeric(18,0) NOT NULL,
+		cuil nvarchar(15) NULL DEFAULT ('No definido'),
+		mail nvarchar(255) NOT NULL DEFAULT ('No definido'),
+		telefono nvarchar(15) NULL DEFAULT ('No definido'),
+		direccion_calle nvarchar(255) NULL DEFAULT ('No definido'),
+		direccion_nro numeric(18, 0) NULL DEFAULT ('0'),
+		direccion_piso numeric(18, 0) NULL DEFAULT ('0'),
+		direccion_depto nvarchar(255) NULL DEFAULT ('No definido'),
+		direccion_localidad nvarchar(255) NULL DEFAULT ('No definido'),
+		codigo_postal nvarchar(255) NULL DEFAULT ('No definido'),
+		fecha_nacimiento datetime NULL,
+		fecha_creacion datetime NULL,
+		id_usuario int NOT NULL,
+		CONSTRAINT UC_Cliente UNIQUE (tipo_documento,nro_documento),
+		primary key ([id_cliente]),
+		foreign key ([id_usuario]) references [LOOPP].[Usuarios]([id_usuario])
+	) 
+
+	
+	/*-15- Formas de Pago*/
+	CREATE TABLE LOOPP.Formas_Pago(
+		id_forma_pago int identity(1,1) NOT NULL,
+		descripcion nvarchar(20) NOT NULL,
+		marca nvarchar(20),
+		primary key ([id_forma_pago]),
+	) 
+
+
+	/*-15- Formas de Pago Cliente*/
+	CREATE TABLE LOOPP.Formas_Pago_Cliente(
+		id_forma_pago_cliente int identity(1,1) NOT NULL,
+		id_forma_pago int NOT NULL,
+		nro_tarjeta bigint,
+		id_cliente int NOT NULL,
+		primary key ([id_forma_pago_cliente]),
+		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente),
+		foreign key (id_forma_pago) references [LOOPP].[Formas_Pago](id_forma_pago)
+	) 
+	
+	/*-16- Catalogo de canjes*/
+	CREATE TABLE LOOPP.Catalogo_Canjes(
+		id_codigo int identity(1,1) NOT NULL,
+		stock numeric(18, 0) not null,
+		descripcion	nvarchar(30) NOT NULL,
+		puntos_validos numeric(18, 0) not NULL,
+		primary key ([id_codigo])
+	) 
+
+	/*-17- Canjes*/
+	CREATE TABLE LOOPP.Canjes(
+		id_canje int identity(1,1) NOT NULL,
+		fecha_canje datetime NOT NULL,
+		puntos_canjeados numeric(18, 0) not NULL,
+		id_codigo int NOT NULL,
+		id_cliente int NOT NULL,
+		primary key ([id_canje]),
+		foreign key (id_codigo) references [LOOPP].[Catalogo_Canjes](id_codigo),
+		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
+	) 
+
+	/*-18- Tabla Compras*/
+	CREATE TABLE LOOPP.Compras(
+		id_compra int identity(1,1) NOT NULL,
+		fecha_compra datetime NOT NULL,
+		importe_total numeric(18, 0) NOT NULL,
+		cantidad_compra numeric(18, 0) NOT NULL,
+		id_forma_pago_cliente int NOT NULL,
+		puntos  int NOT NULL DEFAULT('0'),
+		id_cliente int NOT NULL,
+		facturado bit not null DEFAULT('False'),
+		primary key ([id_compra]),
+		foreign key ([id_forma_pago_cliente]) references [LOOPP].[Formas_Pago_Cliente]([id_forma_pago_cliente]),
+		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
+		
+	) 
+
+	/*-19- Tabla Facturas*/
+	CREATE TABLE LOOPP.Facturas(
+		nro_factura int NOT NULL,
+		fecha_factura datetime NOT NULL,
+		total_factura numeric(18, 2) NOT NULL,
+		total_comision numeric(18, 2) NOT NULL,
+		id_empresa int NOT NULL,
+		id_espectaculo int NOT NULL,
+		primary key ([nro_factura]),
+		foreign key ([id_empresa]) references [LOOPP].[Empresas]([id_empresa]),
+		foreign key ([id_espectaculo]) references [LOOPP].[Espectaculos]([id_espectaculo])
+	) 
+
+	/*-20- Tabla Items Factura*/
+	CREATE TABLE LOOPP.Item_Factura(
+		nro_item int identity(1,1) NOT NULL,
+		nro_factura int NOT NULL,
+		monto_compra numeric(18, 2) NOT NULL,
+		monto_comision numeric(18, 2) NOT NULL,
+		cantidad numeric(18, 0) NOT NULL,
+		descripcion nvarchar(60) NOT NULL,
+		primary key ([nro_item]),
+		foreign key ([nro_factura]) references [LOOPP].[Facturas]([nro_factura])
+	) 
+
+
+	/*-21- Tabla Localidades vendidas*/
+	CREATE TABLE LOOPP.Localidades_Vendidas(
+		id_compra int NOT NULL,
+		id_espectaculo int NOT NULL,
+		id_ubicacion int NOT NULL,
+		primary key (id_compra,id_espectaculo,id_ubicacion),
+		foreign key (id_compra) references [LOOPP].[Compras](id_compra),
+		foreign key (id_espectaculo) references [LOOPP].[Espectaculos](id_espectaculo),
+		foreign key (id_ubicacion) references [LOOPP].[Ubicaciones](id_ubicacion)
+	) 
+	
+	/*22-Creacion de tabla de puntos */
+	CREATE TABLE LOOPP.Registro_Puntos(
+		id_compra int NOT NULL,
+		id_cliente int NOT NULL,
+		puntos_usados int,
+		fecha_vencimiento datetime,
+		primary key (id_compra,id_cliente),
+		foreign key (id_compra) references [LOOPP].[Compras](id_compra),
+		foreign key (id_cliente) references [LOOPP].[Clientes](id_cliente)
+	) 
+	
+
+Print '***Fin de creacion de tablas***'
+GO
+Print '***Creacion Triggers***'
+GO
+create trigger TR_CrearRegistroPuntos on LOOPP.Compras
+after insert
+as
+	BEGIN TRANSACTION [T]
+
+	BEGIN TRY
+
+	insert into LOOPP.Registro_Puntos (id_cliente, id_compra,puntos_usados, fecha_vencimiento)
+	select id_cliente, id_compra, 0, DATEADD(month, 6, fecha_compra)
+	from inserted
+	COMMIT TRANSACTION [T]
+
+	END TRY
+
+	BEGIN CATCH
+
+      ROLLBACK TRANSACTION [T]
+
+	END CATCH;
+GO
+Print '***Fin Creacion Triggers***'
+
+/*##########################################################################################################*/
+/*										MIGRACION DE DATOS													*/
+/*##########################################################################################################*/
+
+/*Creacion de Estados_Publicacion*/
+
+INSERT INTO LOOPP.Estados_Publicacion (descripcion)
+VALUES ('Borrador');--id=1
+INSERT INTO LOOPP.Estados_Publicacion (descripcion)
+VALUES ('Publicada');--id=2
+INSERT INTO LOOPP.Estados_Publicacion (descripcion)
+VALUES ('Pausada');--id=3
+INSERT INTO LOOPP.Estados_Publicacion (descripcion)
+VALUES ('Finalizada');--id=4
+GO
+-------------------------------------------------------------------------------
+
+/*Creacion de Tipo_Ubicacion*/
+
+INSERT INTO LOOPP.Tipo_Ubicacion ( 
+	id_tipo_ubicacion, 
+	descripcion, 
+	porcentual )
+SELECT 
+	DISTINCT Ubicacion_Tipo_Codigo, 
+	Ubicacion_Tipo_Descripcion,
+	CASE	WHEN Ubicacion_Tipo_Descripcion = 'Platea Alta' THEN 1.35
+			WHEN Ubicacion_Tipo_Descripcion = 'Platea Baja' THEN 1.5
+			WHEN Ubicacion_Tipo_Descripcion = 'Vip' THEN 1.8
+			WHEN Ubicacion_Tipo_Descripcion = 'Campo' THEN 1.2
+			WHEN Ubicacion_Tipo_Descripcion = 'Campo Vip' THEN 1.6
+			WHEN Ubicacion_Tipo_Descripcion = 'PullMan' THEN 1.25
+			WHEN Ubicacion_Tipo_Descripcion = 'Super PullMan' THEN 1.55
+			WHEN Ubicacion_Tipo_Descripcion = 'Cabecera' THEN 1
+	END AS porcentual 
+FROM gd_esquema.Maestra
+ORDER BY Ubicacion_Tipo_Codigo
+GO
+-------------------------------------------------------------------------------
+/*Creacion de formas de pago disponibles*/
+
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Efectivo', null);
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Credito', 'VISA');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Credito', 'MASTERCARD');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Credito', 'AMERICAN EXPRESS');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Debito', 'VISA');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Debito', 'MASTERCARD');
+INSERT INTO LOOPP.Formas_Pago (descripcion, marca) VALUES ('Tarjeta Debito', 'AMERICAN EXPRESS');
+
+-------------------------------------------------------------------------------
+
+/*Creacion de Rubros*/
+
+INSERT INTO LOOPP.Rubros (descripcion) VALUES ('No definido');
+INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Musical');
+INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Obra Teatral');
+INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Humoristico');
+INSERT INTO LOOPP.Rubros (descripcion) VALUES ('Audio Visual');
+-------------------------------------------------------------------------------
+
+/*Grados de Publicacion*/
+INSERT INTO LOOPP.Grados_Publicacion (comision,descripcion) VALUES (0.30,'Alta');
+INSERT INTO LOOPP.Grados_Publicacion (comision, descripcion) VALUES (0.25, 'Media');
+INSERT INTO LOOPP.Grados_Publicacion (comision, descripcion) VALUES (0.10, 'Baja');
+-------------------------------------------------------------------------------
+
+/*Creacion de Roles*/
+
+INSERT INTO [LOOPP].[Roles]([nombre]) VALUES ('Administrativo');
+INSERT INTO [LOOPP].[Roles]([nombre]) VALUES ('Cliente');
+INSERT INTO [LOOPP].[Roles]([nombre]) VALUES ('Empresa');
+-------------------------------------------------------------------------------
+
+/*Creacion de usuario Admin*/
+
+INSERT INTO [LOOPP].[Usuarios] (username,password)
+--user :admin pass: w23e
+VALUES ('admin', '52d77462b24987175c8d7dab901a5967e927ffc8d0b6e4a234e07a4aec5e3724');
+-------------------------------------------------------------------------------
+
+/*Creacion de Rol_X_Usuario para el admin*/
+
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) VALUES (1,1);
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) VALUES (1,2);
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) VALUES (1,3);
+-------------------------------------------------------------------------------
+
+/*Creacion de funcionalidades*/
+
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Rol');  --1
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Clientes'); --2
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Empresas'); --3
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Comprar Entrada'); --4
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Modificar Compra'); --5
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Publicar Espectaculo'); --6
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Modificar Publicacion'); --7
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Facturar rendiciones'); --8
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Historial Cliente');  --9
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Canjear Puntos'); --10 
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('Listado Estadistico');  --11
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM Grado Publicacion');  --12
+INSERT INTO [LOOPP].[Funcionalidades] (nombre) VALUES ('ABM de Rubros');  --13
+-------------------------------------------------------------------------------
+
+/*Creacion de Funcionalidad_X_Rol*/
+
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,1);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,2);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,3);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,8);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,11);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,12);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (1,13);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,4);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,5);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,9);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (2,10);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (3,6);
+INSERT INTO [LOOPP].[Func_X_Rol] (id_rol,id_funcionalidad) VALUES (3,7);
+-------------------------------------------------------------------------------
+
+/*Creacion de ubicaciones*/
+
+INSERT INTO LOOPP.Ubicaciones (
+	fila,
+	asiento, 
+	sin_numerar, 
+	id_tipo_ubicacion)
+SELECT 
+	Ubicacion_Fila, 
+	Ubicacion_Asiento, 
+	Ubicacion_Sin_numerar, 
+	Ubicacion_Tipo_Codigo
+FROM gd_esquema.Maestra
+GROUP BY Ubicacion_Fila, Ubicacion_Asiento, Ubicacion_Sin_numerar, Ubicacion_Tipo_Codigo
+ORDER BY Ubicacion_Tipo_Codigo, Ubicacion_Fila, Ubicacion_Asiento
+-------------------------------------------------------------------------------
+
+/*Creacion catalogo de Canje*/
+
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES (10, '2 Entradas gratis', 1000);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, '1 Entrada gratis', 800);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Una remera del espectaculo', 500);
+INSERT INTO LOOPP.Catalogo_Canjes (stock, descripcion, puntos_validos) VALUES ( 10, 'Una consumición gratis', 300);
+-------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.FN_RemoveNonAlphaCharacters') IS NOT NULL
+    DROP FUNCTION LOOPP.FN_RemoveNonAlphaCharacters
+GO
+Create Function [LOOPP].[FN_RemoveNonAlphaCharacters](@Temp VarChar(255))
+Returns VarChar(255)
+AS
+Begin
+
+    Declare @KeepValues as varchar(255)
+    Set @KeepValues = '%[^a-z0-9]%'
+    While PatIndex(@KeepValues, @Temp) > 0
+        Set @Temp = Stuff(@Temp, PatIndex(@KeepValues, @Temp), 1, '')
+
+    Return Lower( replace(@Temp, 'nº', ''))
+End
+GO
+-------------------------------------------------------------------------------
+
+/*Migracion de clientes*/
+
+/*Se agrupa clientes de la tabla Maestra y se inserta en una tabla Temporal*/
+select [Cli_Nombre] nombre
+	  ,[Cli_Apeliido] apellido
+	  ,[Cli_Dni] dni
+      ,[Cli_Fecha_Nac]
+      ,[Cli_Mail] email
+      ,[Cli_Dom_Calle]
+      ,[Cli_Nro_Calle]
+      ,[Cli_Piso]
+      ,[Cli_Depto]
+      ,[Cli_Cod_Postal]
+into #Temp_Clientes
+from [GD2C2018].[gd_esquema].[Maestra]
+where Cli_Dni is not null
+group by [Cli_Nombre]
+	  ,[Cli_Apeliido]
+	  ,[Cli_Dni]
+      ,[Cli_Fecha_Nac]
+      ,[Cli_Mail]
+      ,[Cli_Dom_Calle]
+      ,[Cli_Nro_Calle]
+      ,[Cli_Piso]
+      ,[Cli_Depto]
+      ,[Cli_Cod_Postal];
+/*Se busca si existe incosistencia en los datos mediante otra tabla Temporal*/
+SELECT  [Nombre]
+		 ,[Apellido]
+		 ,[Dni]
+		 ,[Cli_Fecha_Nac]
+		 ,[Email]
+		 ,[Cli_Dom_Calle]
+		 ,[Cli_Nro_Calle]
+		 ,[Cli_Piso]
+		 ,[Cli_Depto]
+		 ,[Cli_Cod_Postal]
+		 ,row_number() OVER(PARTITION BY [Dni] ORDER BY Email) AS cantDni
+		 ,row_number() OVER(PARTITION BY [Email] ORDER BY Email) AS cantEmail
+INTO #Temp_Cli_Incons
+FROM #Temp_Clientes
+GROUP BY	 [Nombre]
+			,[Apellido]
+			,[Dni]
+			,[Cli_Fecha_Nac]
+			,[Email]
+			,[Cli_Dom_Calle]
+			,[Cli_Nro_Calle]
+			,[Cli_Piso]
+			,[Cli_Depto]
+			,[Cli_Cod_Postal];
+
+DROP TABLE #Temp_Clientes;
+
+/*Se inserta tabla usuarios antes de insertar el cliente, ya que cliente tiene un FK a la tabla usuarios*/
+DECLARE @newMail nvarchar(255)
+insert into [LOOPP].[Usuarios] (
+		[username]
+		,[password]
+		,[primerLoginAuto])
+select LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1)) userName
+		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
+		,'True'
+from #Temp_Cli_Incons
+where cantDni=1 and cantEmail=1
+
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
+SELECT id_usuario,2
+FROM [LOOPP].[Usuarios]
+where id_usuario not in (select id_usuario from [LOOPP].[Rol_X_Usuario])
+/*Se inserta tabla clientes con los datos de clientes que sean unicos*/
+insert into [LOOPP].[Clientes] (
+	   [nombre]
+      ,[apellido]
+      ,[nro_documento]
+      ,[fecha_nacimiento]
+      ,[mail]
+      ,[direccion_calle]
+      ,[direccion_nro]
+      ,[direccion_piso]
+      ,[direccion_depto]
+      ,[codigo_postal]
+      ,[id_usuario] )
+select [Nombre]
+		 ,[Apellido]
+		 ,[Dni]
+		 ,[Cli_Fecha_Nac]
+		 ,[Email]
+		 ,[Cli_Dom_Calle]
+		 ,[Cli_Nro_Calle]
+		 ,[Cli_Piso]
+		 ,[Cli_Depto]
+		 ,[Cli_Cod_Postal]
+		 ,usu.id_usuario
+from #Temp_Cli_Incons tmp
+inner join [LOOPP].[Usuarios] usu
+on LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1))=usu.username
+where cantDni=1 and cantEmail=1
+order by dni
+
+/*Se inserta tabla usuarios antes de insertar el cliente, ya que cliente tiene un FK a la tabla usuarios*/
+insert into [LOOPP].[Usuarios] (
+		[username]
+		,[password]
+		,[habilitado]
+		,[primerLoginAuto])
+select LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1))+'_duplicado' userName
+		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
+		,'True'
+		,'True'
+from #Temp_Cli_Incons
+where cantDni=1 and cantEmail>1
+
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
+SELECT id_usuario,2
+FROM [LOOPP].[Usuarios]
+where id_usuario not in (select id_usuario from [LOOPP].[Rol_X_Usuario])
+
+/*Se inserta tabla clientes con los datos de clientes que poseen datos incosistentes
+  Como por ejemplo 2 emials iguales para clientes con distinto dni*/
+insert into [LOOPP].[Clientes] (
+	   [nombre]
+      ,[apellido]
+      ,[nro_documento]
+      ,[fecha_nacimiento]
+      ,[mail]
+      ,[direccion_calle]
+      ,[direccion_nro]
+      ,[direccion_piso]
+      ,[direccion_depto]
+      ,[codigo_postal]
+	  ,[estado]
+	  ,[baja_logica]
+      ,[id_usuario] )
+select [Nombre]
+		 ,[Apellido]
+		 ,[Dni]
+		 ,[Cli_Fecha_Nac]
+		 ,[Email]
+		 ,[Cli_Dom_Calle]
+		 ,[Cli_Nro_Calle]
+		 ,[Cli_Piso]
+		 ,[Cli_Depto]
+		 ,[Cli_Cod_Postal]
+		 ,'Inconsistente' estado
+		 ,'False'
+		 ,usu.id_usuario
+from #Temp_Cli_Incons tmp
+inner join [LOOPP].[Usuarios] usu
+on LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1))+'_duplicado'=usu.username
+where cantDni=1 and cantEmail>1
+order by dni
+
+DROP TABLE #Temp_Cli_Incons;
+-------------------------------------------------------------------------------
+
+/*Migracion de Empresas*/
+
+SELECT 
+	Espec_Empresa_Razon_Social,
+	Espec_Empresa_Cuit, 
+	Espec_Empresa_Fecha_Creacion,
+	Espec_Empresa_Mail email,
+	Espec_Empresa_Dom_Calle,
+	Espec_Empresa_Nro_Calle,
+	Espec_Empresa_Piso,
+	Espec_Empresa_Depto,
+	Espec_Empresa_Cod_Postal
+into #Temp_Empresas
+FROM [GD2C2018].[gd_esquema].[Maestra]
+where Espec_Empresa_Cuit  is not null
+group by 
+	Espec_Empresa_Razon_Social,
+	Espec_Empresa_Cuit, 
+	Espec_Empresa_Fecha_Creacion,
+	Espec_Empresa_Mail,
+	Espec_Empresa_Dom_Calle,
+	Espec_Empresa_Nro_Calle,
+	Espec_Empresa_Piso,
+	Espec_Empresa_Depto,
+	Espec_Empresa_Cod_Postal
+;
+
+/*Se inserta tabla usuarios antes de insertar la empresa, ya que empresa tiene un FK a la tabla usuarios*/
+
+insert into [LOOPP].[Usuarios] (
+		[username]
+		,[password]
+		,[primerLoginAuto])
+select LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1)) userName
+		,'4f37c061f1854f9682f543fecb5ee9d652c803235970202de97c6e40c8361766' pass
+		,'True'
+from #Temp_Empresas
+
+INSERT INTO [LOOPP].[Rol_X_Usuario] (id_usuario,id_rol) 
+SELECT id_usuario,3
+FROM [LOOPP].[Usuarios]
+where id_usuario not in (select id_usuario from [LOOPP].[Rol_X_Usuario])
+
+/*Se inserta tabla empresas */
+
+insert into [LOOPP].[Empresas] (
+	 razon_social,
+	 cuit,
+	 fecha_creacion,
+	 mail,
+	 direccion_calle,
+	 direccion_nro,
+	 direccion_piso,
+	 direccion_depto,
+	 cod_postal,
+	 id_usuario )
+select	Espec_Empresa_Razon_Social,
+		Espec_Empresa_Cuit, 
+		Espec_Empresa_Fecha_Creacion,
+		 email,
+		Espec_Empresa_Dom_Calle,
+		Espec_Empresa_Nro_Calle,
+		Espec_Empresa_Piso,
+		Espec_Empresa_Depto,
+		Espec_Empresa_Cod_Postal,
+		usu.id_usuario 
+FROM #Temp_Empresas
+inner join [LOOPP].[Usuarios] usu
+on LOOPP.FN_RemoveNonAlphaCharacters(left(email,charindex('@',email,1)-1))=usu.username
+order by Espec_Empresa_Cuit
+
+DROP TABLE #Temp_Empresas;
+-------------------------------------------------------------------------------
+
+/*Migracion Forma de pago clientes*/
+
+insert into [LOOPP].[Formas_Pago_Cliente] (
+	id_forma_pago,
+	id_cliente,
+	nro_tarjeta)
+select 1,clie.id_cliente, null
+FROM [gd_esquema].[Maestra] m
+inner join [LOOPP].[Clientes] clie on clie.nro_documento = m.Cli_Dni
+where Forma_Pago_Desc is not null
+group by clie.id_cliente
+
+-------------------------------------------------------------------------------
+
+/*Migracion de Espectaculos*/
+
+/*Se genera una tabla temporal con los datos unicos sin repetidos*/
+SELECT [Espectaculo_Cod] id
+      ,[Espectaculo_Descripcion] descripcion
+      ,[Espectaculo_Fecha] espec_fecha
+      ,[Espectaculo_Fecha_Venc] venc_publicacion
+      ,[Espectaculo_Rubro_Descripcion] rubro
+      ,[Espectaculo_Estado] estado
+	  ,LOOPP.FN_RemoveNonAlphaCharacters(left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1)) usuario
+into #TEMP_Espectaculo
+  FROM [GD2C2018].[gd_esquema].[Maestra]
+  group by [Espectaculo_Cod]
+      ,[Espectaculo_Descripcion]
+      ,[Espectaculo_Fecha]
+      ,[Espectaculo_Fecha_Venc]
+      ,[Espectaculo_Rubro_Descripcion]
+      ,[Espectaculo_Estado]
+	  ,LOOPP.FN_RemoveNonAlphaCharacters(left(Espec_Empresa_Mail,charindex('@',Espec_Empresa_Mail,1)-1))
+  order by [Espectaculo_Cod]
+  --7.803 rows
+
+/*Se inserta tabla Estapectaculos*/
+
+	insert into [LOOPP].[Espectaculos](
+			 [id_espectaculo]
+			,[id_usuario_responsable]
+			,[id_rubro]
+			,[fecha_publicacion]
+			,[descripcion]
+			,[id_estado_publicacion]
+			,[id_grado_publicacion]
+			,[fecha_espectaculo]
+			,[fecha_venc_espectaculo]
+			,[hora_espectaculo]
+			)
+	select t.id
+			,u.id_usuario
+			,1--rubro 'No Definido'
+			,t.venc_publicacion
+			,t.descripcion
+			,e.id_estado_publicacion
+			,3--grado de publicacion 'Baja'
+			,cast(espec_fecha as date) 
+			,cast(venc_publicacion as date) 
+			,'00:00:00'
+	from #TEMP_Espectaculo t
+	inner join [LOOPP].[Usuarios] u
+	on t.usuario=u.username
+	inner join [LOOPP].[Estados_Publicacion] e
+	on t.estado=e.descripcion
+
+	Drop table #TEMP_Espectaculo;
+-------------------------------------------------------------------------------
+
+/*Migracion de Ubicacion por Espectaculo*/
+
+/*Se genera una tabla temporal con los datos unicos sin repetidos*/
+	SELECT [Espectaculo_Cod]
+		  ,[Espectaculo_Fecha]
+		  ,[Espectaculo_Fecha_Venc]
+		  ,[Ubicacion_Fila]
+		  ,[Ubicacion_Asiento]
+		  ,[Ubicacion_Sin_numerar]
+		  ,[Ubicacion_Precio]
+		  ,[Ubicacion_Tipo_Codigo]
+		  ,[Ubicacion_Tipo_Descripcion]
+	into #Temp_Ubic_Espec
+	FROM [GD2C2018].[gd_esquema].[Maestra]
+	group by [Espectaculo_Cod]
+		  ,[Espectaculo_Fecha]
+		  ,[Espectaculo_Fecha_Venc]
+		  ,[Ubicacion_Fila]
+		  ,[Ubicacion_Asiento]
+		  ,[Ubicacion_Sin_numerar]
+		  ,[Ubicacion_Precio]
+		  ,[Ubicacion_Tipo_Codigo]
+		  ,[Ubicacion_Tipo_Descripcion]
+	order by [Espectaculo_Cod]
+	--238.143
+
+	/*Inserta las ubicaciones ya reservadas*/
+	insert into [LOOPP].[Ubicac_X_Espectaculo] (
+				[id_espectaculo]
+				,[id_ubicacion]
+				,[precio]
+				,disponible)
+	select e.id_espectaculo
+		  ,u.id_ubicacion
+		  ,t.Ubicacion_Precio
+		  ,'False' disponible
+	from #Temp_Ubic_Espec t
+	inner join [LOOPP].[Espectaculos] e
+		on t.Espectaculo_Cod=e.id_espectaculo
+	inner join [LOOPP].[Ubicaciones] u
+		on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
+	inner join [LOOPP].[Tipo_Ubicacion] tu
+		on u.id_tipo_ubicacion=tu.id_tipo_ubicacion and t.Ubicacion_Tipo_Descripcion=tu.descripcion
+	order by e.id_espectaculo,u.id_ubicacion;
+
+	/*Inserta ubicaciones disponibles por espectaculo*/
+	insert into [LOOPP].[Ubicac_X_Espectaculo] (
+				[id_espectaculo]
+				,[id_ubicacion]
+				,[precio])
+	select e.id_espectaculo
+		  ,u.id_ubicacion
+		  ,t.Ubicacion_Precio
+	from #Temp_Ubic_Espec t
+	inner join [LOOPP].[Espectaculos] e
+		on t.Espectaculo_Cod=e.id_espectaculo
+	right join [LOOPP].[Ubicaciones] u
+		on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
+	where not exists (select 1 from [LOOPP].[Ubicac_X_Espectaculo] uxe 
+					  where uxe.id_espectaculo=e.id_espectaculo and uxe.id_ubicacion=u.id_ubicacion)
+	order by e.id_espectaculo,u.id_ubicacion;
+
+	Drop table #Temp_Ubic_Espec;
+-------------------------------------------------------------------------------
+
+/*Migracion de Facturas*/
+
+/*Se genera una tabla temporal con los datos unicos sin repetidos*/
+SELECT [Espec_Empresa_Cuit]
+      ,[Espectaculo_Cod]
+	  ,[Espectaculo_Fecha]
+      ,[Factura_Nro]
+      ,[Factura_Fecha]
+      ,[Factura_Total] total_comision
+	  ,SUM([Ubicacion_Precio]) total_facturado
+into #Temp_Factura
+FROM [GD2C2018].[gd_esquema].[Maestra]
+where [Factura_Nro] is not null
+group by [Espec_Empresa_Cuit]
+      ,[Espectaculo_Cod]
+	  ,[Espectaculo_Fecha]
+      ,[Factura_Nro]
+      ,[Factura_Fecha]
+      ,[Factura_Total]
+order by [Espec_Empresa_Cuit]
+      ,[Espectaculo_Cod]
+	  ,[Factura_Nro]
+--7.664 rows
+
+insert into [LOOPP].[Facturas](
+			[nro_factura]
+		   ,[fecha_factura]
+		   ,[total_factura]
+		   ,[total_comision]
+		   ,[id_empresa]
+		   ,[id_espectaculo])
+select t.Factura_Nro
+	  ,t.Factura_Fecha
+	  ,t.total_facturado
+	  ,t.total_comision
+	  ,em.id_empresa
+	  ,es.id_espectaculo
+from #Temp_Factura t
+inner join [LOOPP].[Empresas] em
+	on t.Espec_Empresa_Cuit=em.cuit
+inner join [LOOPP].[Espectaculos] es
+	on t.Espectaculo_Cod=es.id_espectaculo
+order by t.Factura_Nro
+
+Drop table #Temp_Factura;
+-------------------------------------------------------------------------------
+
+/*Migracion de Items Factura*/
+
+insert into [LOOPP].[Item_Factura](
+			[nro_factura]
+			,[monto_compra]
+			,[monto_comision]
+			,[cantidad]
+			,[descripcion])
+SELECT [Factura_Nro]
+	  ,[Ubicacion_Precio]
+      ,[Item_Factura_Monto]
+      ,[Item_Factura_Cantidad]
+      ,[Item_Factura_Descripcion]
+FROM [GD2C2018].[gd_esquema].[Maestra]
+where [Factura_Nro] is not null
+order by [Factura_Nro]
+--94.142 rows
+-------------------------------------------------------------------------------
+
+/*Migracion de Compras*/
+INSERT INTO [LOOPP].[Compras] (
+	fecha_compra,
+	importe_total,
+	[cantidad_compra],
+	puntos,
+	id_cliente,
+	id_forma_pago_cliente,
+	facturado
+)
+SELECT
+	[Compra_Fecha],
+	(Ubicacion_Precio),
+	[Compra_Cantidad],
+	LOOPP.Fn_CalcularPuntos(Ubicacion_Precio),
+	clie.id_cliente,
+	f.id_forma_pago_cliente,
+	'True'
+FROM [gd_esquema].[Maestra]
+inner join [LOOPP].[Clientes] clie 
+	on clie.nro_documento = Cli_Dni
+left join [LOOPP].[Formas_Pago_Cliente] f 
+	on f.id_cliente = clie.id_cliente
+inner join LOOPP.Ubicaciones u 
+	on u.fila=Ubicacion_Fila and u.asiento= Ubicacion_Asiento
+inner join LOOPP.Tipo_Ubicacion tu 
+	on tu.id_tipo_ubicacion = u.id_tipo_ubicacion and tu.descripcion = Ubicacion_Tipo_Descripcion
+where Compra_Fecha is not null
+group by [Compra_Fecha], Ubicacion_Precio, porcentual ,[Compra_Cantidad], clie.id_cliente, f.id_forma_pago_cliente, Ubicacion_Asiento, Ubicacion_Fila
+order by Compra_Fecha;
+
+---------------------------------------------------------------------------------
+
+/*Migracion Localidades Vendidas*/
+
+/*Se genera una tabla temporal con los datos unicos sin repetidos*/
+	SELECT [Espectaculo_Cod]
+		  ,[Ubicacion_Fila]
+		  ,[Ubicacion_Asiento]
+		  ,[Ubicacion_Sin_numerar]
+		  ,[Cli_Dni]
+		  ,[Compra_Fecha]
+
+	into #Temp_Ubic_Espec_compra
+	FROM [GD2C2018].[gd_esquema].[Maestra]
+	group by  [Espectaculo_Cod]
+		  ,[Ubicacion_Fila]
+		  ,[Ubicacion_Asiento]
+		  ,[Ubicacion_Sin_numerar]
+		  ,[Cli_Dni]
+		  ,[Compra_Fecha]
+	order by [Espectaculo_Cod]
+
+	--332.285
+
+insert into [LOOPP].[Localidades_Vendidas] (
+			[id_espectaculo]
+			,[id_compra]
+			,[id_ubicacion] )
+select 
+			uxe.id_espectaculo,
+			c.id_compra,
+			uxe.id_ubicacion
+	FROM #Temp_Ubic_Espec_compra t
+inner join [LOOPP].[Ubicaciones] u 
+	on t.Ubicacion_Fila=u.fila and t.Ubicacion_Asiento=u.asiento
+inner join LOOPP.Ubicac_X_Espectaculo uxe 
+	on uxe.id_espectaculo = t.Espectaculo_Cod and uxe.id_ubicacion = u.id_ubicacion
+inner join [LOOPP].[Clientes] clie 
+	on clie.nro_documento = t.Cli_Dni
+inner join [LOOPP].[Compras]c 
+	on  c.id_cliente = clie.id_cliente  and c.fecha_compra = t.Compra_Fecha
+order by c.id_compra 
+
+--130.362
+
+drop table #Temp_Ubic_Espec_compra
+
 /*##########################################################################################################*/
 /*										CREACION DE SPs y FN												*/
 /*##########################################################################################################*/
@@ -1752,20 +2788,6 @@ GO
 
 --------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------
-/*Funcion que calcula los puntos*/
-IF OBJECT_ID('LOOPP.Fn_CalcularPuntos') IS NOT NULL
-	DROP FUNCTION [LOOPP].[Fn_CalcularPuntos];
-GO
-
-CREATE FUNCTION [LOOPP].[Fn_CalcularPuntos] (@Importe_total numeric (18,0))
-RETURNS int
-AS BEGIN
-		declare @puntos int
-	set @puntos = ( @Importe_total /10)
-	
-    RETURN @puntos
-END
-
 /*SP que devuelve consulta con compras segun id seleccionadas en la APP*/
 IF OBJECT_ID('[LOOPP].[SP_RetornaUbicacionesDeLista]') IS NOT NULL
     DROP PROCEDURE [LOOPP].[SP_RetornaUbicacionesDeLista]
@@ -1863,7 +2885,7 @@ IF OBJECT_ID('LOOPP.SP_GetMayorAnioActividad') IS NOT NULL
 GO
 CREATE PROCEDURE LOOPP.SP_GetMayorAnioActividad
 AS
-	SELECT TOP 1 (YEAR(comp.fecha_compra)) A�O
+	SELECT TOP 1 (YEAR(comp.fecha_compra)) AÑO
 	FROM LOOPP.Compras comp
 	ORDER BY comp.fecha_compra DESC
 GO
@@ -1874,7 +2896,7 @@ IF OBJECT_ID('LOOPP.SP_GetMenorAnioActividad') IS NOT NULL
 GO
 CREATE PROCEDURE LOOPP.SP_GetMenorAnioActividad
 AS
-	SELECT TOP 1 (YEAR(comp.fecha_compra)) A�O
+	SELECT TOP 1 (YEAR(comp.fecha_compra)) AÑO
 	FROM LOOPP.Compras comp
 	ORDER BY comp.fecha_compra ASC
 GO
@@ -1892,49 +2914,36 @@ BEGIN
 	
 	select sum(com.puntos-regP.puntos_usados)
 	from LOOPP.Compras com 
-	inner join LOOPP.Clientes cli on cli.id_cliente=com.id_cliente
-	inner join LOOPP.Registro_Puntos regP on regP.id_compra=com.id_compra and cli.id_cliente=regP.id_cliente
-	where cli.id_usuario=@idUsuario and fecha_vencimiento>@fechaActual
-	group by cli.id_cliente
+	inner join LOOPP.Registro_Puntos regP on regP.id_compra=com.id_compra and com.id_cliente=regP.id_cliente
+	where fecha_vencimiento>@fechaActual and com.id_cliente=(select id_cliente from LOOPP.Clientes where id_usuario=@idUsuario)
+	group by com.id_cliente
 	
 END
 
 GO
 
 --------------------------------------------------------------------------------
-
-
---------------------------------------------------------------------------------
-IF OBJECT_ID('LOOPP.SP_CanjearProducto') IS NOT NULL
-    DROP PROCEDURE LOOPP.SP_CanjearProducto
+IF OBJECT_ID('LOOPP.SP_UsarPuntosDeCliente') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_UsarPuntosDeCliente 
 GO
 
-CREATE PROCEDURE [LOOPP].[SP_CanjearProducto] @idProducto int, @idUsuario int, @fechaCanje datetime
+CREATE PROCEDURE [LOOPP].[SP_UsarPuntosDeCliente] @idCliente int, @puntosProducto int
 AS
 BEGIN
-	DECLARE @puntosACanjear int, @idCanje int, @idCliente int, @resultado varchar(255), @idCompra int, @puntosDisponibles int, @puntosProducto int
-	BEGIN TRANSACTION [T]
+	DECLARE @puntosACanjear int, @idCompra int, @puntosDisponibles int
 
-	BEGIN TRY
+	DECLARE @tablaTemporalCliente TABLE( idCliente int, idCompra int, puntosValidos int )
+	
+	INSERT INTO @tablaTemporalCliente
+	select rp.id_cliente ,rp.id_compra, com.puntos-rp.puntos_usados
+	from LOOPP.Compras com
+			inner join LOOPP.Registro_Puntos rp on com.id_compra=rp.id_compra and com.id_cliente=rp.id_cliente
+	where com.puntos-rp.puntos_usados>0 and rp.id_cliente=@idCliente
+	group by rp.id_compra,  rp.id_cliente,com.puntos ,fecha_compra, rp.puntos_usados
+	order by fecha_compra asc
 
-		
-		SELECT @puntosProducto=puntos_validos
-		FROM LOOPP.Catalogo_Canjes
-		WHERE id_codigo=@idProducto
 
-		SELECT id_cliente
-		into #Temp_Cliente_Consulta
-		from LOOPP.Clientes
-		where id_usuario=@idUsuario
-
-		DECLARE db_cursor CURSOR FOR 
-			select rp.id_cliente ,rp.id_compra, com.puntos-rp.puntos_usados
-			from LOOPP.Registro_Puntos rp
-			inner join LOOPP.Compras com on com.id_compra=rp.id_compra
-			inner join #Temp_Cliente_Consulta temp on temp.id_cliente=com.id_cliente
-			where com.puntos-rp.puntos_usados>0
-			group by rp.id_compra,  rp.id_cliente,com.puntos ,fecha_compra, rp.puntos_usados
-			order by fecha_compra asc
+	DECLARE db_cursor CURSOR FOR SELECT * from @tablaTemporalCliente
 		OPEN db_cursor  
 		FETCH NEXT FROM db_cursor INTO @idCliente, @idCompra, @puntosDisponibles
 		SET @puntosACanjear= @puntosProducto
@@ -1954,7 +2963,7 @@ BEGIN
 						SET puntos_usados=puntos_usados+@puntosACanjear
 					where id_compra=@idCompra and id_cliente=@idCliente
 					SET @puntosACanjear=0
-					BREAK;
+					
 				END
 			
 			
@@ -1963,14 +2972,37 @@ BEGIN
 
 		CLOSE db_cursor  
 		DEALLOCATE db_cursor	
+		DELETE @tablaTemporalCliente
+END
+GO
+--------------------------------------------------------------------------------
+IF OBJECT_ID('LOOPP.SP_CanjearProducto') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_CanjearProducto
+GO
+
+CREATE PROCEDURE [LOOPP].[SP_CanjearProducto] @idProducto int, @idUsuario int, @fechaCanje datetime
+AS
+BEGIN
+	DECLARE  @idCanje int, @idClienteConPuntos int, @resultado varchar(255), @idCompra int, @puntosDisponibles int, @puntosCanje int
+	BEGIN TRANSACTION [T]
+
+	BEGIN TRY
+
 		
-		drop table #Temp_Cliente_Consulta
+		SELECT @puntosCanje=puntos_validos
+		FROM LOOPP.Catalogo_Canjes
+		WHERE id_codigo=@idProducto
+		SELECT @idClienteConPuntos =id_cliente
+		FROM LOOPP.Clientes
+		WHERE id_usuario=@idUsuario
+		EXEC LOOPP.SP_UsarPuntosDeCliente @idCliente=@idClienteConPuntos ,@puntosProducto=@puntosCanje
+		
 		UPDATE LOOPP.Catalogo_Canjes
 			SET stock = stock - 1
 		WHERE id_codigo = @idProducto
 
 		INSERT INTO LOOPP.Canjes(fecha_canje, puntos_canjeados, id_codigo, id_cliente)
-		VALUES (@fechaCanje, @puntosProducto, @idProducto, @idCliente)
+		VALUES (@fechaCanje, @puntosCanje, @idProducto, @idClienteConPuntos)
 		
 		SELECT @idCanje=SCOPE_IDENTITY() 
 		FROM LOOPP.Canjes

@@ -16,6 +16,7 @@ namespace PalcoNet.Formularios.CanjePuntos
     {
         int puntosTotales;
         Catalogo_Manager catalogoMng = new Catalogo_Manager();
+        Cliente_Manager clienteMng = new Cliente_Manager();
         public CanjePuntosForm()
         {
             InitializeComponent();
@@ -26,7 +27,6 @@ namespace PalcoNet.Formularios.CanjePuntos
 
         private void cargarPuntosTotales()
         {
-            Cliente_Manager clienteMng = new Cliente_Manager();
             puntosTotales =clienteMng.getPuntosClienteConIdUsuario(DatosSesion.id_usuario);
             labelPuntos.Text = puntosTotales.ToString();
         }

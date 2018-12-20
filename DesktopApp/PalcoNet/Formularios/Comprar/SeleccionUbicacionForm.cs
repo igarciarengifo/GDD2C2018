@@ -119,23 +119,31 @@ namespace PalcoNet.Formularios.Comprar{
         }
 
         private void btnComprar_Click(object sender, EventArgs e) {
-            this.verificarCamposObligatorios();
-            string idCadena = "";
-            foreach (Ubicacion item in ubicacionesList)
+            try
             {
-                string id_ubic = (item.id_ubicacion).ToString();
-                idCadena += id_ubic + ",";
+                this.verificarCamposObligatorios();
+                string idCadena = "";
+                foreach (Ubicacion item in ubicacionesList)
+                {
+                    string id_ubic = (item.id_ubicacion).ToString();
+                    idCadena += id_ubic + ",";
+                }
+                idCadena = idCadena.Substring(0, idCadena.Length - 1);
+                Compra compra = new Compra();
+                compra.id_cliente = DatosSesion.id_usuario;
+                compra.id_espectaculo = espectaculoItem.id_espectaculo;
+                compra.listUbicaciones = idCadena;
+                compra.id_medio_pago = (int)cmbMedioPago.SelectedValue;
+                string resultado = compraMngr.comprarEntrada(compra);
+                if (resultado.Equals("OK"))
+                {
+                    MessageBox.Show("La compra se ha realizado con éxito. Disfrute el espectáculo!");
+                }
             }
-            idCadena = idCadena.Substring(0, idCadena.Length - 1); 
-            Compra compra = new Compra();
-            compra.id_cliente = DatosSesion.id_usuario;
-            compra.id_espectaculo = espectaculoItem.id_espectaculo;
-            compra.listUbicaciones = idCadena;
-            compra.id_medio_pago = (int)cmbMedioPago.SelectedValue;
-            string resultado = compraMngr.comprarEntrada(compra);
-            if (resultado.Equals("OK")) {
-                MessageBox.Show("La compra se ha realizado con éxito. Disfrute el espectáculo!");
+            catch (Exception exc) {
+                MessageBox.Show(exc.Message);
             }
+            
         }
 
         private void verificarCamposObligatorios()
