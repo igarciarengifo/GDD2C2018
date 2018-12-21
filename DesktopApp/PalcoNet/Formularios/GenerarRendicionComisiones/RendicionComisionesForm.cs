@@ -58,16 +58,20 @@ namespace PalcoNet.Formularios.GenerarRendicionComisiones
         }
 
         private void btnComision_Click(object sender, EventArgs e) {
-            this.verificarCamposObligatorios();
-            this.validarTiposCampos();
-            int idEmpresa = (int)cmbEmpresa.SelectedValue;
-            int idEspectaculo = (int)cmbEspectaculo.SelectedValue;
-            int cantidad = Convert.ToInt32(txtCantidad.Text);
-            Factura factura = mngrCompra.generarRendicion(idEmpresa, idEspectaculo, cantidad);
-            FacturaForm facturaForm = new FacturaForm(factura);
-            facturaForm.ShowDialog();
-            this.Dispose();
-            this.Close();
+            try {
+                this.verificarCamposObligatorios();
+                this.validarTiposCampos();
+                int idEmpresa = (int)cmbEmpresa.SelectedValue;
+                int idEspectaculo = (int)cmbEspectaculo.SelectedValue;
+                int cantidad = Convert.ToInt32(txtCantidad.Text);
+                Factura factura = mngrCompra.generarRendicion(idEmpresa, idEspectaculo, cantidad);
+                FacturaForm facturaForm = new FacturaForm(factura);
+                facturaForm.ShowDialog();
+                this.Dispose();
+                this.Close();
+            } catch (Exception exc) {
+                MessageBox.Show(exc.Message);
+            }
         }
     }
 }

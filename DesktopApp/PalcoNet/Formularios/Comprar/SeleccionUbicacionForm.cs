@@ -123,8 +123,7 @@ namespace PalcoNet.Formularios.Comprar{
             {
                 this.verificarCamposObligatorios();
                 string idCadena = "";
-                foreach (Ubicacion item in ubicacionesList)
-                {
+                foreach (Ubicacion item in ubicacionesList) {
                     string id_ubic = (item.id_ubicacion).ToString();
                     idCadena += id_ubic + ",";
                 }
