@@ -51,9 +51,15 @@ namespace PalcoNet.Formularios.GenerarRendicionComisiones
                 throw new ArgumentException("Debe completar los datos requeridos");
             }
         }
+        private void validarTiposCampos()
+        {
+            ValidarTiposEntradas.numerico(txtCantidad.Text, "Cantidad");
+
+        }
 
         private void btnComision_Click(object sender, EventArgs e) {
             this.verificarCamposObligatorios();
+            this.validarTiposCampos();
             int idEmpresa = (int)cmbEmpresa.SelectedValue;
             int idEspectaculo = (int)cmbEspectaculo.SelectedValue;
             int cantidad = Convert.ToInt32(txtCantidad.Text);
