@@ -2027,6 +2027,7 @@ AS
 		select top (@cantidad) *
 		into #Temp_Compra
 		from [LOOPP].[Compras]
+		where facturado = 'False'
 		order by fecha_compra asc
 
 			select distinct esp.id_espectaculo
@@ -2923,59 +2924,6 @@ END
 GO
 
 --------------------------------------------------------------------------------
-IF OBJECT_ID('LOOPP.SP_UsarPuntosDeCliente') IS NOT NULL
-    DROP PROCEDURE LOOPP.SP_UsarPuntosDeCliente 
-GO
-
-CREATE PROCEDURE [LOOPP].[SP_UsarPuntosDeCliente] @idCliente int, @puntosProducto int
-AS
-BEGIN
-	DECLARE @puntosACanjear int, @idCompra int, @puntosDisponibles int
-
-	DECLARE @tablaTemporalCliente TABLE( idCliente int, idCompra int, puntosValidos int )
-	
-	INSERT INTO @tablaTemporalCliente
-	select rp.id_cliente ,rp.id_compra, com.puntos-rp.puntos_usados
-	from LOOPP.Compras com
-			inner join LOOPP.Registro_Puntos rp on com.id_compra=rp.id_compra and com.id_cliente=rp.id_cliente
-	where com.puntos-rp.puntos_usados>0 and rp.id_cliente=@idCliente
-	group by rp.id_compra,  rp.id_cliente,com.puntos ,fecha_compra, rp.puntos_usados
-	order by fecha_compra asc
-
-
-	DECLARE db_cursor CURSOR FOR SELECT * from @tablaTemporalCliente
-		OPEN db_cursor  
-		FETCH NEXT FROM db_cursor INTO @idCliente, @idCompra, @puntosDisponibles
-		SET @puntosACanjear= @puntosProducto
-		WHILE @@FETCH_STATUS = 0 or @puntosACanjear>0
-		BEGIN
-			
-			IF (@puntosACanjear>=@puntosDisponibles)
-				BEGIN
-					SET @puntosACanjear=@puntosACanjear - @puntosDisponibles
-					UPDATE LOOPP.Registro_Puntos
-						SET puntos_usados=puntos_usados+@puntosDisponibles
-					where id_compra=@idCompra and id_cliente=@idCliente
-				END
-			ELSE
-				BEGIN
-					UPDATE LOOPP.Registro_Puntos
-						SET puntos_usados=puntos_usados+@puntosACanjear
-					where id_compra=@idCompra and id_cliente=@idCliente
-					SET @puntosACanjear=0
-					
-				END
-			
-			
-			FETCH NEXT FROM db_cursor INTO @idCliente, @idCompra, @puntosDisponibles
-		END 
-
-		CLOSE db_cursor  
-		DEALLOCATE db_cursor	
-		DELETE @tablaTemporalCliente
-END
-GO
---------------------------------------------------------------------------------
 IF OBJECT_ID('LOOPP.SP_CanjearProducto') IS NOT NULL
     DROP PROCEDURE LOOPP.SP_CanjearProducto
 GO
@@ -2983,36 +2931,80 @@ GO
 CREATE PROCEDURE [LOOPP].[SP_CanjearProducto] @idProducto int, @idUsuario int, @fechaCanje datetime
 AS
 BEGIN
-	DECLARE  @idCanje int, @idClienteConPuntos int, @resultado varchar(255), @idCompra int, @puntosDisponibles int, @puntosCanje int
+	DECLARE  @resultado varchar(255)
+			,@puntosCanje int
+			,@puntosProducto int
+			,@cliente int
+			,@idCanje int
+
+	set @puntosCanje=0;
+
 	BEGIN TRANSACTION [T]
 
 	BEGIN TRY
 
-		
-		SELECT @puntosCanje=puntos_validos
-		FROM LOOPP.Catalogo_Canjes
+		SELECT @puntosProducto=puntos_validos
+		FROM [LOOPP].[Catalogo_Canjes]
 		WHERE id_codigo=@idProducto
-		SELECT @idClienteConPuntos =id_cliente
-		FROM LOOPP.Clientes
+
+		SELECT @cliente=id_cliente
+		FROM [LOOPP].[Clientes]
 		WHERE id_usuario=@idUsuario
-		EXEC LOOPP.SP_UsarPuntosDeCliente @idCliente=@idClienteConPuntos ,@puntosProducto=@puntosCanje
+
+		declare @id_compra as int,@id_cliente as int ,@puntos as int, @fecVenc datetime;
+
+		DECLARE cursor_canje CURSOR FOR 
+
+		SELECT comp.id_compra,comp.id_cliente,comp.puntos,pun.fecha_vencimiento
+		FROM [LOOPP].[Compras] comp
+		INNER JOIN [LOOPP].[Registro_Puntos] pun
+			on comp.id_compra=pun.id_compra and comp.id_cliente=pun.id_cliente and comp.id_cliente=@cliente
+		WHERE pun.[fecha_vencimiento]>GETDATE()
+		ORDER BY pun.fecha_vencimiento asc
+
+		OPEN cursor_canje
+
+		begin
+
+			FETCH NEXT FROM cursor_canje into @id_compra, @id_cliente,@puntos,@fecVenc;
+
+			while @puntosCanje<=@puntosProducto
+			BEGIN
+
+				set @puntosCanje = @puntosCanje+@puntos;
+
+				update [LOOPP].[Registro_Puntos]
+				set [puntos_usados]=@puntos
+				where [id_compra]=@id_compra
+				and [id_cliente]=@id_cliente
+
+				FETCH NEXT FROM cursor_canje into @id_compra, @id_cliente,@puntos,@fecVenc;
+
+			END;
+		end;
+
+		CLOSE cursor_canje;
+		DEALLOCATE cursor_canje;
+
+		if @puntosCanje>=@puntosProducto
+		begin 
+
+			INSERT INTO LOOPP.Canjes(fecha_canje, puntos_canjeados, id_codigo, id_cliente)
+			VALUES (@fechaCanje, @puntosProducto, @idProducto, @id_cliente)
 		
-		UPDATE LOOPP.Catalogo_Canjes
-			SET stock = stock - 1
-		WHERE id_codigo = @idProducto
+			update [LOOPP].[Catalogo_Canjes]
+			set stock=stock-1
+			where id_codigo=@idProducto;
 
-		INSERT INTO LOOPP.Canjes(fecha_canje, puntos_canjeados, id_codigo, id_cliente)
-		VALUES (@fechaCanje, @puntosCanje, @idProducto, @idClienteConPuntos)
-		
-		SELECT @idCanje=SCOPE_IDENTITY() 
-		FROM LOOPP.Canjes
+			SELECT @idCanje=SCOPE_IDENTITY() 
+			FROM LOOPP.Canjes
 
-	COMMIT TRANSACTION [T]
+			COMMIT TRANSACTION [T]
 
-	set @resultado = 'OK;'+CONVERT(varchar(255),@idCanje)
+			set @resultado = 'OK;'+CONVERT(varchar(255),@idCanje)
+		end
 
 	END TRY
-
 	BEGIN CATCH
 
       ROLLBACK TRANSACTION [T]
@@ -3020,7 +3012,7 @@ BEGIN
 	  set @resultado ='ERROR;' +ERROR_MESSAGE();
 
 	END CATCH;
+
 	SELECT @resultado
 END
-
 GO

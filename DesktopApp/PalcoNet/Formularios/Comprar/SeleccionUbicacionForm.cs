@@ -123,8 +123,7 @@ namespace PalcoNet.Formularios.Comprar{
             {
                 this.verificarCamposObligatorios();
                 string idCadena = "";
-                foreach (Ubicacion item in ubicacionesList)
-                {
+                foreach (Ubicacion item in ubicacionesList) {
                     string id_ubic = (item.id_ubicacion).ToString();
                     idCadena += id_ubic + ",";
                 }
@@ -138,6 +137,8 @@ namespace PalcoNet.Formularios.Comprar{
                 if (resultado.Equals("OK"))
                 {
                     MessageBox.Show("La compra se ha realizado con éxito. Disfrute el espectáculo!");
+                    this.Dispose();
+                    this.Close();
                 }
             }
             catch (Exception exc) {

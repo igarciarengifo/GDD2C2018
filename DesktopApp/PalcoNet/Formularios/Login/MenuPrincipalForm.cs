@@ -31,7 +31,6 @@ namespace PalcoNet.Formularios
             InitializeComponent();
             panelEmpresas.Visible = false;
             comprarBtn.Visible = false;
-            editCompBtn.Visible = false;
             rendConsBtn.Visible = false;
             newPubBtn.Visible = false;
             editPubBtn.Visible = false;
@@ -76,13 +75,7 @@ namespace PalcoNet.Formularios
             {
                 comprarBtn.Visible = true;
                 flpCentral.Controls.Add(comprarBtn);
-            }
-
-            if (f.Any(func => func.nombre.Equals("Modificar Compra")))
-            {
-                editCompBtn.Visible = true;
-                flpCentral.Controls.Add(editCompBtn);
-            }
+            }        
 
             if (f.Any(func => func.nombre.Equals("Historial Cliente")))
             {
@@ -100,8 +93,6 @@ namespace PalcoNet.Formularios
             if (f.Any(func => func.nombre.Equals("Facturar rendiciones")))
             {
                 rendConsBtn.Visible = true;
-                factComBtn.Visible = true;
-                flpCentral.Controls.Add(factComBtn);
                 flpCentral.Controls.Add(rendConsBtn);
             }
 
