@@ -3016,3 +3016,19 @@ BEGIN
 	SELECT @resultado
 END
 GO
+
+--------------------------------------------------------------------------------
+
+/* LOOPP.SP_GetClientePorIdUsuario */
+
+IF OBJECT_ID('LOOPP.SP_GetClientePorIdUsuario') IS NOT NULL
+	DROP PROCEDURE [LOOPP].SP_GetClientePorIdUsuario;
+GO
+CREATE PROCEDURE [LOOPP].SP_GetClientePorIdUsuario
+	
+	@idUsuario int
+AS
+BEGIN
+	SELECT * FROM Clientes WHERE id_usuario=@idUsuario
+END
+GO
