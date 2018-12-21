@@ -40,20 +40,40 @@ namespace PalcoNet.Formularios.ListadoEstadistico
 
         private void empresasLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            DataTable resultTable = estadisticasMng.getTopEmpresasLocalidadesNoVendidas(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
-            dataGridEstadisticas.DataSource = resultTable;
+            if (anioConsultaBox.SelectedItem != null)
+            {
+                DataTable resultTable = estadisticasMng.getTopEmpresasLocalidadesNoVendidas(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
+                dataGridEstadisticas.DataSource = resultTable;
+            }
+            else {
+                MessageBox.Show("Debe ingresar un año de consulta");
+            }
+            
         }
 
         private void puntosLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            DataTable resultTable = estadisticasMng.getTopClientesPuntosVencidos(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
-            dataGridEstadisticas.DataSource = resultTable;
+            if (anioConsultaBox.SelectedItem != null)
+            {
+              
+                DataTable resultTable = estadisticasMng.getTopClientesPuntosVencidos(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
+                dataGridEstadisticas.DataSource = resultTable;
+            }
+            else
+            {
+                MessageBox.Show("Debe ingresar un año de consulta");
+            }
         }
 
         private void comprasLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            DataTable resultTable = estadisticasMng.getTopClientesConMasCompras(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
-            dataGridEstadisticas.DataSource = resultTable;
+            if (anioConsultaBox.SelectedItem != null)
+            {
+
+                DataTable resultTable = estadisticasMng.getTopClientesConMasCompras(Convert.ToInt32(anioConsultaBox.Text), (int)trimestreBox.Value);
+                dataGridEstadisticas.DataSource = resultTable;
+            }
         }
+
     }
 }

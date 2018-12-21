@@ -3016,3 +3016,40 @@ BEGIN
 	SELECT @resultado
 END
 GO
+
+
+IF OBJECT_ID('LOOPP.SP_TopEmpresasLocalidadesNoVendidas') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_TopEmpresasLocalidadesNoVendidas
+GO
+/*Además el sistema nos pedirá que ingresemos obligatoriamente el año por el cual
+queremos consultar, luego nos pedirá el trimestre*/
+CREATE PROCEDURE LOOPP.SP_TopEmpresasLocalidadesNoVendidas ( @anio int, @trimestre int)
+AS 
+BEGIN
+	SELECT top 5 emp.id_empresa, emp.razon_social as 'Razon social', COUNT(*)- COUNT(lcv.id_ubicacion)'Localidades no vendidas', gdp.descripcion'Grado publicacion'
+
+	from LOOPP.Empresas emp
+	INNER JOIN LOOPP.Usuarios usu on usu.id_usuario=emp.id_usuario
+	INNER JOIN LOOPP.Espectaculos esp on esp.id_usuario_responsable=emp.id_usuario
+	INNER JOIN LOOPP.Grados_Publicacion gdp on gdp.id_grado_publicacion=esp.id_grado_publicacion
+	Inner join LOOPP.Ubicac_X_Espectaculo ube on ube.id_espectaculo=esp.id_espectaculo
+	LEFT join LOOPP.Localidades_Vendidas lcv on lcv.id_espectaculo=esp.id_espectaculo
+	WHERE @anio=YEAR(esp.fecha_espectaculo) and @trimestre=DATEPART(QUARTER,esp.fecha_espectaculo)
+	group by  emp.id_empresa,emp.razon_social,comision,gdp.descripcion
+
+	order by comision desc,  COUNT(*)- COUNT(lcv.id_ubicacion)desc
+END
+GO
+----------------------------------------------------
+
+IF OBJECT_ID('LOOPP.SP_GetAllEspectaculos') IS NOT NULL
+    DROP PROCEDURE LOOPP.SP_GetAllEspectaculos
+GO
+CREATE PROCEDURE LOOPP.SP_GetAllEspectaculos 
+AS 
+BEGIN
+	select id_espectaculo, descripcion
+	from LOOPP.Espectaculos
+	where id_estado_publicacion=2
+END
+GO
