@@ -242,5 +242,23 @@ namespace PalcoNet.Managers
                                             SQLArgumentosManager.nuevoParametro("@idFormaPagoCliente", formaPagoActual.id_forma_pago_cliente));
 
         }
+
+        public Cliente getClientePorIdUsuario(int idUsuario)
+        {
+            DataTable resultTable = SQLManager.ejecutarDataTableStoreProcedure("LOOPP.SP_GetClientePorIdUsuario", SQLArgumentosManager.nuevoParametro("@idUsuario", idUsuario));
+            List<Cliente> lista_clientes = new List<Cliente>();
+
+            if (resultTable != null && resultTable.Rows != null)
+            {
+
+                foreach (DataRow row in resultTable.Rows)
+                {
+                    Cliente cliente = BuildCliente(row);
+                    lista_clientes.Add(cliente);
+                }
+            }
+
+            return lista_clientes.ElementAt(0);
+        }
     }
 }

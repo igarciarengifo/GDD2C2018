@@ -60,7 +60,8 @@ namespace PalcoNet.Formularios.Comprar{
 
         private void cargarMediosPagoCmb() {
             List<Forma_Pago_Cliente> formasPagos = new List<Forma_Pago_Cliente>();
-            formasPagos = clienteMngr.getMediosDePagoDeUsuario(DatosSesion.id_usuario);
+            Cliente cliente = clienteMngr.getClientePorIdUsuario(DatosSesion.id_usuario);
+            formasPagos = clienteMngr.getMediosDePagoDeUsuario(cliente.id_cliente);
             if (formasPagos.Count > 0)
             {
                 cmbMedioPago.DisplayMember = "marca";
