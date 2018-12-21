@@ -101,8 +101,9 @@ namespace PalcoNet.Formularios.Comprar{
           
             if (cmbTipoMP.SelectedValue != null) {
                 this.validarNumeroTarjeta();
+                Cliente cliente = clienteMngr.getClientePorIdUsuario(DatosSesion.id_usuario);
                 Forma_Pago_Cliente mp = new Forma_Pago_Cliente();
-                mp.id_cliente = DatosSesion.id_usuario;
+                mp.id_cliente = cliente.id_cliente;
                 mp.id_forma_pago = (int)cmbTipoMP.SelectedValue;
                 mp.nro_tarjeta = Int64.Parse(nroTarjetaBox.Text);
                 string resultado = clienteMngr.altaDeMedioDePago(mp);
@@ -129,8 +130,9 @@ namespace PalcoNet.Formularios.Comprar{
                     idCadena += id_ubic + ",";
                 }
                 idCadena = idCadena.Substring(0, idCadena.Length - 1);
+                Cliente cliente = clienteMngr.getClientePorIdUsuario(DatosSesion.id_usuario);
                 Compra compra = new Compra();
-                compra.id_cliente = DatosSesion.id_usuario;
+                compra.id_cliente = cliente.id_cliente;
                 compra.id_espectaculo = espectaculoItem.id_espectaculo;
                 compra.listUbicaciones = idCadena;
                 compra.id_medio_pago = (int)cmbMedioPago.SelectedValue;
