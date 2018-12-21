@@ -2027,6 +2027,7 @@ AS
 		select top (@cantidad) *
 		into #Temp_Compra
 		from [LOOPP].[Compras]
+		where facturado = 'False'
 		order by fecha_compra asc
 
 			select distinct esp.id_espectaculo
